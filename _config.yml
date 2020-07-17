@@ -17,7 +17,7 @@ title: KK Homepage
 email: name.lastname@uwr.edu.pl
 description: >- # this means to ignore newlines until "baseurl:"
   KK home webpage
-baseurl: krzkot
+baseurl:
 twitter_username: krzykoty
 github_username: plokoon12
 minimal_mistakes_skin: default
@@ -59,7 +59,7 @@ plugins:
 author:
   name   : "Krzysztof Kotysz"
   avatar : "/assets/images/bio-photo.jpg"
-  bio    : "PhD student at Astronomical Institute (University of Wroclaw) and amateur photographer."
+  bio    : 'PhD student at Astronomical Institute (University of Wroclaw) and amateur photographer.<br><i class="fa fa-envelope"></i>  [name].[last_name]@uwr.edu.pl'
   links:
     - label: "Flickr"
       icon: "fab fa-fw fa-flickr"
