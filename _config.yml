@@ -123,5 +123,5 @@ tag_archive:
   path: /tags/
 gallery:
   type: liquid
-  path: /gallery
+  path: /gallery/
 theme: jekyll-theme-minimal
