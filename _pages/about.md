@@ -2,7 +2,7 @@
 permalink: /about/
 title: "About"
 ---
+![title](../assets/images/background.png)
+I am an astronomer and PhD student at Astronomical Institute at University of Wroclaw (Poland). Although PhD studies take most of my time, I am trying to find some moments for photography. Mostly I am interested in astrophotography (obviously) but in my gallery day-time photographs also can be found. 
 
-Tempor velit sint sunt ipsum tempor enim ad qui ullamco. Est dolore anim ad velit duis dolore minim sunt aliquip amet commodo labore. Ut eu pariatur aute ea aute excepteur laborum. Esse ea esse excepteur minim mollit qui cillum excepteur ex dolore magna. Labore deserunt fugiat incididunt incididunt sint ea. Consequat dolore aute laboris quis proident quis non et est consectetur ex eiusmod sit culpa.
-
-Cupidatat ea do et in excepteur in. Ad nostrud ut est esse eu duis ea sunt eiusmod. Aliquip tempor veniam sint elit fugiat. Velit incididunt laboris amet incididunt labore dolore irure velit excepteur commodo deserunt laborum. Consectetur eu fugiat veniam veniam Lorem labore magna eiusmod. Ea occaecat reprehenderit pariatur consectetur minim labore ut aliquip.
+In my work I am mostly interested in pulsating stars. Following my passion for photography and observations, I decided to pursue a career in observational astronomy. This involves working with sattelite data and travelling to astronomical observatories all over the world. Currently I am an observer in Bialków Astronomical Observatory which belongs to University of Wroclaw. I have also spent 3 weeks at observational run in the Atacama dessert in Chile.
