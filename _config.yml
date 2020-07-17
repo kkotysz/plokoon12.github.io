@@ -59,7 +59,9 @@ plugins:
 author:
   name   : "Krzysztof Kotysz"
   avatar : "/assets/images/bio-photo.jpg"
-  bio    : 'PhD student at Astronomical Institute (University of Wroclaw) and amateur photographer.<br><i class="fa fa-envelope"></i>  [name].[last_name]@uwr.edu.pl'
+  bio    : 'PhD student at Astronomical Institute (University of Wroclaw) and amateur photographer.
+            <br><a href="https://orcid.org/0000-0003-4960-7463"><i class="ai ai-orcid" style="color: rgb(174,204,84)">ORCID</i></a>
+            <br><i class="fa fa-envelope"></i>  [name].[last_name]@uwr.edu.pl'
   links:
     - label: "Flickr"
       icon: "fab fa-fw fa-flickr"
@@ -70,9 +72,9 @@ author:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/plokoon12"
-    - label: "ORCID"
-      icon: "ai ai-orcid"
-      url: "https://orcid.org/0000-0003-4960-7463"
+    - label: "reddit"
+      icon: "fab fa-fw fa-reddit"
+      url: "https://www.reddit.com/user/plokoon"
     - label: "LinkedIn"
       icon: "fab fa-fw fa-linkedin"
       url: "https://www.linkedin.com/in/krzysztof-kotysz-574031163/"
@@ -88,9 +90,9 @@ footer:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/plokoon12"
-    - label: "ORCID"
-      icon: "ai ai-orcid"
-      url: "https://orcid.org/0000-0003-4960-7463"
+    - label: "reddit"
+      icon: "fab fa-fw fa-reddit"
+      url: "https://www.reddit.com/user/plokoon"
     - label: "LinkedIn"
       icon: "fab fa-fw fa-linkedin"
       url: "https://www.linkedin.com/in/krzysztof-kotysz-574031163/"
