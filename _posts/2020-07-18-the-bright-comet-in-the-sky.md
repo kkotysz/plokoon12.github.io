@@ -12,7 +12,7 @@ tags:
   - bialkow
 ---
 
-An opportunity to watch a bright comet does not come often. The last one was called __C/1995__ O1 or simply __Comet Hale-Bopp__. It was visible to the naked eye for 18 months!
+An opportunity to watch a bright comet does not come often. The last one was called __C/1995 O1__ or simply __Comet Hale-Bopp__. It was visible to the naked eye for 18 months!
 
 The hero of this post is not as bright as Hale-Bopp but also can be seen by naked eye. __Comet NEOWSIE__ or __C/2020 F3 (NEOWISE)__ is already circumpolar object (in Poland, at the time of writing this post) which means it does not set. It can be seen during whole night overt northern horizon. Comet was discovered March 27, 2020 and two tails (dust and ion) can be seen. The first one by eye and second one in photographs. The nucleus is estimated to be about 5km. As of 16 July brightness was about 2-2.5 mag.
 
