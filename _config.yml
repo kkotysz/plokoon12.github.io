@@ -22,7 +22,7 @@ twitter_username: krzykoty
 github_username: plokoon12
 minimal_mistakes_skin: "air" # "air", "aqua", "contrast", "dark", "default", "dirt", "neon", "mint", "plum" "sunrise"
 search: true
-masthead_title: "KK Home"
+masthead_title: "Homepage"
 logo: "/apple-touch-icon.png"
 
 # Build settings
