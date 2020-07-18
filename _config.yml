@@ -125,6 +125,11 @@ defaults:
     values:
       layout: single
       author_profile: true
+    
+comments:
+  provider: "disqus"
+  disqus:
+    shortname: "krzkot"
 
 category_archive:
   type: liquid
