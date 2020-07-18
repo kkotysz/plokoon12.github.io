@@ -24,7 +24,7 @@ minimal_mistakes_skin: "air" # "air", "aqua", "contrast", "dark", "default", "di
 search: true
 masthead_title: "Homepage"
 logo: "/apple-touch-icon.png"
-
+og_image: "/site-logo.png"
 # Build settings
 markdown: kramdown
 remote_theme: mmistakes/minimal-mistakes
