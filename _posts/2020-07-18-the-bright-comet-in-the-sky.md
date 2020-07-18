@@ -17,7 +17,7 @@ An opportunity to watch a bright comet does not come often. The last one was cal
 The hero of this post is not as bright as Hale-Bopp but also can be seen by naked eye. __Comet NEOWSIE__ or __C/2020 F3 (NEOWISE)__ is already circumpolar object (in Poland, at the time of writing this post) which means it does not set. It can be seen during whole night overt northern horizon. Comet was discovered March 27, 2020 and two tails (dust and ion) can be seen. The first one by eye and second one in photographs. The nucleus is estimated to be about 5km. As of 16 July brightness was about 2-2.5 mag.
 
 <figure>
-    <a href="https://cobs.si"><img src="/assets/images/lightcurve_20200718-120038.png"></a>
+    <a href="/assets/images/lightcurve_20200718-120038.png"><img src="/assets/images/lightcurve_20200718-120038.png"></a>
     <figcaption>Light-curve of C/2020 F3 (NEOWISE) (Jul 18, 2020).<br>Source: <a href="https://cobs.si">COBS/Crni Vrh Observatory</a></figcaption>
 </figure>
 
