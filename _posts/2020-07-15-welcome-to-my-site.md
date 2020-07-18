@@ -1,29 +1,28 @@
 ---
 title: "Welcome to my site!"
-date: 2020-07-16T10:00:00-01:00
+date: 2020-07-18T10:00:00-01:00
 categories:
   - blog
 tags:
   - Jekyll
   - start
+  - Ruby
+  - GitHub Pages
 ---
 
-You'll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
+Hi!<br>
+This is the start of my personal webpage. I will post here different content - news about astronomy, my work, `python` projects and many more (hopefully , we'll see... :wink:).
 
-To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
+In this first post I'd like to write a little about [Jekyll][jekyll-home] project which I used to create this site. It is a very powerful tool for generation of blog-type static sites. It was written in [Ruby][ruby-home] programming language by Tom Preston-Werner, GitHub's co-founder. I strongly recommend to familiariaze yourself with `Jekyll`, especially if you want to launch your website using [GitHub Pages][gh-pages] - it integrates very well with `Jekyll`.
 
-Jekyll also offers powerful support for code snippets:
+`Jekyll` offers a very large amount of themes to choose from and most of them are free and customizable (if acknowledgment is provided). The one that I am using is called [Minimal Mistakes][mmistakes]. Another advantage is that most of the website development is done in __markdown__. Knowledge of `Ruby` language and `html` may come in handy if you plan to go beyond what is offered by chosen theme. 
 
-```ruby
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-```
+To get yourself started I can recommend this great [__tutorial__][jekyll-tut] made by Mike Dane from [Giraffe Academy][mike-dane].
 
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
 
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
+[jekyll-home]: https://jekyllrb.com/
+[ruby-home]:   https://www.ruby-lang.org/pl/
+[gh-pages]: https://pages.github.com
+[mmistakes]: https://mademistakes.com/work/minimal-mistakes-jekyll-theme/
+[jekyll-tut]: https://youtu.be/T1itpPvFWHI
+[mike-dane]: https://www.mikedane.com
