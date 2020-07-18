@@ -31,5 +31,6 @@ Recently, I had the opportunity to capture __C/2020 F3 (NEOWISE)__ at <a href="h
     </figcaption>
 </figure>
 
-Other photos are present in [gallery][gallery]. I strongly encourage anyone to see this gorgeous comet. ☄️
-[gallery]: /gallery/
+Other photos are present in [gallery][gallery-url]. I strongly encourage anyone to see this gorgeous comet. ☄️
+
+[gallery-url]: /gallery/
