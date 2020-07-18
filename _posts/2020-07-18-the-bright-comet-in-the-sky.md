@@ -1,6 +1,6 @@
 ---
 title: "The Bright Comet in the Sky"
-date: 2020-07-18T10:00:00-01:00
+date: 2020-07-18T14:00:00+01:00
 categories:
   - blog
   - astronomy
