@@ -10,6 +10,8 @@ tags:
   - f3
   - neowise
   - bialkow
+header:
+  teaser: /assets/photos/c2020-f3-neowise-in-the-trees_50112625338_o.jpg
 ---
 
 An opportunity to watch a bright comet does not come often. The last one was called __C/1995 O1__ or simply __Comet Hale-Bopp__. It was visible to the naked eye for 18 months!
