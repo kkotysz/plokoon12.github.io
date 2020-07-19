@@ -68,7 +68,7 @@ plugins:
 author:
   name   : "Krzysztof Kotysz"
   avatar : "/assets/images/bio-photo.jpg"
-  bio    : 'PhD student at Astronomical Institute (University of Wroclaw) and amateur photographer.
+  bio    : 'PhD student at Astronomical Institute (University of Wroclaw) and passionate amateur photographer.
             <br><a href="https://orcid.org/0000-0003-4960-7463"><i class="ai ai-orcid" style="color: rgb(174,204,84)">ORCID</i></a>
             <br><i class="fa fa-envelope"></i>  [name].[last_name]@uwr.edu.pl'
   links:
