@@ -4,11 +4,14 @@
 // init Isotope
 var $grid = $('.grid').isotope({
   itemSelector: '.grid-item',
-  layoutMode: 'fitRows',
-  // masonry: {
-  //   columnWidth: 120,
-  //   // isFitWidth: true
-  //   }
+  // layoutMode: '',
+  // isfitWidth: true,
+  masonry: {
+    // columnWidth: 0,
+    isFitWidth: true,
+    gutter: 3,
+    // horizontalOrder: true,
+    },
   getSortData: {
     name: '.name',
     symbol: '.symbol',
@@ -19,6 +22,10 @@ var $grid = $('.grid').isotope({
       return parseFloat( weight.replace( /[\(\)]/g, '') );
     }
   }
+});
+
+$grid.imagesLoaded().progress( function() {
+  $grid.isotope('layout');
 });
 
 // filter functions
@@ -58,4 +65,4 @@ $('.button-group').each( function( i, buttonGroup ) {
   });
 });
   
-
+$grid.isotope('shuffle')
