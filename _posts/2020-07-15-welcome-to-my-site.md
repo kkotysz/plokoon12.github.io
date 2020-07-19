@@ -1,6 +1,6 @@
 ---
 title: "Welcome to my site!"
-date: 2020-07-18T10:00:00-01:00
+date: 2020-07-18T10:00:00+01:00
 categories:
   - blog
 tags:
