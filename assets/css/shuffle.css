@@ -12,14 +12,15 @@ body {
 .button {
   display: inline-block;
   padding: 0.5em 1.0em;
-  background: #EEE;
-  border: none;
-  border-radius: 7px;
-  background-image: linear-gradient( to bottom, hsla(0, 0%, 0%, 0), hsla(0, 0%, 0%, 0.2) );
-  color: #222;
+  background: #1e1e1e;
+  border: 0.1em solid yellow;
+  border-radius: 1.8em;
+  background-image: linear-gradient( to bottom, hsla(0, 0%, 0%, 0), hsla(0, 0%, 0%, 0) );
+  color: #eee;
   font-family: 'Abel', sans-serif;
-  font-size: 16px;
-  text-shadow: 0 1px white;
+  font-weight: 600;
+  font-size: 18px;
+  /* text-shadow: 0 1px white; */
   text-decoration: none;
   cursor: pointer;
 }
@@ -58,13 +59,14 @@ body {
 
 .button-group .button {
   float: left;
-  border-radius: 0;
-  margin-left: 0;
-  margin-right: 1px;
+  margin-left: 0.25em;
+  margin-right: 0.25em;
 }
+.button-group {margin-left: 26vw;}
+/* .button-group .button:last-child { margin-left: 40vw;} */ */
 
-.button-group .button:first-child { border-radius: 0.5em 0 0 0.5em; }
-.button-group .button:last-child { border-radius: 0 0.5em 0.5em 0; }
+/* .button-group .button:first-child { border-radius: 0.5em 0.5em 0.5em 0.5em; }
+.button-group .button:last-child { border-radius: 0.5em 0.5em 0.5em 0.5em; } */
 
 /* ---- isotope ---- */
 
@@ -129,15 +131,4 @@ body {
   top: 76px;
   font-size: 12px;
 }
-
-.element-item.alkali          { background: #F00; background: hsl(   0, 100%, 50%); }
-.element-item.alkaline-earth  { background: #F80; background: hsl(  36, 100%, 50%); }
-.element-item.lanthanoid      { background: #FF0; background: hsl(  72, 100%, 50%); }
-.element-item.actinoid        { background: #0F0; background: hsl( 108, 100%, 50%); }
-.element-item.transition      { background: #0F8; background: hsl( 144, 100%, 50%); }
-.element-item.post-transition { background: #0FF; background: hsl( 180, 100%, 50%); }
-.element-item.metalloid       { background: #08F; background: hsl( 216, 100%, 50%); }
-.element-item.diatomic        { background: #00F; background: hsl( 252, 100%, 50%); }
-.element-item.halogen         { background: #F0F; background: hsl( 288, 100%, 50%); }
-.element-item.noble-gas       { background: #F08; background: hsl( 324, 100%, 50%); }
 
