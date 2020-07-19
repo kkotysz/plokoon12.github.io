@@ -19,50 +19,51 @@ body {
   color: #eee;
   font-family: 'Abel', sans-serif;
   font-weight: 600;
-  font-size: 18px;
+  font-size: 28px;
   /* text-shadow: 0 1px white; */
   text-decoration: none;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 
 .button:hover {
   background-color: rgb(252, 235, 160);
-  text-shadow: 0 1px hsla(0, 0%, 100%, 0.5);
+  /* text-shadow: 0 1px hsla(0, 0%, 100%, 0.5); */
   color: #222;
 }
 
-.button:active,
+.button:active {
+  background-color: rgba(77, 77, 77, 0.877);
+  color: rgb(231, 231, 231);
+}
 .button.is-checked {
   background-color: rgb(255, 238, 0);
 }
 
 .button.is-checked {
   color: black;
-  text-shadow: 0 -1px hsla(0, 0%, 100%, 0.5);
+  /* text-shadow: 0 -1px hsla(0, 0%, 100%, 0.5); */
 }
 
-.button:active {
+/* .button:active {
   box-shadow: inset 0 1px 10px hsla(0, 0%, 100%, 0.5);
-}
+} */
 
 /* ---- button-group ---- */
 
-.button-group {
-  margin-bottom: 20px;
-}
 
-.button-group:after {
+/* .button-group:after {
   content: '';
   display: block;
   clear: both;
-}
+} */
 
-.button-group .button {
+/* .button-group .button {
   float: left;
   margin-left: 0.25em;
   margin-right: 0.25em;
-}
-.button-group {margin-left: 26vw;}
+} */
+/* .button-group {margin-left: 0vw;} */
 /* .button-group .button:last-child { margin-left: 40vw;} */ */
 
 /* .button-group .button:first-child { border-radius: 0.5em 0.5em 0.5em 0.5em; }
@@ -72,6 +73,7 @@ body {
 
 .grid {
   border: 0px solid #332;
+  max-width: 1200px;
 }
 
 /* clear fix */
@@ -83,22 +85,32 @@ body {
 
 /* ---- .element-item ---- */
 
-.element-item {
-  position: relative;
+.grid-item {
+  /* position: relative; */
   float: left;
-  width: 100px;
-  height: 100px;
-  margin: 0px;
-  padding: 0px;
+  width: 120px;
+  height: 120px;
+  /* margin: 0px; */
+  /* padding: 0px; */
   background: #888;
   color: #262524;
 }
 
-.element-item > * {
+.grid-item--w2 {width: 120px;}
+.grid-item--h2 {height: 120px;}
+
+/* .grid-item--wp { width: 120px; }
+.grid-item--ws { width: 240px; }
+.grid-item--wl { width: 240px; }
+.grid-item--hp { height: 240px; }
+.grid-item--hs { height: 240px; }
+.grid-item--hl { height: 120px; } */
+
+/* .element-item > * {
   margin: 0;
   padding: 0;
-}
-
+} */
+/* 
 .element-item .name {
   position: absolute;
 
@@ -130,5 +142,5 @@ body {
   left: 10px;
   top: 76px;
   font-size: 12px;
-}
+} */
 

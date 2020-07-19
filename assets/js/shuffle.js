@@ -3,8 +3,12 @@
 
 // init Isotope
 var $grid = $('.grid').isotope({
-  itemSelector: '.element-item',
+  itemSelector: '.grid-item',
   layoutMode: 'fitRows',
+  // masonry: {
+  //   columnWidth: 120,
+  //   // isFitWidth: true
+  //   }
   getSortData: {
     name: '.name',
     symbol: '.symbol',

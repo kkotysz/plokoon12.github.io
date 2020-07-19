@@ -95,11 +95,39 @@
 
 <div class="grid">
 {% for photo in site.data.gallery %}
-    {% comment %} <div class="element-item {{ photo.tags }}" data-category=""> {% endcomment %}
-        <img id="img_{{ photo.id }}" class="myImg element-item {{ photo.tags }}" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
+    {% if photo.aspect == 'landscape' %}
+        <img id="img_{{ photo.id }}" class="myImg grid-item grid-item--w2 {{ photo.tags }}" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
          onclick="openModal();currentSlide({{ photo.id }})" width="100%">
+    {% elsif photo.aspect == 'portrait' %}
+        <img id="img_{{ photo.id }}" class="myImg grid-item grid-item--h2 {{ photo.tags }}" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
+         onclick="openModal();currentSlide({{ photo.id }})" width="100%">
+    {% elsif photo.aspect == 'square' %}
+        <img id="img_{{ photo.id }}" class="myImg grid-item grid-item--w2 grid-item--h2 {{ photo.tags }}" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
+         onclick="openModal();currentSlide({{ photo.id }})" width="100%">
+    {% endif %}
 {% endfor %}
 </div>
+
+{% comment %} <div class="grid">
+{% for photo in site.data.gallery %}
+    {% if photo.aspect == 'landscape' %}
+    <div class="grid-item grid-item--w2 {{ photo.tags }}">
+        <img id="img_{{ photo.id }}" class="myImg" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
+         onclick="openModal();currentSlide({{ photo.id }})" width="100%">
+    </div>
+    {% elsif photo.aspect == 'portrait' %}
+    <div class="grid-item grid-item--h2 {{ photo.tags }}">
+        <img id="img_{{ photo.id }}" class="myImg" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
+         onclick="openModal();currentSlide({{ photo.id }})" width="100%">
+    </div>
+    {% elsif photo.aspect == 'square' %}
+    <div class="grid-item grid-item--w2 grid-item--h2 {{ photo.tags }}">
+        <img id="img_{{ photo.id }}" class="myImg {{ photo.tags }}" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
+         onclick="openModal();currentSlide({{ photo.id }})" width="100%">
+    </div>
+    {% endif %}
+{% endfor %}
+</div> {% endcomment %}
 
 <!-- The Modal/Lightbox -->
 <div id="myModal" class="modal">
@@ -111,8 +139,7 @@
           <img class="modal-content" src="../assets/photos/{{ photo.filename }}">
         </div>
     {% endfor %}
-
-
+    
   </div>
 </div>
 
