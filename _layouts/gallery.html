@@ -102,13 +102,13 @@
         <img id="img_{{ photo.id }}" class="myImg grid-item grid-item--w2 {{ photo.tags }}" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
          onclick="openModal();currentSlide({{ photo.id }})" width="100%">
     {% elsif photo.aspect == 'portrait' %}
-        <img id="img_{{ photo.id }}" class="myImg grid-item grid-item--h2 {{ photo.tags }}" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
+        <img id="img_{{ photo.id }}" class="myImg grid-item grid-item--w2 grid-item--hp {{ photo.tags }}" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
          onclick="openModal();currentSlide({{ photo.id }})" width="100%">
     {% elsif photo.aspect == 'square' %}
         <img id="img_{{ photo.id }}" class="myImg grid-item grid-item--w2 grid-item--h2 {{ photo.tags }}" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
          onclick="openModal();currentSlide({{ photo.id }})" width="100%">
     {% elsif photo.aspect == 'panorama' %}
-        <img id="img_{{ photo.id }}" class="myImg grid-item grid-item--w-pano {{ photo.tags }}" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
+        <img id="img_{{ photo.id }}" class="myImg grid-item grid-item--wpano {{ photo.tags }}" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
          onclick="openModal();currentSlide({{ photo.id }})" width="100%">
     {% endif %}
 {% endfor %}
