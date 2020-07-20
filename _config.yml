@@ -14,9 +14,10 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: KK Homepage
+name: Krzysztof Kotysz
 email: name.lastname@uwr.edu.pl
 description: >- # this means to ignore newlines until "baseurl:"
-  KK home webpage
+  KK home webpage wiht astronomy, photography and technology related content.
 baseurl:
 twitter_username: krzykoty
 github_username: plokoon12
@@ -33,6 +34,7 @@ permalink: /:categories/:title/
 paginate: 5 # amount of posts to show
 paginate_path: /page:num/
 timezone: Europe/Warsaw # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+breadcrumbs: true
 
 analytics:
   provider: "google-gtag"
@@ -64,6 +66,15 @@ plugins:
   - jemoji
   - jekyll-include-cache
   - jekyll-seo-tag
+
+social:
+  type:  # Person or Organization (defaults to Person)
+  name:  # If the user or organization name differs from the site's name
+  links:
+    - "https://twitter.com/krzykoty"
+    - "https://www.facebook.com/k.kotysz"
+    - "https://flickr.com/people/krzkot"
+    - "https://www.linkedin.com/in/krzysztof-kotysz-574031163"
 
 author:
   name   : "Krzysztof Kotysz"
