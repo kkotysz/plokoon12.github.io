@@ -1,7 +1,7 @@
 * { box-sizing: border-box; }
 
 body {
-  font-family: 'Abel', sans-serif;
+  font-family: 'Advent Pro', sans-serif;
   height: 100vh;
   background: #1e1e1e;
   text-align: center;
@@ -49,7 +49,7 @@ body {
 /* ---- isotope ---- */
 
 .grid {
-  border: 0px solid #332;
+  /* border: 0px solid rgb(34,34,34,0); */
   /* max-width: 100%; */
   margin: 0 auto;
 }
@@ -71,7 +71,6 @@ body {
   margin-bottom: 3px;
   /* padding: 0px; */
   background: #888;
-  color: #262524;
 }
 
 
