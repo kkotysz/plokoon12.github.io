@@ -7,52 +7,47 @@
   tags: astrophoto landscape tromso
   id: 2 
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Aurora Borealis over Rekvik near Tromsø - Norway
 - filename: 3.jpg
   tags: astrophoto landscape tromso
   id: 3  
   aspect: landscape
-  desc: Lorem ipsum
+  desc: "Aurora Borealis with visible colors from O<sub>2</sub> and N<sub>2</sub>"
 - filename: 4.jpg
   tags: astrophoto landscape tromso
   id: 4  
   aspect: portrait
-  desc: Lorem ipsum
+  desc: View on Aurora Borealis, Rekvik near Tromsø - Norway
 - filename: 5.jpg
   tags: astrophoto bialkow landscape
   id: 5  
   aspect: landscape
-  desc: Comet C/2020 F3 (NEOWISE) in the tree gap
+  desc: Comet C/2020 F3 (NEOWISE) in the tree gap with ion tail
 - filename: 6.jpg
   tags: astrophoto bialkow landscape
   id: 6  
   aspect: landscape
-  desc: Lorem ipsum
-- filename: 7.jpg
-  tags: astrophoto bialkow landscape
-  id: 7  
-  aspect: 
-  desc: Lorem ipsum
+  desc: Comet C/2020 F3 (NEOWISE) in Białków
 - filename: 8.jpg
   tags: astrophoto bialkow
   id: 8  
   aspect: portrait
-  desc: Lorem ipsum
+  desc: Comet C/2020 F3 (NEOWISE) close-up view with greenish head
 - filename: 9.jpg
   tags: landscape
   id: 9  
   aspect: square
-  desc: Lorem ipsum
+  desc: Cheyen the Dog
 - filename: 10.jpg
   tags: landscape switzerland
   id: 10  
   aspect: landscape
-  desc: Lorem ipsum
+  desc: On the way to Geneva, Switzerland
 - filename: 11.jpg
   tags: landscape switzerland
   id: 11 
   aspect: portrait
-  desc: Lorem ipsum
+  desc: Watrerfall near Lavaux Vinorama
 - filename: 12.jpg
   tags: landscape switzerland
   id: 12  
