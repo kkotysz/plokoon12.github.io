@@ -34,11 +34,11 @@
 	<E K="Width" V="2848" />
 	<VAR Engine="1300">
 		<E K="HighResProcessCounter" V="4658" />
-		<E K="LastMetadataModificationDate" V="1596570134.068013" />
-		<E K="LowResProcessCounter" V="12998" />
+		<E K="LastMetadataModificationDate" V="1596571057.499817" />
+		<E K="LowResProcessCounter" V="13002" />
 		<E K="ProductID" V="FileSystemJpeg" />
-		<E K="SyncProcessCounter" V="1" />
-		<E K="UUID" V="BD88AC65-BCF0-423A-A152-784742DD39FF" />
+		<E K="SyncProcessCounter" V="2" />
+		<E K="UUID" V="C23686A9-7205-4EBB-A32D-0420547DF073" />
 		<DL>
 			<E K="BlackRecovery" V="0" />
 			<E K="Brightness" V="0" />
@@ -94,6 +94,7 @@
 			<E K="Image_Scene" V="" />
 			<E K="LensAperture" V="5" />
 			<E K="LensChromaFringing" V="|||||" />
+			<E K="LensDiffractionCorrectionEnabled" V="0" />
 			<E K="LensFocalLength" V="52" />
 			<E K="LensLCCDustRemovalEnabled" V="0" />
 			<E K="LensLccLightFalloff" V="0" />
@@ -120,6 +121,7 @@
 			<E K="TechnicalProcessingMethod" V="0" />
 			<E K="UsmAmount" V="0" />
 			<E K="UsmHaloControl" V="0" />
+			<E K="UsmMethod" V="0" />
 			<E K="UsmRadius" V="0.800000011920929" />
 			<E K="UsmThreshold" V="1" />
 			<E K="Vignetting" V="0|1|0|1" />
@@ -159,6 +161,7 @@
 			<E K="TargetHighlight" V="1;1;1;1" />
 			<E K="TargetShadow" V="0;0;0;0" />
 			<E K="UsmHaloControl" V="0" />
+			<E K="UsmMethod" V="0" />
 			<E K="UsmRadius" V="0.800000011920929" />
 			<E K="UsmThreshold" V="1" />
 			<E K="WhiteRecovery" V="-8.01661014556885" />
@@ -196,6 +199,7 @@
 			<E K="TargetHighlight" V="1;1;1;1" />
 			<E K="TargetShadow" V="0;0;0;0" />
 			<E K="UsmHaloControl" V="0" />
+			<E K="UsmMethod" V="0" />
 			<E K="UsmRadius" V="0.800000011920929" />
 			<E K="UsmThreshold" V="1" />
 			<E K="WhiteRecovery" V="-28.244649887085" />
