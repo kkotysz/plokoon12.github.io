@@ -21,7 +21,7 @@ description: >- # this means to ignore newlines until "baseurl:"
   GALLERY | POSTS | ABOUT
 baseurl:
 twitter_username: krzykoty
-github_username: plokoon12
+github_username: kkotysz
 minimal_mistakes_skin: "air" # "air", "aqua", "contrast", "dark", "default", "dirt", "neon", "mint", "plum" "sunrise"
 search: true
 masthead_title: "Homepage"
@@ -92,7 +92,7 @@ author:
       url: "https://twitter.com/krzykoty"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/plokoon12"
+      url: "https://github.com/kkotysz"
     - label: "reddit"
       icon: "fab fa-fw fa-reddit"
       url: "https://www.reddit.com/user/plokoon_"
@@ -110,7 +110,7 @@ footer:
       url: "https://twitter.com/krzykoty"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/plokoon12"
+      url: "https://github.com/kkotysz"
     - label: "reddit"
       icon: "fab fa-fw fa-reddit"
       url: "https://www.reddit.com/user/plokoon_"
