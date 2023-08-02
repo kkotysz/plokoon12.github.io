@@ -119,12 +119,12 @@
   aspect: landscape
   desc: Lorem ipsum
 - filename: 26.jpg
-  tags: landscape
+  tags: landscape bw
   id: 26
   aspect: landscape
   desc: Izera Mountains
 - filename: 27.jpg
-  tags: landscape
+  tags: landscape bw
   id: 27
   aspect: square
   desc: The great tit (Bogatka zwyczajna) on a tree
@@ -179,10 +179,10 @@
   aspect: landscape
   desc: Bialkow Observatory
 - filename: 38.jpg
-  tags: bialkow landscape
+  tags: bialkow landscape bw
   id: 38
   aspect: square
-  desc: LBialkow Observatory in B&W
+  desc: Bialkow Observatory in B&W
 - filename: 39.jpg
   tags: bialkow landscape
   id: 39
@@ -499,7 +499,7 @@
   aspect: landscape
   desc: Lorem ipsum
 - filename: 102.jpg
-  tags: landscape
+  tags: landscape bw
   id: 102
   aspect: landscape
   desc: Lorem ipsum
@@ -603,3 +603,418 @@
   id: 122
   aspect: square
   desc: Conjunction of Moon, Jupiter and Saturn
+- filename: 123.jpg
+  tags: architecture dubai landscape
+  id: 123
+  aspect: landscape
+  desc: Burj Khalifa, palm tree and Moon
+- filename: 124.jpg
+  tags: architecture dubai portrait
+  id: 124
+  aspect: portrait
+  desc: Burj Khalifa - panorama
+- filename: 125.jpg
+  tags: architecture dubai landscape
+  id: 125
+  aspect: landscape
+  desc: Dubai architecture
+- filename: 126.jpg
+  tags: architecture dubai landscape
+  id: 126
+  aspect: landscape
+  desc: Marina in Dubai
+- filename: 127.jpg
+  tags: architecture dubai landscape
+  id: 127
+  aspect: landscape
+  desc: Tall buildings in Dubai
+- filename: 128.jpg
+  tags: architecture dubai landscape
+  id: 128
+  aspect: landscape
+  desc: Dubai at sunrise
+- filename: 129.jpg
+  tags: architecture busan landscape korea
+  id: 129
+  aspect: landscape
+  desc: View on Haeundae Beach from Dongbaek Island
+- filename: 130.jpg
+  tags: architecture busan landscape korea
+  id: 130
+  aspect: landscape
+  desc: View on Gwangan Bridge from Dongbaek Island
+- filename: 131.jpg
+  tags: architecture busan landscape korea
+  id: 131
+  aspect: landscape
+  desc: Haedong Yonggungsa Temple #1
+- filename: 132.jpg
+  tags: busan landscape korea
+  id: 132
+  aspect: landscape
+  desc: Chill Buddha
+- filename: 133.jpg
+  tags: architecture busan landscape korea
+  id: 133
+  aspect: landscape
+  desc: Haedong
+- filename: 134.jpg
+  tags: busan landscape korea
+  id: 134
+  aspect: landscape
+  desc: Colorful Buddhas in Haedong Yonggungsa Temple
+- filename: 135.jpg
+  tags: busan square korea bw
+  id: 135
+  aspect: square
+  desc: Haedong Yonggungsa Temple - rock
+- filename: 136.jpg
+  tags: busan landscape korea
+  id: 136
+  aspect: landscape
+  desc: View from Gamcheon Culture Village
+- filename: 137.jpg
+  tags: busan landscape korea bw
+  id: 137
+  aspect: landscape
+  desc: Jagalchi Market, Busan
+- filename: 138.jpg
+  tags: busan landscape korea
+  id: 138
+  aspect: landscape
+  desc: Geumjeongsanseong Fortress
+- filename: 139.jpg
+  tags: busan landscape korea
+  id: 139
+  aspect: landscape
+  desc: Bamboo on the trail from Geumjeongsanseong Fortress
+- filename: 140.jpg
+  tags: busan landscape korea
+  id: 140
+  aspect: landscape
+  desc: View on fireworks on Gwangalli Beach
+- filename: 141.jpg
+  tags: busan landscape korea
+  id: 141
+  aspect: landscape
+  desc: Gwangalli Beach #5
+- filename: 142.jpg
+  tags: daegu korea landscape
+  id: 142
+  aspect: landscape
+  desc: Korean red pine trees in Donghwasa Temple #1
+- filename: 143.jpg
+  tags: daegu korea landscape
+  id: 143
+  aspect: landscape
+  desc: Walk around Donghwasa Temple #1
+- filename: 144.jpg
+  tags: daegu korea landscape
+  id: 144
+  aspect: landscape
+  desc: Walk around Donghwasa Temple #3
+- filename: 145.jpg
+  tags: daegu korea landscape
+  id: 145
+  aspect: landscape
+  desc: Walk around Donghwasa Temple #6
+- filename: 146.jpg
+  tags: daegu korea landscape
+  id: 146
+  aspect: landscape
+  desc: Thirty Metre Tall Statue of Buddha at Donghwasa Temple #2
+- filename: 147.jpg
+  tags: architecture daegu korea landscape
+  id: 147
+  aspect: landscape
+  desc: Donghwasa Temple #4
+- filename: 148.jpg
+  tags: bw daegu korea landscape
+  id: 148
+  aspect: landscape
+  desc: Donghwasa Temple - prayers #1
+- filename: 149.jpg
+  tags: busan korea landscape
+  id: 149
+  aspect: landscape
+  desc: Dadaepo Beach #5
+- filename: 150.jpg
+  tags: busan korea landscape
+  id: 150
+  aspect: landscape
+  desc: Dadaepo Beach #7
+- filename: 151.jpg
+  tags: busan korea landscape
+  id: 151
+  aspect: landscape
+  desc: Dadaepo Beach - Morundae walk
+- filename: 152.jpg
+  tags: gyeongju korea landscape
+  id: 152
+  aspect: landscape
+  desc: Among Gyeongju tombs
+- filename: 153.jpg
+  tags: architecture gyeongju korea landscape
+  id: 153
+  aspect: landscape
+  desc: Cheomseongdae (첨성대) observatory
+- filename: 154.jpg
+  tags: architecture gyeongju korea landscape
+  id: 154
+  aspect: landscape
+  desc: 첨성대 from the front
+- filename: 155.jpg
+  tags: architecture korea landscape seoul
+  id: 155
+  aspect: landscape
+  desc: Seoul - Gyeongbokgung (경복궁)
+- filename: 156.jpg
+  tags: architecture bw korea landscape seoul
+  id: 156
+  aspect: landscape
+  desc: 경복궁 - ballroom
+- filename: 157.jpg
+  tags: architecture korea landscape seoul
+  id: 157
+  aspect: landscape
+  desc: Inside 경복궁
+- filename: 158.jpg
+  tags: architecture korea landscape seoul
+  id: 158
+  aspect: landscape
+  desc: Korean architecture
+- filename: 159.jpg
+  tags: architecture bw korea landscape seoul
+  id: 159
+  aspect: landscape
+  desc: Simplistic Seoul architecture
+- filename: 160.jpg
+  tags: architecture ireland landscape
+  id: 160
+  aspect: landscape
+  desc: Slieve Russel Hotel
+- filename: 161.jpg
+  tags: ireland landscape nature
+  id: 161
+  aspect: landscape
+  desc: Farmland in Ireland
+- filename: 163.jpg
+  tags: architecture ireland square
+  id: 163
+  aspect: square
+  desc: Masonic Hall
+- filename: 164.jpg
+  tags: architecture ireland landscape
+  id: 164
+  aspect: landscape
+  desc: Tomregan Church of Ireland
+- filename: 165.jpg
+  tags: ireland landscape nature
+  id: 165
+  aspect: landscape
+  desc: Door to...?
+- filename: 166.jpg
+  tags: ireland landscape
+  id: 166
+  aspect: landscape
+  desc: Not too fast
+- filename: 167.jpg
+  tags: ireland nature landscape
+  id: 167
+  aspect: landscape
+  desc: Bundoran Beach with cliffs
+- filename: 168.jpg
+  tags: ireland landscape nature
+  id: 168
+  aspect: landscape
+  desc: Cliffs in the water
+- filename: 169.jpg
+  tags: ireland landscape nature
+  id: 169
+  aspect: landscape
+  desc: Polish cross in Ireland
+- filename: 170.jpg
+  tags: ireland landscape
+  id: 170
+  aspect: landscape
+  desc: Golfing mood
+- filename: 171.jpg
+  tags: ireland landscape nature
+  id: 171
+  aspect: landscape
+  desc: The Fairy Bridges in Bundoran
+- filename: 172.jpg
+  tags: ireland landscape nature
+  id: 172
+  aspect: landscape
+  desc: <i>Waves</i> on the water
+- filename: 173.jpg
+  tags: ireland landscape nature
+  id: 173
+  aspect: landscape
+  desc: Waves crashing
+- filename: 174.jpg
+  tags: ireland landscape nature
+  id: 174
+  aspect: landscape
+  desc: Cliff, beach and ocean
+- filename: 175.jpg
+  tags: ireland landscape nature
+  id: 175
+  aspect: landscape
+  desc: Vegetation on the beach
+- filename: 176.jpg
+  tags: ireland landscape nature
+  id: 176
+  aspect: landscape
+  desc: Idyllic view
+- filename: 177.jpg
+  tags: ireland landscape nature
+  id: 177
+  aspect: landscape
+  desc: Horseriding on the beach
+- filename: 178.jpg
+  tags: ireland landscape nature
+  id: 178
+  aspect: landscape
+  desc: Take a seat
+- filename: 179.jpg
+  tags: ireland landscape nature
+  id: 179
+  aspect: landscape
+  desc: Is there a pot of gold?
+- filename: 180.jpg
+  tags: architecture barcelona square
+  id: 180
+  aspect: square
+  desc: Dual nature of Sagrada Familia
+- filename: 181.jpg
+  tags: architecture barcelona portrait
+  id: 181
+  aspect: portrait
+  desc: Inside Sagrada
+- filename: 182.jpg
+  tags: architecture barcelona square
+  id: 182
+  aspect: square
+  desc: Almost Dürers magic square
+- filename: 183.jpg
+  tags: architecture barcelona landscape
+  id: 183
+  aspect: landscape
+  desc: Judas Kiss
+- filename: 184.jpg
+  tags: architecture barcelona bw square
+  id: 184
+  aspect: square
+  desc: A quiet corner in Barri Gòtic
+- filename: 186.jpg
+  tags: architecture barcelona bw portrait
+  id: 186
+  aspect: portrait
+  desc: Walk through Barri Gòtic
+- filename: 187.jpg
+  tags: barcelona nature square
+  id: 187
+  aspect: square
+  desc: Just a Palm tree
+- filename: 188.jpg
+  tags: barcelona landscape nature
+  id: 188
+  aspect: landscape
+  desc: 2 trees 1 bird
+- filename: 189.jpg
+  tags: barcelona landscape nature
+  id: 189
+  aspect: landscape
+  desc: Beautiful view from Park Güell
+- filename: 190.jpg
+  tags: barcelona landscape
+  id: 190
+  aspect: landscape
+  desc: Mirador del Tibidabo
+- filename: 192.jpg
+  tags: barcelona landscape
+  id: 192
+  aspect: landscape
+  desc: Nature over the Port
+- filename: 194.jpg
+  tags: barcelona landscape
+  id: 194
+  aspect: landscape
+  desc: Ways of transport
+- filename: 195.jpg
+  tags: barcelona architecture landscape
+  id: 195
+  aspect: landscape
+  desc: Castell de Montjuïc
+- filename: 196.jpg
+  tags: barcelona landscape nature
+  id: 196
+  aspect: landscape
+  desc: One, two, three - Palm Tree!
+- filename: 197.jpg
+  tags: architecture barcelona landscape
+  id: 197
+  aspect: landscape
+  desc: Parc de la Ciutadella
+- filename: 198.jpg
+  tags: barcelona landscape nature
+  id: 198
+  aspect: landscape
+  desc: Tropical Ciutadella
+- filename: 199.jpg
+  tags: architecture barcelona landscape
+  id: 199
+  aspect: landscape
+  desc: Palau Nacional
+- filename: 200.jpg
+  tags: barcelona landscape
+  id: 200
+  aspect: landscape
+  desc: Busy Barcelona near Arc de Triomf
+- filename: 201.jpg
+  tags: barcelona nature square
+  id: 201
+  aspect: square
+  desc: Sunlit Palm Tree
+- filename: 202.jpg
+  tags: barcelona bw landscape
+  id: 202
+  aspect: landscape
+  desc: Busy waters
+- filename: 203.jpg
+  tags: landscape nature switzerland
+  id: 203
+  aspect: landscape
+  desc: Swiss Alps
+- filename: 204.jpg
+  tags: bw landscape switzerland
+  id: 204
+  aspect: landscape
+  desc: Lac supérieur de Fully
+- filename: 205.jpg
+  tags: landscape nature switzerland
+  id: 205
+  aspect: landscape
+  desc: Sunset at Cabane du Fenestral (2453 AMSL)
+- filename: 206.jpg
+  tags: landscape switzerland
+  id: 206
+  aspect: landscape
+  desc: Little Bridge near Chillon Castle
+- filename: 207.jpg
+  tags: annecy architecture france landscape switzerland
+  id: 207
+  aspect: landscape
+  desc: Annecy, France
+- filename: 208.jpg
+  tags: architecture landscape switzerland
+  id: 208
+  aspect: landscape
+  desc: View of Bern
+- filename: 209.jpg
+  tags: architecture landscape switzerland
+  id: 209
+  aspect: landscape
+  desc: Samson Fountain, Bern

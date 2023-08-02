@@ -108,64 +108,41 @@
   <button class="button is-checked" data-filter="*">#all</button>
   <button class="button" data-filter=".tromso">#tromso</button>
   <button class="button" data-filter=".chile">#chile</button>
-  <button class="button" data-filter=".bialkow">#bialkow</button>
   <button class="button" data-filter=".switzerland">#switzerland</button>
+  <button class="button" data-filter=".barcelona">#barcelona</button>
+  <button class="button" data-filter=".ireland">#ireland</button>
+  <button class="button" data-filter=".korea">#korea</button>
+  <button class="button" data-filter=".dubai">#dubai</button>
+  <button class="button" data-filter=".bialkow">#bialkow</button>
   <button class="button" data-filter=".astrophoto">#astro</button>
+  <button class="button" data-filter=".bw">#bnw</button>
 </div>
-
-{% comment %} <h2>Sort</h2>
-<div id="sorts" class="button-group">  <button class="button is-checked" data-sort-by="original-order">original order</button>
-  <button class="button" data-sort-by="name">name</button>
-  <button class="button" data-sort-by="symbol">symbol</button>
-  <button class="button" data-sort-by="number">number</button>
-  <button class="button" data-sort-by="weight">weight</button>
-  <button class="button" data-sort-by="category">category</button>
-</div> {% endcomment %}
 
 <div class="grid" id="lightgallery">
   {% for photo in site.data.gallery %}
     <a href="../assets/photos/{{ photo.filename }}" data-sub-html="<h2>{{ photo.desc }}</h2>">
       {% if photo.aspect == 'landscape' %}
-
         <div class="grid-item grid-item--w2 {{ photo.tags }}">
           <img id="img_{{ photo.id }}" class="grid-item--w2" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
             height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_landscape.jpg'" />
-          <div class="hover">
-            <div class="text">{{ photo.desc }}</div>
-          </div>
-        </div>  
-
       {% elsif photo.aspect == 'portrait' %}
-
         <div class="grid-item grid-item--w2 grid-item--hportrait {{ photo.tags }}">
           <img id="img_{{ photo.id }}" class="grid-item--w2 grid-item--hportrait" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
             height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_portrait.jpg'">
-          <div class="hover">
-            <div class="text">{{ photo.desc }}</div>
-          </div>
-        </div>  
-
       {% elsif photo.aspect == 'square' %}
-
         <div class="grid-item grid-item--w2 grid-item--h2 {{ photo.tags }}">
           <img id="img_{{ photo.id }}" class="grid-item--w2 grid-item--h2" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
             height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_square.jpg'">
-          <div class="hover">
-            <div class="text">{{ photo.desc }}</div>
-          </div>
-        </div>  
-
       {% elsif photo.aspect == 'panorama' %}
-
         <div class="grid-item grid-item--wpano {{ photo.tags }}">
           <img id="img_{{ photo.id }}" class="grid-item--wpano" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
             height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_pano.jpg'">
+      {% endif %}        
           <div class="hover">
             <div class="text">{{ photo.desc }}</div>
           </div>
+        
         </div>  
-
-      {% endif %}
     </a>
   {% endfor %}
 </div>
