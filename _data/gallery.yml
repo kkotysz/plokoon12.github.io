@@ -1,30 +1,30 @@
 - filename: 1.jpg
-  tags: chile landscape
+  tags: chile
   id: 1
   aspect: landscape
   desc: View on Atacama dessert from Cerro Murphy
 - filename: 2.jpg
-  tags: astrophoto landscape tromso
+  tags: astrophoto tromso
   id: 2
   aspect: landscape
   desc: Aurora Borealis over Rekvik near Tromsø - Norway
 - filename: 3.jpg
-  tags: astrophoto landscape tromso
+  tags: astrophoto  tromso
   id: 3
   aspect: landscape
   desc: "Aurora Borealis with visible colors from O<sub>2</sub> and N<sub>2</sub>"
 - filename: 4.jpg
-  tags: astrophoto landscape tromso
+  tags: astrophoto  tromso
   id: 4
   aspect: portrait
   desc: View on Aurora Borealis, Rekvik near Tromsø - Norway
 - filename: 5.jpg
-  tags: astrophoto bialkow landscape
+  tags: astrophoto bialkow 
   id: 5
   aspect: landscape
   desc: Comet C/2020 F3 (NEOWISE) in the tree gap with ion tail
 - filename: 6.jpg
-  tags: astrophoto bialkow landscape
+  tags: astrophoto bialkow 
   id: 6
   aspect: landscape
   desc: Comet C/2020 F3 (NEOWISE) in Białków
@@ -34,192 +34,192 @@
   aspect: portrait
   desc: Comet C/2020 F3 (NEOWISE) close-up view with greenish head
 - filename: 9.jpg
-  tags: landscape
+  tags: nature square
   id: 9
   aspect: square
   desc: Cheyen the Dog
 - filename: 10.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 10
   aspect: landscape
   desc: On the way to Geneva, Switzerland
 - filename: 11.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 11
   aspect: portrait
   desc: Watrerfall near Lavaux Vinorama
 - filename: 12.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 12
   aspect: landscape
   desc: Vineyards near Geneva Lake
 - filename: 13.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 13
   aspect: portrait
   desc: Vineyards and railroad at Lavaux
 - filename: 14.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 14
   aspect: landscape
   desc: Geneva Lake after sunset
 - filename: 15.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 15
   aspect: landscape
   desc: View from Lavaux on Montreux and Bernese Alps
 - filename: 16.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 16
   aspect: landscape
   desc: Le Grammont from Montreux
 - filename: 17.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 17
   aspect: landscape
   desc: Le Moléson (2002 m AMSL) from Grueyere
 - filename: 18.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 18
   aspect: landscape
   desc: Dent du Bourgo (1913 m AMSL) from Gruyere
 - filename: 19.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 19
   aspect: landscape
   desc: Surroundings of Gruyere
 - filename: 20.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 20
   aspect: landscape
   desc: More surroundings of Gruyere
 - filename: 21.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 21
   aspect: landscape
   desc: Scenic trail no. 1
 - filename: 22.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 22
   aspect: portrait
   desc: Scenic trail no. 2
 - filename: 23.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 23
   aspect: landscape
   desc: Scenic trail no. 3
 - filename: 24.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 24
   aspect: landscape
   desc: Scenic trail no. 4
 - filename: 25.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 25
   aspect: landscape
   desc: Scenic trail no. 5
 - filename: 26.jpg
-  tags: landscape bw
+  tags:  bw nature
   id: 26
   aspect: landscape
   desc: Izera Mountains
 - filename: 27.jpg
-  tags: landscape bw
+  tags:  bw nature square
   id: 27
   aspect: square
   desc: The great tit (Bogatka zwyczajna) on a tree
 - filename: 28.jpg
-  tags: landscape
+  tags: nature
   id: 28
   aspect: landscape
   desc: Birds and balloons
 - filename: 29.jpg
-  tags: bialkow landscape
+  tags: bialkow 
   id: 29
   aspect: landscape
   desc: Sunrise at Bialkow Observatory
 - filename: 30.jpg
-  tags: bialkow landscape
+  tags: bialkow 
   id: 30
   aspect: landscape
   desc: Sunrise at Bialkow Observatory
 - filename: 31.jpg
-  tags: bialkow landscape
+  tags: bialkow 
   id: 31
   aspect: landscape
   desc: Sunrise at Bialkow Observatory
 - filename: 32.jpg
-  tags: bialkow landscape
+  tags: bialkow 
   id: 32
   aspect: landscape
   desc: Sunrise at Bialkow Observatory
 - filename: 33.jpg
-  tags: bialkow landscape
+  tags: bialkow 
   id: 33
   aspect: landscape
   desc: Palace in Bialkow
 - filename: 34.jpg
-  tags: bialkow landscape
+  tags: bialkow 
   id: 34
   aspect: landscape
   desc: Bialkow Observatory at sunrise
 - filename: 35.jpg
-  tags: bialkow landscape
+  tags: bialkow 
   id: 35
   aspect: landscape
   desc: Coronagraph at sunrise
 - filename: 36.jpg
-  tags: bialkow landscape
+  tags: bialkow 
   id: 36
   aspect: landscape
   desc: Bialkow Observatory
 - filename: 37.jpg
-  tags: bialkow landscape
+  tags: bialkow 
   id: 37
   aspect: landscape
   desc: Bialkow Observatory
 - filename: 38.jpg
-  tags: bialkow landscape bw
+  tags: bialkow  bw square
   id: 38
   aspect: square
   desc: Bialkow Observatory in B&W
 - filename: 39.jpg
-  tags: bialkow landscape
+  tags: bialkow 
   id: 39
   aspect: landscape
   desc: Coronagraph in Bialkow
 - filename: 40.jpg
-  tags: chile landscape
+  tags: chile 
   id: 40
   aspect: landscape
   desc: Chilean road
 - filename: 41.jpg
-  tags: chile landscape
+  tags: chile 
   id: 41
   aspect: landscape
   desc: On the road to Cerro Armazones
 - filename: 42.jpg
-  tags: chile landscape
+  tags: chile 
   id: 42
   aspect: landscape
   desc: Cerro Murphy
 - filename: 43.jpg
-  tags: chile landscape
+  tags: chile 
   id: 43
   aspect: landscape
   desc: Cerro Armazones
 - filename: 44.jpg
-  tags: chile landscape
+  tags: chile 
   id: 44
   aspect: landscape
   desc: Sunset over Paranal
 - filename: 45.jpg
-  tags: astrophoto chile landscape
+  tags: astrophoto chile 
   id: 45
   aspect: landscape
   desc: Shooting for the stars
 - filename: 46.jpg
-  tags: astrophoto chile landscape
+  tags: astrophoto chile 
   id: 46
   aspect: landscape
   desc: Milky Way over Atacama
@@ -229,22 +229,22 @@
   aspect: portrait
   desc: Milky Way Core
 - filename: 48.jpg
-  tags: astrophoto chile landscape
+  tags: astrophoto chile 
   id: 48
   aspect: landscape
   desc: Wind Farm under Atacama sky
 - filename: 49.jpg
-  tags: astrophoto chile landscape
+  tags: astrophoto chile 
   id: 49
   aspect: landscape
   desc: Nearing sunrise at the Atacama dessert
 - filename: 50.jpg
-  tags: chile landscape
+  tags: chile 
   id: 50
   aspect: landscape
   desc: Sunset over Paranal
 - filename: 51.jpg
-  tags: astrophoto chile landscape
+  tags: astrophoto chile 
   id: 51
   aspect: landscape
   desc: Moonlit Atacama
@@ -284,12 +284,12 @@
   aspect: landscape
   desc: Sun with spots 2
 - filename: 59.jpg
-  tags: landscape
+  tags: portrait
   id: 59
   aspect: portrait
   desc: Contrails with reflecting plane
 - filename: 60.jpg
-  tags: chile landscape
+  tags: chile 
   id: 60
   aspect: landscape
   desc: 1/4 of the VLT
@@ -299,27 +299,27 @@
   aspect: landscape
   desc: Moon
 - filename: 62.jpg
-  tags: landscape
+  tags: nature
   id: 62
   aspect: landscape
   desc: Giewont
 - filename: 63.jpg
-  tags: landscape
+  tags: nature
   id: 63
   aspect: landscape
   desc: Czerwone Wierchy
 - filename: 64.jpg
-  tags: landscape
+  tags: nature
   id: 64
   aspect: landscape
   desc: Tatra Mountains
 - filename: 65.jpg
-  tags: landscape
+  tags: nature
   id: 65
   aspect: landscape
   desc: High Tatras
 - filename: 66.jpg
-  tags: landscape switzerland
+  tags:  switzerland
   id: 66
   aspect: landscape
   desc: On the way to Geneva
@@ -329,17 +329,17 @@
   aspect: landscape
   desc: Partial Eclipse in March 2015
 - filename: 68.jpg
-  tags: landscape
+  tags: architecture
   id: 68
   aspect: landscape
   desc: Astronomical Institute in Wroclaw
 - filename: 69.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 69
   aspect: landscape
   desc: Shed in Tromsø
 - filename: 70.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 70
   aspect: landscape
   desc: Walking in Tromsø
@@ -349,97 +349,97 @@
   aspect: landscape
   desc: Harbor in Tromsø
 - filename: 72.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 72
   aspect: landscape
   desc: Lake in Tromsø
 - filename: 73.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 73
   aspect: landscape
   desc: Kvaløya near Tromsø, Norway
 - filename: 74.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 74
   aspect: landscape
   desc: Rain near Tromsø
 - filename: 75.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 75
   aspect: landscape
   desc: Tromsø area
 - filename: 76.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 76
   aspect: landscape
   desc: Near Tromsø
 - filename: 77.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 77
   aspect: landscape
   desc: Kvaløya near Tromsø, Norway
 - filename: 78.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 78
   aspect: landscape
   desc: Kvaløya near Tromsø, Norway
 - filename: 79.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 79
   aspect: landscape
   desc: View from Storsteinen
 - filename: 80.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 80
   aspect: landscape
   desc: Tromsø from Storsteinen Part 1
 - filename: 81.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 81
   aspect: landscape
   desc: Tromsø from Storsteinen Part 2
 - filename: 82.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 82
   aspect: landscape
   desc: Window view in Tromsø
 - filename: 83.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 83
   aspect: landscape
   desc: Lake Blåvatnet
 - filename: 84.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 84
   aspect: landscape
   desc: Glacier over Lake Blåvatnet
 - filename: 85.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 85
   aspect: landscape
   desc: Mountains near Lake Blåvatnet
 - filename: 86.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 86
   aspect: landscape
   desc: Lyngen Alps near Lake Blåvatnet
 - filename: 87.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 87
   aspect: landscape
   desc: On the way back from Lake Blåvatnet
 - filename: 88.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 88
   aspect: landscape
   desc: Sunset over Lyngen Alps
 - filename: 89.jpg
-  tags: astrophoto landscape tromso
+  tags: astrophoto  tromso
   id: 89
   aspect: landscape
   desc: Aurora Borealis over Tromsø area
 - filename: 90.jpg
-  tags: astrophoto landscape tromso
+  tags: astrophoto  tromso
   id: 90
   aspect: landscape
   desc: Something evil in the sky...
@@ -449,67 +449,67 @@
   aspect: portrait
   desc: Brightest moment of the aurora
 - filename: 92.jpg
-  tags: astrophoto tromso
+  tags: astrophoto tromso 
   id: 92
   aspect: landscape
   desc: Aurora Borealis over Tromsø area
 - filename: 93.jpg
-  tags: astrophoto tromso
+  tags: astrophoto tromso ladscape
   id: 93
   aspect: landscape
   desc: Aurora Borealis over Tromsø area
 - filename: 94.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 94
   aspect: landscape
   desc: On the way to glacier
 - filename: 95.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 95
   aspect: landscape
   desc: Lyngen Alps
 - filename: 96.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 96
   aspect: landscape
   desc: Peaking out of the glacier
 - filename: 97.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 97
   aspect: landscape
   desc: Glacier with 400 m AMSL elevation
 - filename: 98.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 98
   aspect: landscape
   desc: Lonely island on glacier lake
 - filename: 99.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 99
   aspect: landscape
   desc: Walking on the glacier
 - filename: 100.jpg
-  tags: tromso
+  tags: tromso 
   id: 100
   aspect: landscape
   desc: Cracked ice on the glacier
 - filename: 101.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 101
   aspect: landscape
   desc: On the way back from glacier
 - filename: 102.jpg
-  tags: landscape bw
+  tags: nature bw
   id: 102
   aspect: landscape
   desc: Ice desert near Śnieżka peak
 - filename: 103.jpg
-  tags: astrophoto
+  tags: astrophoto 
   id: 103
   aspect: landscape
   desc: Simply moon
 - filename: 104.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 104
   aspect: landscape
   desc: Lake Blåvatnet
@@ -519,92 +519,92 @@
   aspect: landscape
   desc: LMC
 - filename: 106.jpg
-  tags: astrophoto chile landscape
+  tags: astrophoto chile 
   id: 106
   aspect: landscape
   desc: Short Startrails
 - filename: 107.jpg
-  tags: astrophoto
+  tags: astrophoto square
   id: 107
   aspect: square
   desc: Mercury transit, 9th of May 2016
 - filename: 108.jpg
-  tags: astrophoto chile
+  tags: astrophoto chile 
   id: 108
   aspect: landscape
   desc: Looking into the heart of the Milky Way
 - filename: 109.jpg
-  tags: astrophoto chile landscape
+  tags: astrophoto chile 
   id: 109
   aspect: landscape
   desc: Galaxyset
 - filename: 110.jpg
-  tags: astrophoto chile
+  tags: astrophoto chile 
   id: 110
   aspect: landscape
   desc: Milky Way and LMC
 - filename: 111.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 111
   aspect: landscape
   desc: Kvaløysletta or Skellige?
 - filename: 112.jpg
-  tags: landscape tromso
+  tags:  tromso
   id: 112
   aspect: landscape
   desc: Creek in Norway
 - filename: 113.jpg
-  tags: landscape
+  tags: panorama
   id: 113
   aspect: panorama
   desc: Śnieżka at dawn
 - filename: 114.jpg
-  tags: landscape
+  tags: panorama
   id: 114
   aspect: panorama
   desc: From Śnieżka during sunrise
 - filename: 115.jpg
-  tags: chile landscape
+  tags: chile 
   id: 115
   aspect: landscape
   desc: Sunset over Atacama Desert wit VLT
 - filename: 116.jpg
-  tags: astrophoto chile landscape
+  tags: astrophoto chile 
   id: 116
   aspect: landscape
   desc: Moving clouds and stars
 - filename: 117.jpg
-  tags: landscape
+  tags: 
   id: 117
   aspect: landscape
   desc: Lightning strike in Opole
 - filename: 118.jpg
-  tags: astrophoto bialkow landscape
+  tags: astrophoto bialkow 
   id: 118
   aspect: landscape
   desc: Białków trails part 2
 - filename: 119.jpg
-  tags: astrophoto bialkow landscape
+  tags: astrophoto bialkow 
   id: 119
   aspect: landscape
   desc: Białków trails part 1
 - filename: 120.jpg
-  tags: astrophoto chile landscape
+  tags: astrophoto chile 
   id: 120
   aspect: landscape
   desc: Startrails over Atacama Desert part 1
 - filename: 121.jpg
-  tags: astrophoto chile landscape
+  tags: astrophoto chile 
   id: 121
   aspect: landscape
   desc: Startrails over Atacama Desert part 2
 - filename: 122.jpg
-  tags: astrophoto bialkow landscape
+  tags: astrophoto bialkow square
   id: 122
   aspect: square
   desc: Conjunction of Moon, Jupiter and Saturn
 - filename: 123.jpg
-  tags: architecture dubai landscape
+  tags: architecture dubai 
   id: 123
   aspect: landscape
   desc: Burj Khalifa, palm tree and Moon
@@ -614,52 +614,52 @@
   aspect: portrait
   desc: Burj Khalifa - panorama
 - filename: 125.jpg
-  tags: architecture dubai landscape
+  tags: architecture dubai panorama
   id: 125
   aspect: landscape
   desc: Dubai architecture
 - filename: 126.jpg
-  tags: architecture dubai landscape
+  tags: architecture dubai 
   id: 126
   aspect: landscape
   desc: Marina in Dubai
 - filename: 127.jpg
-  tags: architecture dubai landscape
+  tags: architecture dubai 
   id: 127
   aspect: landscape
   desc: Tall buildings in Dubai
 - filename: 128.jpg
-  tags: architecture dubai landscape
+  tags: architecture dubai 
   id: 128
   aspect: landscape
   desc: Dubai at sunrise
 - filename: 129.jpg
-  tags: architecture busan landscape korea
+  tags: architecture busan  korea
   id: 129
   aspect: landscape
   desc: View on Haeundae Beach from Dongbaek Island
 - filename: 130.jpg
-  tags: architecture busan landscape korea
+  tags: architecture busan  korea
   id: 130
   aspect: landscape
   desc: View on Gwangan Bridge from Dongbaek Island
 - filename: 131.jpg
-  tags: architecture busan landscape korea
+  tags: architecture busan  korea
   id: 131
   aspect: landscape
   desc: Haedong Yonggungsa Temple #1
 - filename: 132.jpg
-  tags: busan landscape korea
+  tags: busan  korea
   id: 132
   aspect: landscape
   desc: Chill Buddha
 - filename: 133.jpg
-  tags: architecture busan landscape korea
+  tags: architecture busan  korea
   id: 133
   aspect: landscape
   desc: Haedong
 - filename: 134.jpg
-  tags: busan landscape korea
+  tags: busan  korea
   id: 134
   aspect: landscape
   desc: Colorful Buddhas in Haedong Yonggungsa Temple
@@ -669,132 +669,132 @@
   aspect: square
   desc: Haedong Yonggungsa Temple - rock
 - filename: 136.jpg
-  tags: busan landscape korea
+  tags: busan  korea
   id: 136
   aspect: landscape
   desc: View from Gamcheon Culture Village
 - filename: 137.jpg
-  tags: busan landscape korea bw
+  tags: busan korea bw
   id: 137
   aspect: landscape
   desc: Jagalchi Market, Busan
 - filename: 138.jpg
-  tags: busan landscape korea
+  tags: busan korea
   id: 138
   aspect: landscape
   desc: Geumjeongsanseong Fortress
 - filename: 139.jpg
-  tags: busan landscape korea
+  tags: busan korea
   id: 139
   aspect: landscape
   desc: Bamboo on the trail from Geumjeongsanseong Fortress
 - filename: 140.jpg
-  tags: busan landscape korea
+  tags: busan korea
   id: 140
   aspect: landscape
   desc: View on fireworks on Gwangalli Beach
 - filename: 141.jpg
-  tags: busan landscape korea
+  tags: busan korea
   id: 141
   aspect: landscape
   desc: Gwangalli Beach #5
 - filename: 142.jpg
-  tags: daegu korea landscape
+  tags: daegu korea
   id: 142
   aspect: landscape
   desc: Korean red pine trees in Donghwasa Temple #1
 - filename: 143.jpg
-  tags: daegu korea landscape
+  tags: daegu korea
   id: 143
   aspect: landscape
   desc: Walk around Donghwasa Temple #1
 - filename: 144.jpg
-  tags: daegu korea landscape
+  tags: daegu korea
   id: 144
   aspect: landscape
   desc: Walk around Donghwasa Temple #3
 - filename: 145.jpg
-  tags: daegu korea landscape
+  tags: daegu korea
   id: 145
   aspect: landscape
   desc: Walk around Donghwasa Temple #6
 - filename: 146.jpg
-  tags: daegu korea landscape
+  tags: daegu korea
   id: 146
   aspect: landscape
   desc: Thirty Metre Tall Statue of Buddha at Donghwasa Temple #2
 - filename: 147.jpg
-  tags: architecture daegu korea landscape
+  tags: architecture daegu korea
   id: 147
   aspect: landscape
   desc: Donghwasa Temple #4
 - filename: 148.jpg
-  tags: bw daegu korea landscape
+  tags: bw daegu korea
   id: 148
   aspect: landscape
   desc: Donghwasa Temple - prayers #1
 - filename: 149.jpg
-  tags: busan korea landscape
+  tags: busan korea
   id: 149
   aspect: landscape
   desc: Dadaepo Beach #5
 - filename: 150.jpg
-  tags: busan korea landscape
+  tags: busan korea
   id: 150
   aspect: landscape
   desc: Dadaepo Beach #7
 - filename: 151.jpg
-  tags: busan korea landscape
+  tags: busan korea
   id: 151
   aspect: landscape
   desc: Dadaepo Beach - Morundae walk
 - filename: 152.jpg
-  tags: gyeongju korea landscape
+  tags: gyeongju korea
   id: 152
   aspect: landscape
   desc: Among Gyeongju tombs
 - filename: 153.jpg
-  tags: architecture gyeongju korea landscape
+  tags: architecture gyeongju korea
   id: 153
   aspect: landscape
   desc: Cheomseongdae (첨성대) observatory
 - filename: 154.jpg
-  tags: architecture gyeongju korea landscape
+  tags: architecture gyeongju korea
   id: 154
   aspect: landscape
   desc: 첨성대 from the front
 - filename: 155.jpg
-  tags: architecture korea landscape seoul
+  tags: architecture korea seoul
   id: 155
   aspect: landscape
   desc: Seoul - Gyeongbokgung (경복궁)
 - filename: 156.jpg
-  tags: architecture bw korea landscape seoul
+  tags: architecture bw korea seoul
   id: 156
   aspect: landscape
   desc: 경복궁 - ballroom
 - filename: 157.jpg
-  tags: architecture korea landscape seoul
+  tags: architecture korea seoul
   id: 157
   aspect: landscape
   desc: Inside 경복궁
 - filename: 158.jpg
-  tags: architecture korea landscape seoul
+  tags: architecture korea seoul
   id: 158
   aspect: landscape
   desc: Korean architecture
 - filename: 159.jpg
-  tags: architecture bw korea landscape seoul
+  tags: architecture bw korea seoul
   id: 159
   aspect: landscape
   desc: Simplistic Seoul architecture
 - filename: 160.jpg
-  tags: architecture ireland landscape
+  tags: architecture ireland
   id: 160
   aspect: landscape
   desc: Slieve Russel Hotel
 - filename: 161.jpg
-  tags: ireland landscape nature
+  tags: ireland nature
   id: 161
   aspect: landscape
   desc: Farmland in Ireland
@@ -804,82 +804,82 @@
   aspect: square
   desc: Masonic Hall
 - filename: 164.jpg
-  tags: architecture ireland landscape
+  tags: architecture ireland
   id: 164
   aspect: landscape
   desc: Tomregan Church of Ireland
 - filename: 165.jpg
-  tags: ireland landscape nature
+  tags: ireland nature
   id: 165
   aspect: landscape
   desc: Door to...?
 - filename: 166.jpg
-  tags: ireland landscape
+  tags: ireland
   id: 166
   aspect: landscape
   desc: Not too fast
 - filename: 167.jpg
-  tags: ireland nature landscape
+  tags: ireland nature
   id: 167
   aspect: landscape
   desc: Bundoran Beach with cliffs
 - filename: 168.jpg
-  tags: ireland landscape nature
+  tags: ireland nature
   id: 168
   aspect: landscape
   desc: Cliffs in the water
 - filename: 169.jpg
-  tags: ireland landscape nature
+  tags: ireland nature
   id: 169
   aspect: landscape
   desc: Polish cross in Ireland
 - filename: 170.jpg
-  tags: ireland landscape
+  tags: ireland
   id: 170
   aspect: landscape
   desc: Golfing mood
 - filename: 171.jpg
-  tags: ireland landscape nature
+  tags: ireland nature
   id: 171
   aspect: landscape
   desc: The Fairy Bridges in Bundoran
 - filename: 172.jpg
-  tags: ireland landscape nature
+  tags: ireland nature
   id: 172
   aspect: landscape
   desc: <i>Waves</i> on the water
 - filename: 173.jpg
-  tags: ireland landscape nature
+  tags: ireland nature
   id: 173
   aspect: landscape
   desc: Waves crashing
 - filename: 174.jpg
-  tags: ireland landscape nature
+  tags: ireland nature
   id: 174
   aspect: landscape
   desc: Cliff, beach and ocean
 - filename: 175.jpg
-  tags: ireland landscape nature
+  tags: ireland nature
   id: 175
   aspect: landscape
   desc: Vegetation on the beach
 - filename: 176.jpg
-  tags: ireland landscape nature
+  tags: ireland nature
   id: 176
   aspect: landscape
   desc: Idyllic view
 - filename: 177.jpg
-  tags: ireland landscape nature
+  tags: ireland nature
   id: 177
   aspect: landscape
   desc: Horseriding on the beach
 - filename: 178.jpg
-  tags: ireland landscape nature
+  tags: ireland nature
   id: 178
   aspect: landscape
   desc: Take a seat
 - filename: 179.jpg
-  tags: ireland landscape nature
+  tags: ireland nature
   id: 179
   aspect: landscape
   desc: Is there a pot of gold?
@@ -899,7 +899,7 @@
   aspect: square
   desc: Almost Dürers magic square
 - filename: 183.jpg
-  tags: architecture barcelona landscape
+  tags: architecture barcelona
   id: 183
   aspect: landscape
   desc: Judas Kiss
@@ -919,57 +919,57 @@
   aspect: square
   desc: Just a Palm tree
 - filename: 188.jpg
-  tags: barcelona landscape nature
+  tags: barcelona nature
   id: 188
   aspect: landscape
   desc: 2 trees 1 bird
 - filename: 189.jpg
-  tags: barcelona landscape nature
+  tags: barcelona nature
   id: 189
   aspect: landscape
   desc: Beautiful view from Park Güell
 - filename: 190.jpg
-  tags: barcelona landscape
+  tags: barcelona
   id: 190
   aspect: landscape
   desc: Mirador del Tibidabo
 - filename: 192.jpg
-  tags: barcelona landscape
+  tags: barcelona
   id: 192
   aspect: landscape
   desc: Nature over the Port
 - filename: 194.jpg
-  tags: barcelona landscape
+  tags: barcelona
   id: 194
   aspect: landscape
   desc: Ways of transport
 - filename: 195.jpg
-  tags: barcelona architecture landscape
+  tags: barcelona architecture
   id: 195
   aspect: landscape
   desc: Castell de Montjuïc
 - filename: 196.jpg
-  tags: barcelona landscape nature
+  tags: barcelona nature
   id: 196
   aspect: landscape
   desc: One, two, three - Palm Tree!
 - filename: 197.jpg
-  tags: architecture barcelona landscape
+  tags: architecture barcelona
   id: 197
   aspect: landscape
   desc: Parc de la Ciutadella
 - filename: 198.jpg
-  tags: barcelona landscape nature
+  tags: barcelona nature
   id: 198
   aspect: landscape
   desc: Tropical Ciutadella
 - filename: 199.jpg
-  tags: architecture barcelona landscape
+  tags: architecture barcelona
   id: 199
   aspect: landscape
   desc: Palau Nacional
 - filename: 200.jpg
-  tags: barcelona landscape
+  tags: barcelona
   id: 200
   aspect: landscape
   desc: Busy Barcelona near Arc de Triomf
@@ -979,42 +979,57 @@
   aspect: square
   desc: Sunlit Palm Tree
 - filename: 202.jpg
-  tags: barcelona bw landscape
+  tags: barcelona bw
   id: 202
   aspect: landscape
   desc: Busy waters
 - filename: 203.jpg
-  tags: landscape nature switzerland
+  tags: nature switzerland
   id: 203
   aspect: landscape
   desc: Swiss Alps
 - filename: 204.jpg
-  tags: bw landscape switzerland
+  tags: bw switzerland
   id: 204
   aspect: landscape
   desc: Lac supérieur de Fully
 - filename: 205.jpg
-  tags: landscape nature switzerland
+  tags: nature switzerland
   id: 205
   aspect: landscape
   desc: Sunset at Cabane du Fenestral (2453 m AMSL)
 - filename: 206.jpg
-  tags: landscape switzerland
+  tags: switzerland
   id: 206
   aspect: landscape
   desc: Little Bridge near Chillon Castle
 - filename: 207.jpg
-  tags: annecy architecture france landscape switzerland
+  tags: annecy architecture france switzerland
   id: 207
   aspect: landscape
   desc: Annecy, France
 - filename: 208.jpg
-  tags: architecture landscape switzerland
+  tags: architecture switzerland
   id: 208
   aspect: landscape
   desc: View of Bern
 - filename: 209.jpg
-  tags: architecture landscape switzerland
+  tags: architecture switzerland
   id: 209
   aspect: landscape
   desc: Samson Fountain, Bern
+- filename: 210.jpg
+  tags: bialkow nature
+  id: 210
+  aspect: landscape
+  desc: Sunrise in Białków
+- filename: 211.jpg
+  tags: bialkow nature square
+  id: 211
+  aspect: square
+  desc: Sunrise in Białków 2
+- filename: 212.jpg
+  tags: bialkow nature square
+  id: 212
+  aspect: square
+  desc: Sunrise in Białków 3

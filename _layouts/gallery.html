@@ -139,7 +139,14 @@
             height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_pano.jpg'">
       {% endif %}        
           <div class="hover">
-            <div class="text">{{ photo.desc }}</div>
+            <div class="text" style="position: relative; min-height: 12vh; font-size: 1.3em;"><b>{{ photo.desc }}</b>
+              <div style="display: flex; justify-content: center; flex-wrap: wrap; position: absolute; bottom: 0; left: 0; right: 0;">
+                {% assign tags_list = photo.tags | split: " " %}
+                {% for tag in tags_list %}
+                  <span style="opacity: 1; color: cadetblue; margin-right: 5px; font-size: 0.65em;">#{{ tag }}</span>
+                {% endfor %}
+              </div>
+            </div>
           </div>
         
         </div>  
