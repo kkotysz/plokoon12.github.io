@@ -77,47 +77,47 @@
   tags: landscape switzerland
   id: 17
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Le Moléson (2002 m AMSL) from Grueyere
 - filename: 18.jpg
   tags: landscape switzerland
   id: 18
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Dent du Bourgo (1913 m AMSL) from Gruyere
 - filename: 19.jpg
   tags: landscape switzerland
   id: 19
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Surroundings of Gruyere
 - filename: 20.jpg
   tags: landscape switzerland
   id: 20
   aspect: landscape
-  desc: Lorem ipsum
+  desc: More surroundings of Gruyere
 - filename: 21.jpg
   tags: landscape switzerland
   id: 21
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Scenic trail no. 1
 - filename: 22.jpg
   tags: landscape switzerland
   id: 22
   aspect: portrait
-  desc: Lorem ipsum
+  desc: Scenic trail no. 2
 - filename: 23.jpg
   tags: landscape switzerland
   id: 23
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Scenic trail no. 3
 - filename: 24.jpg
   tags: landscape switzerland
   id: 24
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Scenic trail no. 4
 - filename: 25.jpg
   tags: landscape switzerland
   id: 25
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Scenic trail no. 5
 - filename: 26.jpg
   tags: landscape bw
   id: 26
@@ -437,122 +437,122 @@
   tags: astrophoto landscape tromso
   id: 89
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Aurora Borealis over Tromsø area
 - filename: 90.jpg
   tags: astrophoto landscape tromso
   id: 90
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Something evil in the sky...
 - filename: 91.jpg
   tags: astrophoto tromso
   id: 91
   aspect: portrait
-  desc: Lorem ipsum
+  desc: Brightest moment of the aurora
 - filename: 92.jpg
   tags: astrophoto tromso
   id: 92
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Aurora Borealis over Tromsø area
 - filename: 93.jpg
   tags: astrophoto tromso
   id: 93
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Aurora Borealis over Tromsø area
 - filename: 94.jpg
   tags: landscape tromso
   id: 94
   aspect: landscape
-  desc: Lorem ipsum
+  desc: On the way to glacier
 - filename: 95.jpg
   tags: landscape tromso
   id: 95
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Lyngen Alps
 - filename: 96.jpg
   tags: landscape tromso
   id: 96
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Peaking out of the glacier
 - filename: 97.jpg
   tags: landscape tromso
   id: 97
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Glacier with 400 m AMSL elevation
 - filename: 98.jpg
   tags: landscape tromso
   id: 98
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Lonely island on glacier lake
 - filename: 99.jpg
   tags: landscape tromso
   id: 99
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Walking on the glacier
 - filename: 100.jpg
   tags: tromso
   id: 100
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Cracked ice on the glacier
 - filename: 101.jpg
   tags: landscape tromso
   id: 101
   aspect: landscape
-  desc: Lorem ipsum
+  desc: On the way back from glacier
 - filename: 102.jpg
   tags: landscape bw
   id: 102
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Ice desert near Śnieżka peak
 - filename: 103.jpg
   tags: astrophoto
   id: 103
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Simply moon
 - filename: 104.jpg
   tags: landscape tromso
   id: 104
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Lake Blåvatnet
 - filename: 105.jpg
   tags: astrophoto chile
   id: 105
   aspect: landscape
-  desc: Lorem ipsum
+  desc: LMC
 - filename: 106.jpg
   tags: astrophoto chile landscape
   id: 106
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Short Startrails
 - filename: 107.jpg
   tags: astrophoto
   id: 107
   aspect: square
-  desc: Lorem ipsum
+  desc: Mercury transit, 9th of May 2016
 - filename: 108.jpg
   tags: astrophoto chile
   id: 108
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Looking into the heart of the Milky Way
 - filename: 109.jpg
   tags: astrophoto chile landscape
   id: 109
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Galaxyset
 - filename: 110.jpg
   tags: astrophoto chile
   id: 110
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Milky Way and LMC
 - filename: 111.jpg
   tags: landscape tromso
   id: 111
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Kvaløysletta or Skellige?
 - filename: 112.jpg
   tags: landscape tromso
   id: 112
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Creek in Norway
 - filename: 113.jpg
   tags: landscape
   id: 113
@@ -562,42 +562,42 @@
   tags: landscape
   id: 114
   aspect: panorama
-  desc: Lorem ipsum
+  desc: From Śnieżka during sunrise
 - filename: 115.jpg
   tags: chile landscape
   id: 115
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Sunset over Atacama Desert wit VLT
 - filename: 116.jpg
   tags: astrophoto chile landscape
   id: 116
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Moving clouds and stars
 - filename: 117.jpg
   tags: landscape
   id: 117
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Lightning strike in Opole
 - filename: 118.jpg
   tags: astrophoto bialkow landscape
   id: 118
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Białków trails part 2
 - filename: 119.jpg
   tags: astrophoto bialkow landscape
   id: 119
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Białków trails part 1
 - filename: 120.jpg
   tags: astrophoto chile landscape
   id: 120
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Startrails over Atacama Desert part 1
 - filename: 121.jpg
   tags: astrophoto chile landscape
   id: 121
   aspect: landscape
-  desc: Lorem ipsum
+  desc: Startrails over Atacama Desert part 2
 - filename: 122.jpg
   tags: astrophoto bialkow landscape
   id: 122
@@ -997,7 +997,7 @@
   tags: landscape nature switzerland
   id: 205
   aspect: landscape
-  desc: Sunset at Cabane du Fenestral (2453 AMSL)
+  desc: Sunset at Cabane du Fenestral (2453 m AMSL)
 - filename: 206.jpg
   tags: landscape switzerland
   id: 206
