@@ -1,9 +1,14 @@
 // external js: isotope.pkgd.js
 
+plugin = lightGallery(document.getElementById('lightgallery'), {
+  plugins: [lgZoom],
+  speed: 300,
+  // mode: 'lg-fade',
+});
 
 // init Isotope
 var $grid = $('.grid').isotope({
-  itemSelector: '.grid-item',
+  itemSelector: '.item',
   // layoutMode: '',
   // isfitWidth: true,
   masonry: {
@@ -13,14 +18,7 @@ var $grid = $('.grid').isotope({
     // horizontalOrder: true,
     },
   getSortData: {
-    name: '.name',
-    symbol: '.symbol',
-    number: '.number parseInt',
-    category: '[data-category]',
-    weight: function( itemElem ) {
-      var weight = $( itemElem ).find('.weight').text();
-      return parseFloat( weight.replace( /[\(\)]/g, '') );
-    }
+    sortid: '.sortid parseInt',
   }
 });
 
@@ -44,10 +42,25 @@ var filterFns = {
 
 // bind filter button click
 $('#filters').on( 'click', 'button', function() {
+  var btn = $( this ).text();
   var filterValue = $( this ).attr('data-filter');
   // use filterFn if matches value
   filterValue = filterFns[ filterValue ] || filterValue;
   $grid.isotope({ filter: filterValue });
+  
+  if (btn == '#all') {
+    $grid.isotope('shuffle');
+  } else {
+    var sortByValue = $(this).attr('data-sort-by');
+    $grid.isotope({ sortBy: sortByValue });
+  }
+
+  plugin.destroy();
+  plugin = lightGallery(document.getElementById('lightgallery'), {
+    plugins: [lgZoom],
+    speed: 300,
+    selector: filterValue.replace('*','')
+  }); 
 });
 
 // bind sort button click
@@ -63,6 +76,7 @@ $('.button-group').each( function( i, buttonGroup ) {
     $buttonGroup.find('.is-checked').removeClass('is-checked');
     $( this ).addClass('is-checked');
   });
+
 });
   
 $grid.isotope('shuffle')
