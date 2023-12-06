@@ -1033,3 +1033,83 @@
   id: 212
   aspect: square
   desc: Sunrise in Białków 3
+- filename: 213.jpg
+  tags: architecture landscape warsaw
+  id: 213
+  aspect: landscape
+  desc: Warsaw University of Technology 1
+- filename: 214.jpg
+  tags: architecture landscape warsaw
+  id: 214
+  aspect: landscape
+  desc: Warsaw University of Technology 2
+- filename: 215.jpg
+  tags: landscape laski warsaw
+  id: 215
+  aspect: landscape
+  desc: Ośrodek Szkolno-Wychowawczy dla Dzieci Niewidomych im. Róży Czackiej w Laskach
+- filename: 216.jpg
+  tags: architecture portrait warsaw
+  id: 216
+  aspect: portrait
+  desc: Palace of Culture and Science, Warsaw
+- filename: 217.jpg
+  tags: architecture landscape warsaw
+  id: 217
+  aspect: landscape
+  desc: Grand Theatre–National Opera, Warsaw
+- filename: 218.jpg
+  tags: architecture landscape warsaw
+  id: 218
+  aspect: landscape
+  desc: Royal Castle in Warsaw
+- filename: 219.jpg
+  tags: architecture landscape warsaw
+  id: 219
+  aspect: landscape
+  desc: Kazimierz Górski National Stadium, Warsaw
+- filename: 220.jpg
+  tags: architecture landscape warsaw
+  id: 220
+  aspect: landscape
+  desc: Warsaw Old Town
+- filename: 221.jpg
+  tags: architecture landscape warsaw
+  id: 221
+  aspect: landscape
+  desc: Sigismund's Column seen from St. Anne's Church, Warsaw
+- filename: 222.jpg
+  tags: architecture landscape warsaw
+  id: 222
+  aspect: landscape
+  desc: Warsaw architecture 1
+- filename: 223.jpg
+  tags: architecture landscape warsaw
+  id: 223
+  aspect: landscape
+  desc: Warsaw architecture 2
+- filename: 224.jpg
+  tags: architecture portrait warsaw
+  id: 224
+  aspect: portrait
+  desc: Palace of Culture and Science (PKiN)
+- filename: 225.jpg
+  tags: architecture landscape warsaw
+  id: 225
+  aspect: landscape
+  desc: Warsaw Old Town
+- filename: 226.jpg
+  tags: architecture portrait warsaw
+  id: 226
+  aspect: portrait
+  desc: Holy Trinity Church, Warsaw
+- filename: 227.jpg
+  tags: architecture landscape night warsaw
+  id: 227
+  aspect: landscape
+  desc: Warsaw City Centre
+- filename: 228.jpg
+  tags: architecture landscape night warsaw
+  id: 228
+  aspect: landscape
+  desc: Warsaw Skyline at night
