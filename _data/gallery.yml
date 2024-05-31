@@ -16,7 +16,7 @@
 - filename: 4.jpg
   tags: astrophoto  tromso
   id: 4
-  aspect: portrait
+  aspect: landscape
   desc: View on Aurora Borealis, Rekvik near Tromsø - Norway
 - filename: 5.jpg
   tags: astrophoto bialkow 
@@ -329,7 +329,7 @@
   aspect: landscape
   desc: Partial Eclipse in March 2015
 - filename: 68.jpg
-  tags: architecture
+  tags: architecture wroclaw
   id: 68
   aspect: landscape
   desc: Astronomical Institute in Wroclaw
@@ -1128,3 +1128,108 @@
   id: 231
   aspect: landscape
   desc: Before sunrise at Białków 2
+- filename: 232.jpg
+  tags: architecture landscape night wroclaw
+  id: 232
+  aspect: landscape
+  desc: Rooftops and Skytower
+- filename: 233.jpg
+  tags: astrophoto bialkow landscape night
+  id: 233
+  aspect: landscape
+  desc: BLT inside dome
+- filename: 234.jpg
+  tags: astrophoto bialkow landscape night
+  id: 234
+  aspect: landscape
+  desc: Białków Large Telescope (BLT)
+- filename: 235.jpg
+  tags: astrophoto bialkow landscape night
+  id: 235
+  aspect: landscape
+  desc: Startrails over Bialkow palace
+- filename: 236.jpg
+  tags: astrophoto bialkow landscape night
+  id: 236
+  aspect: landscape
+  desc: 12P/Pons-Brooks with M31 and Triangle Galaxy
+- filename: 237.jpg
+  tags: architecture italy landscape pompeii
+  id: 237
+  aspect: landscape
+  desc: Apollo and Vesuvio
+- filename: 238.jpg
+  tags: architecture italy landscape pompeii
+  id: 238
+  aspect: landscape
+  desc: Pompeii 1
+- filename: 239.jpg
+  tags: architecture italy landscape pompeii vesuvio
+  id: 239
+  aspect: landscape
+  desc: Vesuvio from Pompeii
+- filename: 240.jpg
+  tags: italy landscape salerno
+  id: 240
+  aspect: landscape
+  desc: Salerno, Italy
+- filename: 241.jpg
+  tags: architecture italy landscape napoli vesuvio
+  id: 241
+  aspect: landscape
+  desc: Naples city centre with Vesuvio
+- filename: 242.jpg
+  tags: architecture italy landscape napoli
+  id: 242
+  aspect: landscape
+  desc: Palazzo Torre Palasciano
+- filename: 243.jpg
+  tags: architecture italy landscape napoli nature
+  id: 243
+  aspect: landscape
+  desc: City centrie of Naples from INAF
+- filename: 244.jpg
+  tags: architecture italy landscape monte
+  id: 244
+  aspect: landscape
+  desc: Monte Cassino inside
+- filename: 245.jpg
+  tags: architecture italy landscape monte
+  id: 245
+  aspect: landscape
+  desc: Monte Cassino 1
+- filename: 246.jpg
+  tags: architecture italy landscape monte
+  id: 246
+  aspect: landscape
+  desc: Monte Cassino - roadt to Polish war cemetery
+- filename: 247.jpg
+  tags: architecture italy landscape monte
+  id: 247
+  aspect: landscape
+  desc: Monte Cassino 2
+- filename: 248.jpg
+  tags: architecture italy landscape pompeii
+  id: 248
+  aspect: landscape
+  desc: Pompeii - gazing into the distance
+- filename: 249.jpg
+  tags: architecture italy landscape napoli
+  id: 249
+  aspect: landscape
+  desc: Naples view
+- filename: 250.jpg
+  tags: italy landscape napoli nature
+  id: 250
+  aspect: landscape
+  desc: Lizard in a tree
+- filename: 251.jpg
+  tags: astrophoto bialkow night square
+  id: 251
+  aspect: square
+  desc: Startrails in Białków
+- filename: 252.jpg
+  tags: astrophoto night opole square
+  id: 252
+  aspect: square
+  desc: Moon, Venus & Mars
