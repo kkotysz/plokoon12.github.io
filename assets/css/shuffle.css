@@ -81,3 +81,57 @@ body {
 .grid-item--wpano {width: 591px;}
 
 
+.button-container {
+  position: relative;
+  display: inline-block;
+  border-radius: 1.8em;
+}
+
+.expand-button {
+  display: inline-block;
+  padding: 0.5em 1.0em;
+  background: #1e1e1e;
+  border: 0.1em solid yellow;
+  border-radius: inherit;
+  color: #eee;
+  font-family: 'Abel', sans-serif;
+  font-weight: 600;
+  font-size: 28px;
+  text-decoration: none;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.expand-button:hover {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888, #833ab4);
+  color: #eee;
+  border-color: black;
+}
+
+.expand-image {
+  position: absolute;
+  top: 80%; /* Position below the button */
+  left: 50%;
+  transform: translate(-50%, 0) scale(0);
+  height: 30vh;
+  object-fit: cover;
+  border-radius: inherit;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  z-index: 99;
+  image-rendering: auto; /* Ensure smooth scaling */
+}
+
+.expand-button img {
+  border-radius: inherit;
+  z-index: 99;
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888, #833ab4);
+  padding: 0.15em;
+
+}
+
+.expand-button:hover .expand-image {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+  z-index: 99;
+}
