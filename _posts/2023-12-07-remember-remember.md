@@ -11,11 +11,9 @@ tags:
 header:
   teaser: /assets/photos/91.jpg
 ---
-In recent months there has been an increased solar activity with quite a lot of solar flares that resulted in CMEs (Coronal Mass Ejections) that were directed toward Earth. Earlier this year (21st of April) there have been a M1.7 class solar flare on the Sun that resulted in CME - mass ejected from the Sun travelled with velocity over 800km/s after 2 days reached the Earth. This can be seen in an animation from  SOHO/LASCO C3 instrument. 
-<figure style="width: 15em">
-  <a href="/assets/images/cme_full_halo.gif"><img src="/assets/images/cme_full_halo.gif"></a>
-  <figcaption>SOHO/LASCO C3 differential image of CME after M1.7 solar flare</figcaption>
-</figure>
+In recent months there has been an increased solar activity with quite a lot of solar flares that resulted in CMEs (Coronal Mass Ejections) that were directed toward Earth. Earlier this year (21st of April) there have been a M1.7 class solar flare on the Sun that resulted in CME - mass ejected from the Sun travelled with velocity over 800km/s after 2 days reached the Earth. This can be seen in an animation from  SOHO/LASCO C3 instrument.
+
+![SOHO/LASCO C3 differential image of CME after M1.7 solar flare](/assets/images/cme_full_halo.gif "SOHO/LASCO C3 differential image of CME after M1.7 solar flare")
 
 This lead to creation of an extensive aurora oval that could be observed even from southern Europe. In Poland Aurora was visible even in zenith. Thanks to <a target="_blank" href="http://alps.astro.uni.wroc.pl">ALPS</a> (All-sky Light Pollution Survey) - which I am a part of - aurora images were captured bu several of observing stations a.o. Ostrowik (ALPS-OST) and Sopotnia Wielka (ALPS-SOP).
   <p float="left" align="middle">
