@@ -161,3 +161,4 @@ gallery:
   type: liquid
   path: /gallery/
 theme: jekyll-theme-minimal
+port: 4001
