@@ -8,6 +8,8 @@ tags:
   - start
   - Ruby
   - GitHub Pages
+header:
+  teaser: apple-touch-icon.png
 ---
 
 Hi!<br>
