@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Student Help - Courses</title>
+  <title>bash</title>
   <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Advent+Pro:wght@200&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
@@ -21,20 +21,24 @@
       display: inline-block;
       background-color: #333;
       color: #fff;
-      padding: 0.5em 1em;
+      padding: 0.6em 1.2em;
       text-decoration: none;
-      margin: 0.5em;
+      margin: 0.5em 0.3em;
       border-radius: 4px;
       transition: background-color 0.3s ease;
     }
     a.button:hover {
       background-color: #555;
     }
+    .button.active {
+      background-color: #ffcc00;
+      color: #1e1e1e;
+    }
     .grid {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 1em;
+      gap: 0.0em;
       margin-top: 2em;
     }
     .grid-item {
@@ -43,7 +47,7 @@
       border-radius: 4px;
       text-align: center;
       width: 200px;
-      height: 10em;
+      min-height: 10em;
     }
     h1 {
       text-align: center;
@@ -52,88 +56,82 @@
     p {
       font-size: x-large
     }
+    .container {
+      display: flex; /* Enables side-by-side layout */
+      justify-content: space-between; /* Spaces out items */
+      align-items: flex-start; /* Aligns items at the top */
+      gap: 0.1em; /* Adds spacing between columns */
+      padding: 2em;
+      font-size: small;
+    }
+
+    .links-column {
+      flex: 1; /* Takes up available space */
+      max-width: 50vw; /* Adjust this for better spacing */
+    }
+
+    .terminal-column {
+      flex: 1; /* Terminal gets more space */
+      max-width: 100%;
+    }
+
+    #bash-terminal {
+      width: 100%; /* Full width within the column */
+      height: 50vh; /* Keeps a large terminal */
+      border: none;
+      display: block;
+    }
+
   </style>
 </head>
 <body>
   <a class="button" href="/"><i class="fa-solid fa-house"></i> Home</a>
-  <h1>Student Help - Courses</h1>
   <div class="grid">
     <div class="grid-item">
-      <a class="button" href="/teaching/python" style="font-family: Fira Code;">python</a>
+      <a class="button" href="/python" style="font-family: Fira Code;"><i class="fa-brands fa-python"></i> python</a>
     </div>
     <div class="grid-item">
-      <a class="button" href="/teaching/bash" style="font-family: Fira Code;">bash</a>
+      <a class="button active" href="/bash" style="font-family: Fira Code;"><i class="fa-brands fa-linux"></i><br>bash</a>
     </div>
     <div class="grid-item">
-      <a class="button" href="/teaching/fortran" style="font-family: Fira Code;">fortran</a>
+      <a class="button" href="/fortran" style="font-family: Fira Code;"><i class="fa-solid fa-terminal"></i> fortran</a>
     </div>
   </div>
 
-  <h1 style="font-family: Fira Code;">bash</h1>
-  <div class="content">
-    <p>Repozytorium na GitHub: 
-      <a class="button" href="https://github.com/kkotysz/BASH-notebooks" target="_blank">notebooks</a>
-    </p>
-    
-        <p><a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/main/0_wstep.ipynb" target="_blank">
-          0_wstep.ipynb
-        </a></p>
-      <div class="grid-item">
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/main/1.5_podstawy_pliki.ipynb" target="_blank">
-          1.5_podstawy_pliki.ipynb
+  <div class="container">
+    <!-- Left Column: Links -->
+    <div class="links-column">
+      <p>
+        <a class="button" href="https://github.com/kkotysz/BASH-notebooks" target="_blank">
+          <i class="fa-brands fa-github"></i> GitHub repo
         </a>
-      </div>
-      <div class="grid-item">
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/main/10_gnuplot_part2.ipynb" target="_blank">
-          10_gnuplot_part2.ipynb
+        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/Instrukcja_WSL.ipynb" target="_blank">
+          <i class="fa-brands fa-windows"></i> Instrukcja WSL
         </a>
-      </div>
-      <div class="grid-item">
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/main/1_komendy.ipynb" target="_blank">
-          1_komendy.ipynb
-        </a>
-      </div>
-      <div class="grid-item">
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/main/2_pierwszy_skrypt.ipynb" target="_blank">
-          2_pierwszy_skrypt.ipynb
-        </a>
-      </div>
-      <div class="grid-item">
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/main/3_powloka_i_zmienne.ipynb" target="_blank">
-          3_powloka_i_zmienne.ipynb
-        </a>
-      </div>
-      <div class="grid-item">
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/main/4_duze_pliki_tekstowe.ipynb" target="_blank">
-          4_duze_pliki_tekstowe.ipynb
-        </a>
-      </div>
-      <div class="grid-item">
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/main/5_awk-part1.ipynb" target="_blank">
-          5_awk-part1.ipynb
-        </a>
-      </div>
-      <div class="grid-item">
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/main/6_awk-part2.ipynb" target="_blank">
-          6_awk-part2.ipynb
-        </a>
-      </div>
-      <div class="grid-item">
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/main/7_for_if.ipynb" target="_blank">
-          7_for_if.ipynb
-        </a>
-      </div>
-      <div class="grid-item">
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/main/8_for_if_awk.ipynb" target="_blank">
-          8_for_if_awk.ipynb
-        </a>
-      </div>
-      <div class="grid-item">
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/main/9_gnuplot.ipynb" target="_blank">
-          9_gnuplot.ipynb
-        </a>
+      </p>
+      <div class="content grid">
+          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/0_wstep.ipynb" target="_blank">0_wstep.ipynb</a>
+          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/1_komendy.ipynb" target="_blank">1_komendy.ipynb</a>
+          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/1.5_podstawy_pliki.ipynb" target="_blank">1.5_podstawy_pliki.ipynb</a>
+          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/2_pierwszy_skrypt.ipynb" target="_blank">2_pierwszy_skrypt.ipynb</a>
+          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/3_powloka_i_zmienne.ipynb" target="_blank">3_powloka_i_zmienne.ipynb</a>
+          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/4_duze_pliki_tekstowe.ipynb" target="_blank">4_duze_pliki_tekstowe.ipynb</a>
+          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/5_awk-part1.ipynb" target="_blank">5_awk-part1.ipynb</a>
+          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/6_awk-part2.ipynb" target="_blank">6_awk-part2.ipynb</a>
+          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/7_for_if.ipynb" target="_blank">7_for_if.ipynb</a>
+          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/8_for_if_awk.ipynb" target="_blank">8_for_if_awk.ipynb</a>
+          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/9_gnuplot.ipynb" target="_blank">9_gnuplot.ipynb</a>
+          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/10_gnuplot_part2.ipynb" target="_blank">10_gnuplot_part2.ipynb</a>
       </div>
     </div>
-    
-  </div></body>
+  
+    <!-- Right Column: Terminal -->
+    <div class="terminal-column">
+      <h1>Interactive Bash Terminal</h1>
+      <iframe id="bash-terminal" src="https://bellard.org/jslinux/vm.html?url=alpine-x86.cfg&mem=192"></iframe>
+    </div>
+  </div>
+  
+
+</body>
 </html>

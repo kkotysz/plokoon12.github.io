@@ -1,5 +1,5 @@
 ---
-permalink: "/teaching/fortran/"
+permalink: "/fortran/"
 layout: fortran
 author_profile: false
 ---

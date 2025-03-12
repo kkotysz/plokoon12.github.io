@@ -82,16 +82,13 @@ author:
   name   : "Krzysztof Kotysz"
   avatar : "/assets/images/bio-photo.jpg"
   bio    : 'PhD student at Astronomical Institute (University of Wroclaw) and passionate amateur photographer. Member of ALPS Team.
-            <br><a href="https://alps.uwr.edu.pl"><img style="display: inline; width: 20px" src="https://alps.uwr.edu.pl/ALPS/static/favicon.ico"> ALPS</a>
-            <br><a href="https://orcid.org/0000-0003-4960-7463"><i class="ai ai-orcid" style="color: rgb(174,204,84)">ORCID</i></a>
+            <br><a href="https://alps.uwr.edu.pl"><img style="display: inline; width: 20px" src="../assets/images/alps.ico"> ALPS</a>
+            <br><a href="https://orcid.org/0000-0003-4960-7463"><i class="ai ai-orcid" style="color: rgb(174,204,84)"> ORCID</i></a>
             <br><i class="fa fa-envelope"></i>  [name].[last_name]@uwr.edu.pl'
   links:
     - label: "Flickr"
       icon: "fab fa-fw fa-flickr"
       url: "https://flickr.com/photos/krzkot"
-    - label: "Twitter"
-      icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/krzykoty"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/kkotysz"

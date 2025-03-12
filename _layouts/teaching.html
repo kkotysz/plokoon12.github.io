@@ -21,9 +21,9 @@
       display: inline-block;
       background-color: #333;
       color: #fff;
-      padding: 0.5em 1em;
+      padding: 0.6em 1.2em;
       text-decoration: none;
-      /* margin: 0.5em; */
+      margin: 0.5em 0.3em;
       border-radius: 4px;
       transition: background-color 0.3s ease;
     }
@@ -34,16 +34,16 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 2em;
-      /* margin-top: 2em; */
+      gap: 1em;
+      margin-top: 2em;
     }
     .grid-item {
       background: #2c2c2c00;
-      /* padding: 1em; */
+      padding: 0em;
       border-radius: 4px;
       text-align: center;
       width: 200px;
-      height: 10em;
+      min-height: 10em;
     }
     h1 {
       text-align: center;
@@ -56,14 +56,15 @@
   <h1>Student Help - Courses</h1>
   <div class="grid">
     <div class="grid-item">
-      <a class="button" href="/teaching/python" style="font-family: Fira Code;">python</a>
+      <a class="button" href="/python" style="font-family: Fira Code;"><i class="fa-brands fa-python"></i> python</a>
     </div>
     <div class="grid-item">
-      <a class="button" href="/teaching/bash" style="font-family: Fira Code;">bash</a>
+      <a class="button" href="/bash" style="font-family: Fira Code;"><i class="fa-brands fa-linux"></i><br>bash</a>
     </div>
     <div class="grid-item">
-      <a class="button" href="/teaching/fortran" style="font-family: Fira Code;">fortran</a>
+      <a class="button" href="/fortran" style="font-family: Fira Code;"><i class="fa-solid fa-terminal"></i> fortran</a>
     </div>
   </div>
+
 </body>
 </html>

@@ -21,20 +21,24 @@
       display: inline-block;
       background-color: #333;
       color: #fff;
-      padding: 0.5em 1em;
+      padding: 0.6em 1.2em;
       text-decoration: none;
-      margin: 0.5em;
+      margin: 0.5em 0.3em;
       border-radius: 4px;
       transition: background-color 0.3s ease;
     }
     a.button:hover {
       background-color: #555;
     }
+    .button.active {
+      background-color: #ffcc00;
+      color: #1e1e1e;
+    }
     .grid {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 1em;
+      gap: 0.0em;
       margin-top: 2em;
     }
     .grid-item {
@@ -43,33 +47,69 @@
       border-radius: 4px;
       text-align: center;
       width: 200px;
-      height: 10em;
+      min-height: 10em;
     }
     h1 {
       text-align: center;
       margin-top: 1em;
     }
+    .container {
+      display: flex; /* Enables side-by-side layout */
+      justify-content: space-between; /* Spaces out items */
+      align-items: flex-start; /* Aligns items at the top */
+      gap: 2em; /* Adds spacing between columns */
+      padding: 2em;
+      font-size: small;
+    }
+
+    .links-column {
+      flex: 1; /* Takes up available space */
+      max-width: 35vw; /* Adjust this for better spacing */
+    }
+
+    .terminal-column {
+      flex: 1; /* Terminal gets more space */
+      max-width: 100%;
+    }
+
+    #python-terminal {
+      width: 100%; /* Full width within the column */
+      height: 60vh; /* Keeps a large terminal */
+      border: none;
+      display: block;
+    }
   </style>
 </head>
 <body>
   <a class="button" href="/"><i class="fa-solid fa-house"></i> Home</a>
-  <h1>Student Help - Courses</h1>
   <div class="grid">
     <div class="grid-item">
-      <a class="button" href="/teaching/python" style="font-family: Fira Code;">python</a>
+      <a class="button active" href="/python" style="font-family: Fira Code;"><i class="fa-brands fa-python"></i> python</a>
     </div>
     <div class="grid-item">
-      <a class="button" href="/teaching/bash" style="font-family: Fira Code;">bash</a>
+      <a class="button" href="/bash" style="font-family: Fira Code;"><i class="fa-brands fa-linux"></i><br>bash</a>
     </div>
     <div class="grid-item">
-      <a class="button" href="/teaching/fortran" style="font-family: Fira Code;">fortran</a>
+      <a class="button" href="/fortran" style="font-family: Fira Code;"><i class="fa-solid fa-terminal"></i> fortran</a>
     </div>
   </div>
-
-  <h1 style="font-family: Fira Code;">python</h1>
-  <div class="content">
-    <p>Welcome to the help page for Course 1. Replace this text with course materials, instructions, or other helpful content for your students.</p>
+  <div class="container">
+    <!-- Left Column: Links -->
+    <div class="links-column">
+      <p>
+        <a class="button"><i class="fa-brands fa-github"></i> GitHub repo</a>
+      </p>
+    </div>
+  
+    <!-- Right Column: Terminal -->
+    <div class="terminal-column">
+      <h1>Interactive Python Terminal</h1>
+      <iframe id="python-terminal" 
+              src="https://jupyterlite.github.io/demo/repl/index.html?kernel=python">
+      </iframe>
+    </div>
   </div>
+  
 
 </body>
 </html>

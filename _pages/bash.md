@@ -1,5 +1,5 @@
 ---
-permalink: "/teaching/bash/"
+permalink: "/bash/"
 layout: bash
 author_profile: false
 ---

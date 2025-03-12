@@ -21,20 +21,24 @@
       display: inline-block;
       background-color: #333;
       color: #fff;
-      padding: 0.5em 1em;
+      padding: 0.6em 1.2em;
       text-decoration: none;
-      margin: 0.5em;
+      margin: 0.5em 0.3em;
       border-radius: 4px;
       transition: background-color 0.3s ease;
     }
     a.button:hover {
       background-color: #555;
     }
+    .button.active {
+      background-color: #ffcc00;
+      color: #1e1e1e;
+    }
     .grid {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 1em;
+      gap: 0.0em;
       margin-top: 2em;
     }
     .grid-item {
@@ -43,7 +47,7 @@
       border-radius: 4px;
       text-align: center;
       width: 200px;
-      height: 10em;
+      min-height: 10em;
     }
     h1 {
       text-align: center;
@@ -53,21 +57,30 @@
 </head>
 <body>
   <a class="button" href="/"><i class="fa-solid fa-house"></i> Home</a>
-  <h1>Student Help - Courses</h1>
   <div class="grid">
     <div class="grid-item">
-      <a class="button" href="/teaching/python" style="font-family: Fira Code;">python</a>
+      <a class="button" href="/python" style="font-family: Fira Code;"><i class="fa-brands fa-python"></i> python</a>
     </div>
     <div class="grid-item">
-      <a class="button" href="/teaching/bash" style="font-family: Fira Code;">bash</a>
+      <a class="button" href="/bash" style="font-family: Fira Code;"><i class="fa-brands fa-linux"></i><br>bash</a>
     </div>
     <div class="grid-item">
-      <a class="button" href="/teaching/fortran" style="font-family: Fira Code;">fortran</a>
+      <a class="button active" href="/fortran" style="font-family: Fira Code;"><i class="fa-solid fa-terminal"></i> fortran</a>
     </div>
   </div>
 
-  <h1 style="font-family: Fira Code;">fortran</h1>
+  <p>
+    <a class="button" href="https://github.com/kkotysz/fortran-nb" target="_blank"><i class="fa-brands fa-github"></i> GitHub repo</a>
+  </p>
   <div class="content">
-    <p>Welcome to the help page for Course 1. Replace this text with course materials, instructions, or other helpful content for your students.</p>
-  </div></body>
+    <p><a class="button" href="https://github.com/kkotysz/fortran-nb/blob/master/01_zmienne.ipynb" target="_blank">01_zmienne.ipynb</a>
+      <a class="button" href="https://github.com/kkotysz/fortran-nb/blob/master/02_io-operatory.ipynb" target="_blank">02_io-operatory.ipynb</a>
+      <a class="button" href="https://github.com/kkotysz/fortran-nb/blob/master/03_warunki_i_petle.ipynb" target="_blank">03_warunki_i_petle.ipynb</a>
+      <a class="button" href="https://github.com/kkotysz/fortran-nb/blob/master/04_tablice.ipynb" target="_blank">04_tablice.ipynb</a></p>
+   <p><a class="button" href="https://github.com/kkotysz/fortran-nb/blob/master/05_procedury.ipynb" target="_blank">05_procedury.ipynb</a>
+      <a class="button" href="https://github.com/kkotysz/fortran-nb/blob/master/06_praca_z_plikami.ipynb" target="_blank">06_praca_z_plikami.ipynb</a>
+      <a class="button" href="https://github.com/kkotysz/fortran-nb/blob/master/07_pochodne_typy_zmiennych.ipynb" target="_blank">07_pochodne_typy_zmiennych.ipynb</a></p>
+   
+  </div>
+</body>
 </html>
