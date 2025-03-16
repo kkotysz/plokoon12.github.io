@@ -100,10 +100,8 @@
       <p>
         <a href="https://github.com/kkotysz/python-nb" class="button" target="_blank"><i class="fa-brands fa-github"></i> GitHub repo</a>
       </p>
-      <div class="content grid">
-        <a class="button" href="https://github.com/kkotysz/python-nb/blob/main/01_Wprowadzenie.ipynb" target="_blank">
-          <i class="fa-solid fa-file-alt"></i> 01_Wprowadzenie
-        </a>
+      <div class="content grid" id="notebooks-container">
+        <!-- Notebook links will be dynamically injected here -->
       </div>
     </div>
   
@@ -116,7 +114,60 @@
       </iframe>
     </div>
   </div>
-  
 
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const container = document.getElementById("notebooks-container");
+      const apiUrl = "https://api.github.com/repos/kkotysz/python-nb/git/trees/main?recursive=1";
+
+      fetch(apiUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok " + response.statusText);
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data && data.tree) {
+            // Filter for Jupyter notebooks (.ipynb) in the main directory that start with a number
+            const notebooks = data.tree.filter(item =>
+              item.path.endsWith(".ipynb") &&
+              !item.path.includes("/") &&
+              /^[0-9]/.test(item.path)
+            );
+            
+            // Sort the notebooks in numerical order based on the leading numeric prefix.
+            // This regex captures numbers with optional decimals.
+            notebooks.sort((a, b) => {
+              const aName = a.path.replace(/\.ipynb$/, "");
+              const bName = b.path.replace(/\.ipynb$/, "");
+              const aNumMatch = aName.match(/^(\d+(\.\d+)?)/);
+              const bNumMatch = bName.match(/^(\d+(\.\d+)?)/);
+              const aNum = aNumMatch ? parseFloat(aNumMatch[0]) : 0;
+              const bNum = bNumMatch ? parseFloat(bNumMatch[0]) : 0;
+              return aNum - bNum;
+            });
+            
+            // Create and append a link for each notebook, removing the .ipynb extension for display
+            notebooks.forEach(notebook => {
+              const link = document.createElement("a");
+              link.className = "button";
+              link.href = "https://github.com/kkotysz/python-nb/blob/main/" + notebook.path;
+              link.target = "_blank";
+              // Remove the .ipynb extension from the displayed text
+              const displayName = notebook.path.replace(/\.ipynb$/, "");
+              link.innerHTML = '<i class="fa-solid fa-file-alt"></i> ' + displayName;
+              container.appendChild(link);
+            });
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching GitHub notebooks:", error);
+          const errorMessage = document.createElement("p");
+          errorMessage.textContent = "Failed to load notebook links.";
+          container.appendChild(errorMessage);
+        });
+    });
+  </script>
 </body>
 </html>

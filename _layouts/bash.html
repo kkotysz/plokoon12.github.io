@@ -54,7 +54,7 @@
       margin-top: 1em;
     }
     p {
-      font-size: x-large
+      font-size: x-large;
     }
     .container {
       display: flex; /* Enables side-by-side layout */
@@ -64,24 +64,20 @@
       padding: 2em;
       font-size: small;
     }
-
     .links-column {
       flex: 1; /* Takes up available space */
       max-width: 50vw; /* Adjust this for better spacing */
     }
-
     .terminal-column {
       flex: 1; /* Terminal gets more space */
       max-width: 100%;
     }
-
     #bash-terminal {
       width: 100%; /* Full width within the column */
       height: 50vh; /* Keeps a large terminal */
       border: none;
       display: block;
     }
-
   </style>
 </head>
 <body>
@@ -109,19 +105,8 @@
           <i class="fa-brands fa-windows"></i> Instrukcja WSL
         </a>
       </p>
-      <div class="content grid">
-          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/0_wstep.ipynb" target="_blank"><i class="fa-solid fa-file-alt"></i> 0_wstep</a>
-          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/1_komendy.ipynb" target="_blank"><i class="fa-solid fa-file-alt"></i> 1_komendy</a>
-          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/1.5_podstawy_pliki.ipynb" target="_blank"><i class="fa-solid fa-file-alt"></i> 1.5_podstawy_pliki</a>
-          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/2_pierwszy_skrypt.ipynb" target="_blank"><i class="fa-solid fa-file-alt"></i> 2_pierwszy_skrypt</a>
-          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/3_powloka_i_zmienne.ipynb" target="_blank"><i class="fa-solid fa-file-alt"></i> 3_powloka_i_zmienne</a>
-          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/4_duze_pliki_tekstowe.ipynb" target="_blank"><i class="fa-solid fa-file-alt"></i> 4_duze_pliki_tekstowe</a>
-          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/5_awk-part1.ipynb" target="_blank"><i class="fa-solid fa-file-alt"></i> 5_awk-part1</a>
-          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/6_awk-part2.ipynb" target="_blank"><i class="fa-solid fa-file-alt"></i> 6_awk-part2</a>
-          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/7_for_if.ipynb" target="_blank"><i class="fa-solid fa-file-alt"></i> 7_for_if</a>
-          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/8_for_if_awk.ipynb" target="_blank"><i class="fa-solid fa-file-alt"></i> 8_for_if_awk</a>
-          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/9_gnuplot.ipynb" target="_blank"><i class="fa-solid fa-file-alt"></i> 9_gnuplot</a>
-          <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/10_gnuplot_part2.ipynb" target="_blank"><i class="fa-solid fa-file-alt"></i> 10_gnuplot_part2</a>
+      <div class="content grid" id="notebooks-container">
+          <!-- Notebook links will be dynamically injected here -->
       </div>
     </div>
   
@@ -131,7 +116,60 @@
       <iframe id="bash-terminal" src="https://bellard.org/jslinux/vm.html?url=alpine-x86.cfg&mem=192"></iframe>
     </div>
   </div>
-  
 
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const container = document.getElementById("notebooks-container");
+      const apiUrl = "https://api.github.com/repos/kkotysz/BASH-notebooks/git/trees/master?recursive=1";
+
+      fetch(apiUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok " + response.statusText);
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data && data.tree) {
+            // Filter for Jupyter notebooks (.ipynb) in the main directory that start with a number
+            const notebooks = data.tree.filter(item =>
+              item.path.endsWith(".ipynb") &&
+              !item.path.includes("/") &&
+              /^[0-9]/.test(item.path)
+            );
+            
+            // Sort the notebooks in numerical order based on the leading numeric prefix.
+            // This regex captures numbers with optional decimals.
+            notebooks.sort((a, b) => {
+              const aName = a.path.replace(/\.ipynb$/, "");
+              const bName = b.path.replace(/\.ipynb$/, "");
+              const aNumMatch = aName.match(/^(\d+(\.\d+)?)/);
+              const bNumMatch = bName.match(/^(\d+(\.\d+)?)/);
+              const aNum = aNumMatch ? parseFloat(aNumMatch[0]) : 0;
+              const bNum = bNumMatch ? parseFloat(bNumMatch[0]) : 0;
+              return aNum - bNum;
+            });
+            
+            // Create and append a link for each notebook, removing the .ipynb extension for display
+            notebooks.forEach(notebook => {
+              const link = document.createElement("a");
+              link.className = "button";
+              link.href = "https://github.com/kkotysz/BASH-notebooks/blob/master/" + notebook.path;
+              link.target = "_blank";
+              // Remove the .ipynb extension from the displayed text
+              const displayName = notebook.path.replace(/\.ipynb$/, "");
+              link.innerHTML = '<i class="fa-solid fa-file-alt"></i> ' + displayName;
+              container.appendChild(link);
+            });
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching GitHub notebooks:", error);
+          const errorMessage = document.createElement("p");
+          errorMessage.textContent = "Failed to load notebook links.";
+          container.appendChild(errorMessage);
+        });
+    });
+  </script>
 </body>
 </html>
