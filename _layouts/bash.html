@@ -127,12 +127,58 @@
       </div>
     </div>
   
-    <!-- Right Column: Terminal -->
-    <div class="terminal-column">
-      <h1>Interactive Bash Terminal</h1>
-      <iframe id="bash-terminal" src="https://bellard.org/jslinux/vm.html?url=alpine-x86.cfg&mem=192"></iframe>
+    <!-- Right Column: Results -->
+    <div class="terminal-column" style="max-width:700px;margin:auto;font-size:1.1em;">
+      <input id="id" placeholder="Enter student number"
+             style="width:100%;padding:12px;border-radius:6px;border:1px solid #ccc;font-size:1em;;font-family: Fira Code;"/>
+    
+      <button onclick="fetchResults()"
+              style="margin-top:15px;padding:12px 20px;background-color:#ffcc00;color:#1e1e1e;border:none;border-radius:6px;cursor:pointer;font-size:1em;font-family: Fira Code;">
+        Wyniki
+      </button>
+    
+      <div id="results" style="margin-top:25px;"></div>
+    
+      <script>
+        async function fetchResults() {
+          const id = document.getElementById('id').value;
+          const apiURL = 'https://student-results-worker.k-kotysz.workers.dev?id=' + encodeURIComponent(id) +'&course=bash';
+          const resultsElem = document.getElementById('results');          
+          resultsElem.innerHTML = "<em>Pobieram wyniki...</em>";
+    
+          try {
+            const res = await fetch(apiURL);
+            if (res.ok) {
+              const data = await res.json();
+    
+              const tasks = ['zad1', 'zad2', 'zad3', 'zad4', 'zad5'];
+              const taskListItems = tasks.map(task => {
+                const grade = data[task];
+                const icon = grade !== 'N/A' ? '✅' : '❌';
+                const iconColor = grade !== 'N/A' ? '#4CAF50' : '#e74c3c';
+    
+                return `<li><span style="color:${iconColor}">${icon}</span> <strong>Zadanie #${task.slice(-1)}:</strong> ${grade}</li>`;
+              }).join('');
+    
+              resultsElem.innerHTML = `
+              <div style="border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); padding:20px; background-color:#1e1e1e;">
+                <h2 style="margin-top:0; color:#eee;">${data.names} ${data.surname}</h2>
+                <h2 style="margin-top:0; color:#eee;">${data.id}</h2>
+                <ul style="list-style:none;padding-left:0;font-size:2.05em;color:#eee;">
+                  ${taskListItems}
+                </ul>
+              </div>`; 
+            } else {
+              resultsElem.innerHTML = `<div style="color:#e74c3c;">Error: ${await res.text()}</div>`;
+            }
+          } catch (err) {
+            resultsElem.innerHTML = `<div style="color:#e74c3c;">Fetch error: ${err.message}</div>`;
+          }
+        }
+      </script>
     </div>
-  </div>
+    
+    
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {
