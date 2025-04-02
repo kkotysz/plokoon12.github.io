@@ -1,0 +1,145 @@
+<html>
+<head>
+  <title>mmwa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Advent+Pro:wght@200&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../assets/css/shuffle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="shortcut icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <style>
+    /* Button & grid styling similar to your gallery */
+    body {
+      background-color: #1e1e1e;
+      font-family: 'Abel', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #fff;
+    }
+    a.button {
+      display: inline-block;
+      background-color: #333;
+      color: #fff;
+      padding: 0.6em 1.2em;
+      text-decoration: none;
+      margin: 0.5em 0.3em;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    a.button:hover {
+      background-color: #555;
+    }
+    .button.active {
+      background-color: #ffcc00;
+      color: #1e1e1e;
+    }
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.0em;
+      margin-top: 2em;
+    }
+    .grid-item {
+      background: #2c2c2c00;
+      padding: 0em;
+      border-radius: 4px;
+      text-align: center;
+      width: 200px;
+      min-height: 10em;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 1em;
+    }
+    p {
+      font-size: x-large;
+    }
+    .container {
+      display: flex; /* Enables side-by-side layout */
+      justify-content: space-between; /* Spaces out items */
+      align-items: flex-start; /* Aligns items at the top */
+      gap: 0.1em; /* Adds spacing between columns */
+      padding: 2em;
+      font-size: small;
+    }
+    .links-column {
+      flex: 1; /* Takes up available space */
+      max-width: 50vw; /* Adjust this for better spacing */
+    }
+    .terminal-column {
+      flex: 1; /* Terminal gets more space */
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <a class="button" href="/"><i class="fa-solid fa-house"></i> Home</a>
+  <div class="grid">
+    <div class="grid-item">
+      <a class="button" href="/python" style="font-family: Fira Code;"><i class="fa-brands fa-python"></i> python</a>
+    </div>
+    <div class="grid-item">
+      <a class="button" href="/bash" style="font-family: Fira Code;"><i class="fa-brands fa-linux"></i><br>bash</a>
+    </div>
+    <div class="grid-item">
+      <a class="button" href="/fortran" style="font-family: Fira Code;"><i class="fa-solid fa-terminal"></i> fortran</a>
+    </div>
+    <div class="grid-item">
+        <a class="button active" href="/mmwa" style="font-family: Fira Code;"><i class="fa-solid fa-chart-line"></i><br>MMwA</a>
+    </div>
+  </div>
+
+      <input id="id" placeholder="Wpisz nr albumu"
+             style="width:30%;padding:12px;border-radius:6px;border:1px solid #ccc;font-size:1em;font-family: Fira Code;"/>
+    
+      <button onclick="fetchResults()"
+              style="margin-top:0px;padding:12px 20px;background-color:#ffcc00;color:#1e1e1e;border:none;border-radius:6px;cursor:pointer;font-size:1em;font-family: Fira Code;">
+        Wyniki
+      </button>
+    
+      <div id="results" style="margin:25px auto; width:50%;"></div>
+    
+      <script>
+        async function fetchResults() {
+          const id = document.getElementById('id').value;
+          const apiURL = 'https://student-results-worker.k-kotysz.workers.dev?id=' + encodeURIComponent(id) +'&course=mmwa';
+          const resultsElem = document.getElementById('results');          
+          resultsElem.innerHTML = "<em>Pobieram wyniki...</em>";
+    
+          try {
+            const res = await fetch(apiURL);
+            if (res.ok) {
+              const data = await res.json();
+    
+              const tasks = ['zadanie1', 'zadanie2', 'zadanie3', 'zadanie4'];
+              const comments = ['komentarz1', 'komentarz2', 'komentarz3', 'komentarz4'];
+              const taskNumbers = data.zadania.split(',');
+              const taskListItems = tasks.map((task, index) => {
+                const grade = data[task];
+                const icon = grade !== 'N/A' ? '✅' : '❌';
+                const iconColor = grade !== 'N/A' ? '#4CAF50' : '#e74c3c';
+    
+                return `<li><span style="color:${iconColor}">${icon}</span> <strong>Zadanie #${taskNumbers[index].trim()}:</strong> ${grade}<br><p style='font-family: Montserrat;'>${data[comments[index]]}</p></li>`;
+              }).join('');
+    
+              resultsElem.innerHTML = `
+              <div style="border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); padding:20px; background-color:#1e1e1e;">
+                <h2 style="font-family: Montserrat; margin-top:0; color:#ffcc00;">${data.names} ${data.surname}<br>${data.id}</h2>
+                <ul style="list-style:none;padding-left:0;font-size:2.05em;color:#eee;">
+                  ${taskListItems}
+                </ul>
+              </div>`; 
+            } else {
+              resultsElem.innerHTML = `<div style="color:#e74c3c;">Error: ${await res.text()}</div>`;
+            }
+          } catch (err) {
+            resultsElem.innerHTML = `<div style="color:#e74c3c;">Fetch error: ${err.message}</div>`;
+          }
+        }
+      </script>
+    
+</body>
+</html>
