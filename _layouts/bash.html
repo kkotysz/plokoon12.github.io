@@ -220,7 +220,7 @@
             notebooks.forEach(notebook => {
               const link = document.createElement("a");
               link.className = "button";
-              link.href = "https://github.com/kkotysz/BASH-notebooks/blob/master/" + notebook.path;
+              link.href = "https://nbviewer.org/github/kkotysz/BASH-notebooks/blob/master/" + notebook.path;
               link.target = "_blank";
               // Remove the .ipynb extension from the displayed text
               const displayName = notebook.path.replace(/\.ipynb$/, "");

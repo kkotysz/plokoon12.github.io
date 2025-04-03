@@ -199,7 +199,8 @@
             notebooks.forEach(notebook => {
               const link = document.createElement("a");
               link.className = "button";
-              link.href = "https://github.com/kkotysz/python-nb/blob/main/" + notebook.path;
+              // link.href = "https://github.com/kkotysz/python-nb/blob/main/" + notebook.path;
+              link.href = "https://nbviewer.org/github/kkotysz/python-nb/blob/main/" + notebook.path;
               link.target = "_blank";
               // Remove the .ipynb extension from the displayed text
               const displayName = notebook.path.replace(/\.ipynb$/, "");
