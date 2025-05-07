@@ -144,7 +144,7 @@
                 const icon = grade !== 'N/A' ? '✅' : '❌';
                 const iconColor = grade !== 'N/A' ? '#ffcc00' : '#e74c3c';
     
-                return `<li><span style="color:${iconColor}">${icon}</span> <strong>Kodowka #${task.slice(-1)}:</strong> ${grade}</li>`;
+                return `<li><span style="color:${iconColor}">${icon}</span> <strong>${taskName} #${task.slice(-1)}:</strong> ${grade}</li>`;
               }).join('');
     
               resultsElem.innerHTML = `
