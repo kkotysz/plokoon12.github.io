@@ -140,6 +140,7 @@
               const tasks = ['kod1', 'L1'];
               const taskListItems = tasks.map(task => {
                 const grade = data[task];
+                const taskName = task.slice(0, -1) !== 'L' ? 'Kodowka' : 'Lista';
                 const icon = grade !== 'N/A' ? '✅' : '❌';
                 const iconColor = grade !== 'N/A' ? '#ffcc00' : '#e74c3c';
     
