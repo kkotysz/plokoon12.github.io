@@ -138,7 +138,7 @@
             if (res.ok) {
               const data = await res.json();
     
-              const tasks = ['kod1', 'L1'];
+              const tasks = ['kod1', 'kod2', 'L1'];
               const taskListItems = tasks.map(task => {
                 const grade = data[task];
                 const taskName = task.slice(0, -1) !== 'L' ? 'Kodowka' : 'Lista';
