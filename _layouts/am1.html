@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>mmwa</title>
+  <title>am1</title>
   <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Advent+Pro:wght@200&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
@@ -88,10 +88,10 @@
       <a class="button" href="/fortran" style="font-family: Fira Code;"><i class="fa-solid fa-terminal"></i> fortran</a>
     </div>
     <div class="grid-item">
-        <a class="button active" href="/mmwa" style="font-family: Fira Code;"><i class="fa-solid fa-chart-line"></i><br>MMwA</a>
+        <a class="button" href="/mmwa" style="font-family: Fira Code;"><i class="fa-solid fa-chart-line"></i><br>MMwA</a>
     </div>
     <div class="grid-item">
-        <a class="button" href="/am1" style="font-family: Fira Code;"><i class="fa-solid fa-chart-line"></i><br>AM 1</a>
+        <a class="button active" href="/am1" style="font-family: Fira Code;"><i class="fa-solid fa-chart-line"></i><br>AM 1</a>
     </div>
   </div>
 
@@ -108,7 +108,7 @@
       <script>
         async function fetchResults() {
           const id = document.getElementById('id').value;
-          const apiURL = 'https://student-results-worker.k-kotysz.workers.dev?id=' + encodeURIComponent(id) +'&course=mmwa';
+          const apiURL = 'https://student-results-worker.k-kotysz.workers.dev?id=' + encodeURIComponent(id) +'&course=am1';
           const resultsElem = document.getElementById('results');          
           resultsElem.innerHTML = "<em>Pobieram wyniki...</em>";
     
@@ -116,23 +116,13 @@
             const res = await fetch(apiURL);
             if (res.ok) {
               const data = await res.json();
-    
-              const tasks = ['zadanie1', 'zadanie2', 'zadanie3', 'zadanie4'];
-              const comments = ['komentarz1', 'komentarz2', 'komentarz3', 'komentarz4'];
-              const taskNumbers = data.zadania.split(',');
-              const taskListItems = tasks.map((task, index) => {
-                const grade = data[task];
-                const icon = grade !== 'N/A' ? '✅' : '❌';
-                const iconColor = grade !== 'N/A' ? '#4CAF50' : '#e74c3c';
-    
-                return `<li><span style="color:${iconColor}">${icon}</span> <strong>Zadanie #${taskNumbers[index].trim()}:</strong> ${grade}<br><p style='font-family: Montserrat;'>${data[comments[index]]}</p></li>`;
-              }).join('');
+              console.log(data);
     
               resultsElem.innerHTML = `
               <div style="border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); padding:20px; background-color:#1e1e1e;">
                 <h2 style="font-family: Montserrat; margin-top:0; color:#ffcc00;">${data.names} ${data.surname}<br>${data.id}</h2>
                 <ul style="list-style:none;padding-left:0;font-size:2.05em;color:#eee;">
-                  ${taskListItems}
+                  Wynik kolokwium: ${data.kolokwium}
                 </ul>
               </div>`; 
             } else {
