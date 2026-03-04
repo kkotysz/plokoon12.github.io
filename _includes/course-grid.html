@@ -1,0 +1,10 @@
+<div class="grid">
+  {% assign active_course = include.active %}
+  {% for course in site.data.courses %}
+    <div class="grid-item">
+      <a class="button{% if course.id == active_course %} active{% endif %}" href="{{ course.href }}" style="font-family: Fira Code;">
+        <i class="{{ course.icon }}"></i>{% if course.line_break %}<br>{% else %} {% endif %}{{ course.label }}
+      </a>
+    </div>
+  {% endfor %}
+</div>

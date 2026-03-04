@@ -1,0 +1,28 @@
+- id: python
+  label: python
+  href: /python
+  icon: fa-brands fa-python
+- id: bash
+  label: bash
+  href: /bash
+  icon: fa-brands fa-linux
+  line_break: true
+- id: fortran
+  label: fortran
+  href: /fortran
+  icon: fa-solid fa-terminal
+- id: mmwa
+  label: MMwA
+  href: /mmwa
+  icon: fa-solid fa-chart-line
+  line_break: true
+- id: am1
+  label: "AM 1"
+  href: /am1
+  icon: fa-solid fa-square-root-variable
+  line_break: true
+- id: am2
+  label: "AM 2"
+  href: /am2
+  icon: fa-solid fa-square-root-variable
+  line_break: true

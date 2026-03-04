@@ -18,3 +18,5 @@ group :jekyll_plugins do
   gem "jekyll-algolia"
   gem "jekyll-minimagick"
 end
+
+gem "webrick", "~> 1.9"

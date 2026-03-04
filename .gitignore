@@ -6,3 +6,6 @@ Gemfile.lock
 assets/.DS_Store
 _layouts/krzkot-web.code-workspace
 *.code-workspace
+.bundle/config
+*.lock
+/vendor
