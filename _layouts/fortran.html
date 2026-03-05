@@ -1,126 +1,67 @@
-<html>
+<!DOCTYPE html>
+<html lang="pl">
 <head>
-  <title>Student Help - Courses</title>
-  <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Advent+Pro:wght@200&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="../../assets/css/shuffle.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="shortcut icon" type="image/png" href="/favicon.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <style>
-    /* Button & grid styling similar to your gallery */
-    body {
-      background-color: #1e1e1e;
-      font-family: 'Abel', sans-serif;
-      margin: 0;
-      padding: 0;
-      color: #fff;
-    }
-    a.button {
-      display: inline-block;
-      background-color: #333;
-      color: #fff;
-      padding: 0.6em 1.2em;
-      text-decoration: none;
-      margin: 0.5em 0.3em;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
-    }
-    a.button:hover {
-      background-color: #555;
-    }
-    .button.active {
-      background-color: #ffcc00;
-      color: #1e1e1e;
-    }
-    .grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.0em;
-      margin-top: 2em;
-    }
-    .grid-item {
-      background: #2c2c2c00;
-      padding: 0em;
-      border-radius: 4px;
-      text-align: center;
-      width: 200px;
-      min-height: 10em;
-    }
-    h1 {
-      text-align: center;
-      margin-top: 1em;
-    }
-  </style>
+  {% include course-head.html title="Fortran" %}
 </head>
-<body>
-  <a class="button" href="/"><i class="fa-solid fa-house"></i> Home</a>
-  {% include course-grid.html active="fortran" %}
+<body class="course-page">
+  <main class="page">
+    <a class="home-link" href="/"><i class="fa-solid fa-house"></i> Strona główna</a>
 
-  <p>
-    <a class="button" href="https://github.com/kkotysz/fortran-nb" target="_blank"><i class="fa-brands fa-github"></i> GitHub repo</a>
-    <a class="button" href="https://github.com/kkotysz/fortran-nb/blob/main/progs.pdf" target="_blank"><i class="fa-solid fa-file-pdf"></i> Zadania</a>
-    <a class="button" href="https://github.com/kkotysz/fortran-nb/blob/main/zaliczenie.pdf" target="_blank"><i class="fa-solid fa-file-pdf"></i> Zadania na zaliczenie</a>
-  </p>
-  <div class="content grid" id="notebooks-container">
-    <!-- Notebook links will be dynamically injected here -->
-  </div>
+    <header class="hero surface">
+      <span class="tag"><i class="fa-solid fa-terminal"></i> Kurs Fortran</span>
+      <h1>Materiały i notebooki do pracy na zajęciach</h1>
+      <p class="lead">Tutaj masz wszystkie linki do ćwiczeń i notebooków. Strona jest ułożona pod szybkie przejście od materiałów do konkretnych tematów.</p>
+    </header>
+
+    {% include course-switcher.html active="fortran" %}
+
+    <section class="section surface">
+      <h2 class="section-title"><i class="fa-solid fa-bolt"></i> Szybki start</h2>
+      <p class="section-desc">Najważniejsze linki do kursu.</p>
+      <div class="resource-grid">
+        <a class="resource-link" href="https://github.com/kkotysz/fortran-nb" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-brands fa-github"></i> GitHub repo</strong>
+          <span>Kod i notebooki.</span>
+        </a>
+        <a class="resource-link" href="https://github.com/kkotysz/fortran-nb/blob/main/progs.pdf" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-solid fa-file-pdf"></i> Zadania</strong>
+          <span>Bieżące ćwiczenia.</span>
+        </a>
+        <a class="resource-link" href="https://github.com/kkotysz/fortran-nb/blob/main/zaliczenie.pdf" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-solid fa-graduation-cap"></i> Zadania na zaliczenie</strong>
+          <span>Materiał do zaliczenia.</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section surface">
+      <div class="notebook-head">
+        <div>
+          <h2 class="section-title"><i class="fa-solid fa-book-open"></i> Notebooki</h2>
+          <p class="section-desc">Lista ładuje się z jsDelivr, a kliknięcie otwiera notebook bezpośrednio na GitHubie.</p>
+        </div>
+        <span id="notebook-count">Ładuje listę...</span>
+      </div>
+
+      <div id="notebooks-container" class="notebook-grid">
+        <div class="loading-grid" aria-hidden="true">
+          <div class="loading-card"></div>
+          <div class="loading-card"></div>
+          <div class="loading-card"></div>
+          <div class="loading-card"></div>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      const container = document.getElementById("notebooks-container");
-      const apiUrl = "https://api.github.com/repos/kkotysz/fortran-nb/git/trees/main?recursive=1";
-
-      fetch(apiUrl)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok " + response.statusText);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (data && data.tree) {
-            // Filter for Jupyter notebooks (.ipynb) in the main directory that start with a number
-            const notebooks = data.tree.filter(item =>
-              item.path.endsWith(".ipynb") &&
-              !item.path.includes("/") &&
-              /^[0-9]/.test(item.path)
-            );
-            
-            // Sort the notebooks in numerical order based on the leading numeric prefix.
-            // This regex captures numbers with optional decimals.
-            notebooks.sort((a, b) => {
-              const aName = a.path.replace(/\.ipynb$/, "");
-              const bName = b.path.replace(/\.ipynb$/, "");
-              const aNumMatch = aName.match(/^(\d+(\.\d+)?)/);
-              const bNumMatch = bName.match(/^(\d+(\.\d+)?)/);
-              const aNum = aNumMatch ? parseFloat(aNumMatch[0]) : 0;
-              const bNum = bNumMatch ? parseFloat(bNumMatch[0]) : 0;
-              return aNum - bNum;
-            });
-            
-            // Create and append a link for each notebook, removing the .ipynb extension for display
-            notebooks.forEach(notebook => {
-              const link = document.createElement("a");
-              link.className = "button";
-              link.href = "https://nbviewer.org/github/kkotysz/fortran-nb/blob/main/" + notebook.path;
-              link.target = "_blank";
-              // Remove the .ipynb extension from the displayed text
-              const displayName = notebook.path.replace(/\.ipynb$/, "");
-              link.innerHTML = '<i class="fa-solid fa-file-alt"></i> ' + displayName;
-              container.appendChild(link);
-            });
-          }
-        })
-        .catch(error => {
-          console.error("Error fetching GitHub notebooks:", error);
-          const errorMessage = document.createElement("p");
-          errorMessage.textContent = "Failed to load notebook links.";
-          container.appendChild(errorMessage);
-        });
+      initCourseNotebooks({
+        owner: "kkotysz",
+        repo: "fortran-nb",
+        branches: ["main", "master"]
+      });
     });
-  </script>  
+  </script>
 </body>
 </html>

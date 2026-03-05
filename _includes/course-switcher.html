@@ -1,0 +1,10 @@
+{% assign heading_tag = include.heading_tag | default: "h2" %}
+{% assign switcher_icon = include.icon | default: "fa-solid fa-compass" %}
+{% assign switcher_title = include.title | default: "Nawigacja po kursach" %}
+{% assign switcher_description = include.description | default: "Aktywny kurs jest podświetlony kolorem." %}
+
+<section class="section surface course-switcher">
+  <{{ heading_tag }} class="section-title"><i class="{{ switcher_icon }}"></i> {{ switcher_title }}</{{ heading_tag }}>
+  <p class="section-desc">{{ switcher_description }}</p>
+  {% include course-grid.html active=include.active %}
+</section>

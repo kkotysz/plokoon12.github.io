@@ -1,214 +1,135 @@
-<html>
+<!DOCTYPE html>
+<html lang="pl">
 <head>
-  <title>Student Help - Courses</title>
-  <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Advent+Pro:wght@200&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="../../assets/css/shuffle.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="shortcut icon" type="image/png" href="/favicon.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <style>
-    /* Button & grid styling similar to your gallery */
-    body {
-      background-color: #1e1e1e;
-      font-family: 'Abel', sans-serif;
-      margin: 0;
-      padding: 0;
-      color: #fff;
-    }
-    a.button {
-      display: inline-block;
-      background-color: #333;
-      color: #fff;
-      padding: 0.6em 1.2em;
-      text-decoration: none;
-      margin: 0.5em 0.3em;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
-    }
-    a.button:hover {
-      background-color: #555;
-    }
-    .button.active {
-      background-color: #ffcc00;
-      color: #1e1e1e;
-    }
-    .grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.0em;
-      margin-top: 2em;
-    }
-    .grid-item {
-      background: #2c2c2c00;
-      padding: 0em;
-      border-radius: 4px;
-      text-align: center;
-      width: 200px;
-      min-height: 10em;
-    }
-    h1 {
-      text-align: center;
-      margin-top: 1em;
-    }
-    .container {
-      display: flex; /* Enables side-by-side layout */
-      justify-content: space-between; /* Spaces out items */
-      align-items: flex-start; /* Aligns items at the top */
-      gap: 2em; /* Adds spacing between columns */
-      padding: 2em;
-      font-size: small;
-    }
-
-    .links-column {
-      flex: 1; /* Takes up available space */
-      max-width: 45vw; /* Adjust this for better spacing */
-    }
-
-    .terminal-column {
-      flex: 1; /* Terminal gets more space */
-      max-width: 100%;
-    }
-
-    #python-terminal {
-      width: 100%; /* Full width within the column */
-      height: 60vh; /* Keeps a large terminal */
-      border: none;
-      display: block;
-    }
-  </style>
+  {% include course-head.html title="Python" %}
 </head>
-<body>
-  <a class="button" href="/"><i class="fa-solid fa-house"></i> Home</a>
-  {% include course-grid.html active="python" %}
-  
-  <div class="container">
-    <!-- Left Column: Links -->
-    <div class="links-column">
-      <p>
-        <a href="https://github.com/kkotysz/python-nb" class="button" target="_blank"><i class="fa-brands fa-github"></i> GitHub repo</a>
-        <a href="https://docs.google.com/presentation/d/1i45GRi6ww_YgpW-xBsSaicJ6wDGtcsyqoL7xdr-_fP0/edit?usp=sharing" class="button" target="_blank"><i class="fa-solid fa-book"></i> Prezentacja</a>
-        <a href="https://github.com/kkotysz/python-nb/blob/main/python_listy.pdf" class="button" target="_blank"><i class="fa-solid fa-book"></i> Zadania zaliczeniowe</a>
-      </p>
-      <p>
-        <a href="https://github.com/kkotysz/python-nb/blob/main/zadania/01_lista_moduly.pdf" class="button" target="_blank"><i class="fa-solid fa-file-pdf"></i> Lista nr 1</a>
-        <a href="https://github.com/kkotysz/python-nb/blob/main/zadania/02_python_zadania.pdf" class="button" target="_blank"><i class="fa-solid fa-file-pdf"></i> Lista nr 2</a>
-        <a href="https://github.com/kkotysz/python-nb/blob/main/zadania/03_python_astropy.pdf" class="button" target="_blank"><i class="fa-solid fa-file-pdf"></i> Lista nr 3</a>
-      </p>
-      <div class="content grid" id="notebooks-container">
-        <!-- Notebook links will be dynamically injected here -->
+<body class="course-page">
+  <main class="page">
+    <a class="home-link" href="/"><i class="fa-solid fa-house"></i> Strona główna</a>
+
+    <header class="hero surface">
+      <span class="tag"><i class="fa-brands fa-python"></i> Kurs Python</span>
+      <h1>Materiały, notebooki i wyniki</h1>
+      <p class="lead">Z tego miejsca przejdziesz do prezentacji, list i aktualnych notebooków. Po prawej możesz od razu sprawdzić swoje wyniki.</p>
+    </header>
+
+    {% include course-switcher.html active="python" %}
+
+    <section class="section surface">
+      <h2 class="section-title"><i class="fa-solid fa-bolt"></i> Materiały ogólne</h2>
+      <p class="section-desc">Repozytorium, prezentacja do zajęć i zadania zaliczeniowe.</p>
+      <div class="resource-grid">
+        <a class="resource-link" href="https://github.com/kkotysz/python-nb" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-brands fa-github"></i> GitHub repo</strong>
+          <span>Notebooki i kod do kursu.</span>
+        </a>
+        <a class="resource-link" href="https://docs.google.com/presentation/d/1i45GRi6ww_YgpW-xBsSaicJ6wDGtcsyqoL7xdr-_fP0/edit?usp=sharing" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-solid fa-book"></i> Prezentacja</strong>
+          <span>Materiał do teorii i omówienia tematów.</span>
+        </a>
+        <a class="resource-link" href="https://github.com/kkotysz/python-nb/blob/main/python_listy.pdf" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-solid fa-file-pdf"></i> Zadania zaliczeniowe</strong>
+          <span>Zakres i warunki zaliczenia.</span>
+        </a>
       </div>
-    </div>
-  
-  
-    <!-- Right Column: Results -->
-    <div class="terminal-column" style="max-width:700px;margin:auto;font-size:1.1em;">
-      <input id="id" placeholder="Wpisz nr albumu"
-             style="width:100%;padding:12px;border-radius:6px;border:1px solid #ccc;font-size:1em;;font-family: Fira Code;"/>
-    
-      <button onclick="fetchResults()"
-              style="margin-top:15px;padding:12px 20px;background-color:#ffcc00;color:#1e1e1e;border:none;border-radius:6px;cursor:pointer;font-size:1em;font-family: Fira Code;">
-        Wyniki
-      </button>
-    
-      <div id="results" style="margin-top:25px;"></div>
-    
-      <script>
-        async function fetchResults() {
-          const id = document.getElementById('id').value;
-          const apiURL = 'https://student-results-worker.k-kotysz.workers.dev?id=' + encodeURIComponent(id) +'&course=python';
-          const resultsElem = document.getElementById('results');          
-          resultsElem.innerHTML = "<em>Pobieram wyniki...</em>";
-    
-          try {
-            const res = await fetch(apiURL);
-            if (res.ok) {
-              const data = await res.json();
-    
-              const tasks = ['kod1', 'kod2', 'L1', 'L2', 'L3'];
-              const taskListItems = tasks.map(task => {
-                const grade = data[task];
-                const taskName = task.slice(0, -1) !== 'L' ? 'Kodowka' : 'Lista';
-                const icon = grade !== 'N/A' ? '✅' : '❌';
-                const iconColor = grade !== 'N/A' ? '#ffcc00' : '#e74c3c';
-    
-                return `<li><span style="color:${iconColor}">${icon}</span> <strong>${taskName} #${task.slice(-1)}:</strong> ${grade}</li>`;
-              }).join('');
-    
-              resultsElem.innerHTML = `
-              <div style="border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); padding:20px; background-color:#1e1e1e;">
-                <h2 style="margin-top:0; color:#eee;">${data.names} ${data.surname}</h2>
-                <h2 style="margin-top:0; color:#eee;">${data.id}</h2>
-                <ul style="list-style:none;padding-left:0;font-size:2.05em;color:#eee;">
-                  ${taskListItems}
-                </ul>
-              </div>`; 
-            } else {
-              resultsElem.innerHTML = `<div style="color:#e74c3c;">Error: ${await res.text()}</div>`;
-            }
-          } catch (err) {
-            resultsElem.innerHTML = `<div style="color:#e74c3c;">Fetch error: ${err.message}</div>`;
-          }
-        }
-      </script>
-    </div>
-  </div>
+    </section>
+
+    <section class="section surface">
+      <h2 class="section-title"><i class="fa-solid fa-list-check"></i> Listy zadań</h2>
+      <p class="section-desc">Lista ćwiczeń do pracy na zajęciach.</p>
+      <div class="resource-grid">
+        <a class="resource-link" href="https://github.com/kkotysz/python-nb/blob/main/zadania/01_lista_moduly.pdf" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-solid fa-file-pdf"></i> Lista nr 1</strong>
+          <span>Moduły i podstawy.</span>
+        </a>
+        <a class="resource-link" href="https://github.com/kkotysz/python-nb/blob/main/zadania/02_python_zadania.pdf" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-solid fa-file-pdf"></i> Lista nr 2</strong>
+          <span>Ćwiczenia programistyczne.</span>
+        </a>
+        <a class="resource-link" href="https://github.com/kkotysz/python-nb/blob/main/zadania/03_python_astropy.pdf" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-solid fa-file-pdf"></i> Lista nr 3</strong>
+          <span>Astropy i zadania praktyczne.</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section surface content-grid">
+      <div>
+        <div class="notebook-head">
+          <div>
+            <h2 class="section-title"><i class="fa-solid fa-book-open"></i> Notebooki</h2>
+            <p class="section-desc">Lista ładuje się z jsDelivr, a kliknięcie otwiera notebook bezpośrednio na GitHubie.</p>
+          </div>
+          <span id="notebook-count">Ładuje listę...</span>
+        </div>
+
+        <div id="notebooks-container" class="notebook-grid">
+          <div class="loading-grid" aria-hidden="true">
+            <div class="loading-card"></div>
+            <div class="loading-card"></div>
+            <div class="loading-card"></div>
+            <div class="loading-card"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-panel">
+        <h2 class="section-title"><i class="fa-solid fa-chart-line"></i> Wyniki</h2>
+        <p class="section-desc">Wpisz numer albumu, aby pobrać oceny.</p>
+
+        <label class="field-label" for="id">Numer albumu</label>
+        <input id="id" class="text-input" placeholder="Wpisz nr albumu">
+        <button class="action-btn" onclick="fetchResults()">Pobierz wyniki</button>
+
+        <div class="results-output" id="results"></div>
+      </div>
+    </section>
+  </main>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const container = document.getElementById("notebooks-container");
-      const apiUrl = "https://api.github.com/repos/kkotysz/python-nb/git/trees/main?recursive=1";
+    async function fetchResults() {
+      const id = document.getElementById("id").value;
+      const apiURL = "https://student-results-worker.k-kotysz.workers.dev?id=" + encodeURIComponent(id) + "&course=python";
+      const resultsElem = document.getElementById("results");
 
-      fetch(apiUrl)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok " + response.statusText);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (data && data.tree) {
-            // Filter for Jupyter notebooks (.ipynb) in the main directory that start with a number
-            const notebooks = data.tree.filter(item =>
-              item.path.endsWith(".ipynb") &&
-              !item.path.includes("/") &&
-              /^[0-9]/.test(item.path)
-            );
-            
-            // Sort the notebooks in numerical order based on the leading numeric prefix.
-            // This regex captures numbers with optional decimals.
-            notebooks.sort((a, b) => {
-              const aName = a.path.replace(/\.ipynb$/, "");
-              const bName = b.path.replace(/\.ipynb$/, "");
-              const aNumMatch = aName.match(/^(\d+(\.\d+)?)/);
-              const bNumMatch = bName.match(/^(\d+(\.\d+)?)/);
-              const aNum = aNumMatch ? parseFloat(aNumMatch[0]) : 0;
-              const bNum = bNumMatch ? parseFloat(bNumMatch[0]) : 0;
-              return aNum - bNum;
-            });
-            
-            // Create and append a link for each notebook, removing the .ipynb extension for display
-            notebooks.forEach(notebook => {
-              const link = document.createElement("a");
-              link.className = "button";
-              // link.href = "https://github.com/kkotysz/python-nb/blob/main/" + notebook.path;
-              link.href = "https://nbviewer.org/github/kkotysz/python-nb/blob/main/" + notebook.path;
-              link.target = "_blank";
-              // Remove the .ipynb extension from the displayed text
-              const displayName = notebook.path.replace(/\.ipynb$/, "");
-              link.innerHTML = '<i class="fa-solid fa-file-alt"></i> ' + displayName;
-              container.appendChild(link);
-            });
-          }
-        })
-        .catch(error => {
-          console.error("Error fetching GitHub notebooks:", error);
-          const errorMessage = document.createElement("p");
-          errorMessage.textContent = "Failed to load notebook links.";
-          container.appendChild(errorMessage);
-        });
+      resultsElem.innerHTML = '<div class="state-note">Pobieram wyniki...</div>';
+
+      try {
+        const res = await fetch(apiURL);
+        if (res.ok) {
+          const data = await res.json();
+
+          const tasks = ["kod1", "kod2", "L1", "L2", "L3"];
+          const taskListItems = tasks.map(task => {
+            const grade = data[task];
+            const taskName = task.slice(0, -1) !== "L" ? "Kodówka" : "Lista";
+            const ok = grade !== "N/A";
+            const icon = ok ? "fa-circle-check" : "fa-circle-xmark";
+            const statusClass = ok ? "status-ok" : "status-bad";
+
+            return '<li><span class="' + statusClass + '"><i class="fa-solid ' + icon + '"></i></span> <strong>' + taskName + " #" + task.slice(-1) + ":</strong> " + grade + "</li>";
+          }).join("");
+
+          resultsElem.innerHTML =
+            '<div class="results-card">' +
+              '<h3 class="results-name">' + data.names + " " + data.surname + "</h3>" +
+              '<p class="results-id">' + data.id + "</p>" +
+              '<ul class="results-list">' + taskListItems + "</ul>" +
+            "</div>";
+        } else {
+          resultsElem.innerHTML = '<div class="state-note error">Błąd: ' + await res.text() + "</div>";
+        }
+      } catch (err) {
+        resultsElem.innerHTML = '<div class="state-note error">Błąd pobierania: ' + err.message + "</div>";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      initCourseNotebooks({
+        owner: "kkotysz",
+        repo: "python-nb",
+        branches: ["main", "master"]
+      });
     });
   </script>
 </body>

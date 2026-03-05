@@ -1,147 +1,77 @@
-<html>
+<!DOCTYPE html>
+<html lang="pl">
 <head>
-  <title>am2</title>
-  <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Advent+Pro:wght@200&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="../../assets/css/shuffle.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="shortcut icon" type="image/png" href="/favicon.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <style>
-    /* Button & grid styling similar to your gallery */
-    body {
-      background-color: #1e1e1e;
-      font-family: 'Abel', sans-serif;
-      margin: 0;
-      padding: 0;
-      color: #fff;
-    }
-    a.button {
-      display: inline-block;
-      background-color: #333;
-      color: #fff;
-      padding: 0.6em 1.2em;
-      text-decoration: none;
-      margin: 0.5em 0.3em;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
-    }
-    a.button:hover {
-      background-color: #555;
-    }
-    .button.active {
-      background-color: #ffcc00;
-      color: #1e1e1e;
-    }
-    .grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.0em;
-      margin-top: 2em;
-    }
-    .grid-item {
-      background: #2c2c2c00;
-      padding: 0em;
-      border-radius: 4px;
-      text-align: center;
-      width: 200px;
-      min-height: 10em;
-    }
-    h1 {
-      text-align: center;
-      margin-top: 1em;
-    }
-    p {
-      font-size: small;
-    }
-    .container {
-      display: flex; /* Enables side-by-side layout */
-      justify-content: space-between; /* Spaces out items */
-      align-items: flex-start; /* Aligns items at the top */
-      gap: 0.1em; /* Adds spacing between columns */
-      padding: 2em;
-      font-size: small;
-    }
-    .links-column {
-      flex: 1; /* Takes up available space */
-      max-width: 50vw; /* Adjust this for better spacing */
-    }
-    .terminal-column {
-      flex: 1; /* Terminal gets more space */
-      max-width: 100%;
-    }
-    .materials {
-      max-width: 960px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-    .materials h2 {
-      font-family: 'Montserrat', sans-serif;
-      letter-spacing: 0.02em;
-    }
-    .material-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-      margin-top: 16px;
-    }
-    .material-card {
-      background: #2c2c2c;
-      border-radius: 10px;
-      padding: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    }
-    .material-card h3 {
-      margin-top: 0;
-      font-family: 'Montserrat', sans-serif;
-    }
-    .material-card p {
-      margin-bottom: 12px;
-      color: #ccc;
-    }
-    .material-links a.button {
-      width: 100%;
-      box-sizing: border-box;
-      text-align: left;
-    }
-  </style>
+  {% include course-head.html title="AM2" %}
 </head>
-<body>
-  <a class="button" href="/"><i class="fa-solid fa-house"></i> Home</a>
-  {% include course-grid.html active="am2" %}
+<body class="course-page">
+  <main class="page">
+    <a class="home-link" href="/"><i class="fa-solid fa-house"></i> Strona główna</a>
 
-      <div style="margin:25px auto; width:50%; text-align:center; font-family: 'Fira Code', monospace;">
-        <p style="color:#ffcc00; font-size:1.1em; margin-bottom:0.5em;">Wyniki będą dostępne wkrótce.</p>
-        <input id="id" placeholder="Wpisz nr albumu" disabled
-               style="width:30%;padding:12px;border-radius:6px;border:1px solid #ccc;font-size:1em;font-family: Fira Code;opacity:0.5;cursor:not-allowed;"/>
-        <button disabled
-                style="margin-top:0px;padding:12px 20px;background-color:#666;color:#1e1e1e;border:none;border-radius:6px;cursor:not-allowed;font-size:1em;font-family: Fira Code;opacity:0.6;">
-          Wyniki (wyłączone)
-        </button>
-      </div>
+    <header class="hero surface">
+      <span class="tag"><i class="fa-solid fa-square-root-variable"></i> Analiza Matematyczna 2</span>
+      <h1>Materiały do list</h1>
+      <p class="lead">Materiały PDF i nagrania do samodzielnej nauki.</p>
+    </header>
 
-      <section class="materials">
-        <h2><i class="fa-solid fa-book-open"></i> Materiały</h2>
-        <div class="material-grid">
-          <div class="material-card">
-            <h3><i class="fa-solid fa-file-pdf"></i> PDF</h3>
-            <p>Wprowadzenia teoretyczne do list</p>
-            <div class="material-links">
-              <a class="button" href="{{ '/assets/am2/pdf/help-AM2-L2.pdf' | relative_url }}" target="_blank">Lista nr 2</a>
-            </div>
-          </div>
-          <div class="material-card">
-            <h3><i class="fa-solid fa-film"></i> Wideo</h3>
-            <p>Uwaga: Materiały wygenerowane przy pomocy narzędzi AI (Notebook LM)</p>
-            <div class="material-links">
-              <a class="button" href="{{ '/assets/am2/video/01_Fundamenty_Algebry.mp4' | relative_url }}" target="_blank">1: Fundamenty Algebry</a>
-              <a class="button" href="{{ '/assets/am2/video/02_Od_Wektorów_do_Funkcji.mp4' | relative_url }}" target="_blank">2: Od Wektorów do Funkcji</a>
-            </div>
-          </div>
+    {% include course-switcher.html active="am2" %}
+
+    <section class="section surface">
+      <h2 class="section-title"><i class="fa-solid fa-chart-line"></i> Wyniki</h2>
+      <p class="section-desc">Sekcja tymczasowo niedostępna.</p>
+
+      <div class="disabled-panel">
+        <p class="notice">Wyniki będą dostępne wkrótce.</p>
+        <div class="disabled-row">
+          <input class="disabled-input" placeholder="Wpisz nr albumu" disabled>
+          <button class="disabled-btn" disabled>Wyniki (wyłączone)</button>
         </div>
-      </section>
+      </div>
+    </section>
+
+    <section class="section surface">
+      <h2 class="section-title"><i class="fa-solid fa-book-open"></i> Materiały</h2>
+      <p class="section-desc">PDF i nagrania pomocnicze.</p>
+
+      <div class="material-grid">
+        <article class="material-card">
+          <h3><i class="fa-solid fa-file-pdf"></i> PDF</h3>
+          <p>Wprowadzenia teoretyczne do list.</p>
+          {% assign am2_pdfs = site.static_files
+            | where_exp: "item", "item.path contains '/assets/am2/pdf/'"
+            | where: "extname", ".pdf"
+            | sort: "name"
+          %}
+          {% if am2_pdfs and am2_pdfs.size > 0 %}
+            {% for pdf in am2_pdfs %}
+              <a class="material-link" href="{{ pdf.path | relative_url }}" target="_blank" rel="noopener noreferrer">
+                {{ pdf.basename | replace: "AM2-L", "Lista nr " | replace: "_", " " | replace: "-", " " | replace: "help", "Wprowadzenie" }}
+              </a>
+            {% endfor %}
+          {% else %}
+            <div class="state-note">Brak plików PDF do wyświetlenia.</div>
+          {% endif %}
+        </article>
+
+        <article class="material-card">
+          <h3><i class="fa-solid fa-film"></i> Wideo</h3>
+          <p>Uwaga: materiały wygenerowane przy pomocy narzędzi AI (Notebook LM).</p>
+          {% assign am2_videos = site.static_files
+            | where_exp: "item", "item.path contains '/assets/am2/video/'"
+            | where: "extname", ".mp4"
+            | sort: "name"
+          %}
+          {% if am2_videos and am2_videos.size > 0 %}
+            {% for video in am2_videos %}
+              <a class="material-link" href="{{ video.path | relative_url }}" target="_blank" rel="noopener noreferrer">
+                {{ video.basename | replace: "_", " " | replace: "-", " " }}
+              </a>
+            {% endfor %}
+          {% else %}
+            <div class="state-note">Brak nagrań do wyświetlenia.</div>
+          {% endif %}
+        </article>
+      </div>
+    </section>
+  </main>
 </body>
 </html>

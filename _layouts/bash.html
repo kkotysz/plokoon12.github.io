@@ -1,227 +1,135 @@
-<html>
+<!DOCTYPE html>
+<html lang="pl">
 <head>
-  <title>bash</title>
-  <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Advent+Pro:wght@200&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="../../assets/css/shuffle.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="shortcut icon" type="image/png" href="/favicon.png">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <style>
-    /* Button & grid styling similar to your gallery */
-    body {
-      background-color: #1e1e1e;
-      font-family: 'Abel', sans-serif;
-      margin: 0;
-      padding: 0;
-      color: #fff;
-    }
-    a.button {
-      display: inline-block;
-      background-color: #333;
-      color: #fff;
-      padding: 0.6em 1.2em;
-      text-decoration: none;
-      margin: 0.5em 0.3em;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
-    }
-    a.button:hover {
-      background-color: #555;
-    }
-    .button.active {
-      background-color: #ffcc00;
-      color: #1e1e1e;
-    }
-    .grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.0em;
-      margin-top: 2em;
-    }
-    .grid-item {
-      background: #2c2c2c00;
-      padding: 0em;
-      border-radius: 4px;
-      text-align: center;
-      width: 200px;
-      min-height: 10em;
-    }
-    h1 {
-      text-align: center;
-      margin-top: 1em;
-    }
-    p {
-      font-size: x-large;
-    }
-    .container {
-      display: flex; /* Enables side-by-side layout */
-      justify-content: space-between; /* Spaces out items */
-      align-items: flex-start; /* Aligns items at the top */
-      gap: 0.1em; /* Adds spacing between columns */
-      padding: 2em;
-      font-size: small;
-    }
-    .links-column {
-      flex: 1; /* Takes up available space */
-      max-width: 50vw; /* Adjust this for better spacing */
-    }
-    .terminal-column {
-      flex: 1; /* Terminal gets more space */
-      max-width: 100%;
-    }
-    #bash-terminal {
-      width: 100%; /* Full width within the column */
-      height: 50vh; /* Keeps a large terminal */
-      border: none;
-      display: block;
-    }
-  </style>
+  {% include course-head.html title="Bash" %}
 </head>
-<body>
-  <a class="button" href="/"><i class="fa-solid fa-house"></i> Home</a>
-  {% include course-grid.html active="bash" %}
+<body class="course-page">
+  <main class="page">
+    <a class="home-link" href="/"><i class="fa-solid fa-house"></i> Strona główna</a>
 
-  <div class="container">
-    <!-- Left Column: Links -->
-    <div class="links-column">
-      <p>
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks" target="_blank">
-          <i class="fa-brands fa-github"></i> GitHub repo
+    <header class="hero surface">
+      <span class="tag"><i class="fa-brands fa-linux"></i> Kurs Bash</span>
+      <h1>Materiały, ćwiczenia i wyniki</h1>
+      <p class="lead">Wszystkie zadania i notatniki do zajęć są zebrane w jednym miejscu. Po prawej stronie sprawdzisz wyniki po numerze albumu.</p>
+    </header>
+
+    {% include course-switcher.html active="bash" %}
+
+    <section class="section surface">
+      <h2 class="section-title"><i class="fa-solid fa-bolt"></i> Materiały ogólne</h2>
+      <p class="section-desc">Najważniejsze linki startowe do kursu.</p>
+      <div class="resource-grid">
+        <a class="resource-link" href="https://github.com/kkotysz/BASH-notebooks" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-brands fa-github"></i> GitHub repo</strong>
+          <span>Główne repo z notatnikami.</span>
         </a>
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/Instrukcja_WSL.ipynb" target="_blank">
-          <i class="fa-brands fa-windows"></i> Instrukcja WSL
+        <a class="resource-link" href="https://github.com/kkotysz/BASH-notebooks/blob/master/Instrukcja_WSL.ipynb" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-brands fa-windows"></i> Instrukcja WSL</strong>
+          <span>Konfiguracja środowiska pod Windows.</span>
         </a>
-      </p>
-      <p>
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/exercises/zad_1/zad_1.ipynb" target="_blank">
-          <i class="fa-solid fa-file-alt"></i> Z1
-        </a>
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/exercises/zad_2/zad_2.ipynb" target="_blank">
-          <i class="fa-solid fa-file-alt"></i> Z2
-        </a>
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/exercises/zad_3/zad_3.ipynb" target="_blank">
-          <i class="fa-solid fa-file-alt"></i> Z3
-        </a>
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/exercises/zad_4/zad_4.ipynb" target="_blank">
-          <i class="fa-solid fa-file-alt"></i> Z4
-        </a>
-        <a class="button" href="https://github.com/kkotysz/BASH-notebooks/blob/master/exercises/zad_5/zad_5.ipynb" target="_blank">
-          <i class="fa-solid fa-file-alt"></i> Z5
-        </a>
-      </p>
-      <div class="content grid" id="notebooks-container">
-          <!-- Notebook links will be dynamically injected here -->
       </div>
-    </div>
-  
-    <!-- Right Column: Results -->
-    <div class="terminal-column" style="max-width:700px;margin:auto;font-size:1.1em;">
-      <input id="id" placeholder="Wpisz nr albumu"
-             style="width:100%;padding:12px;border-radius:6px;border:1px solid #ccc;font-size:1em;;font-family: Fira Code;"/>
-    
-      <button onclick="fetchResults()"
-              style="margin-top:15px;padding:12px 20px;background-color:#ffcc00;color:#1e1e1e;border:none;border-radius:6px;cursor:pointer;font-size:1em;font-family: Fira Code;">
-        Wyniki
-      </button>
-    
-      <div id="results" style="margin-top:25px;"></div>
-    
-      <script>
-        async function fetchResults() {
-          const id = document.getElementById('id').value;
-          const apiURL = 'https://student-results-worker.k-kotysz.workers.dev?id=' + encodeURIComponent(id) +'&course=bash';
-          const resultsElem = document.getElementById('results');          
-          resultsElem.innerHTML = "<em>Pobieram wyniki...</em>";
-    
-          try {
-            const res = await fetch(apiURL);
-            if (res.ok) {
-              const data = await res.json();
-    
-              const tasks = ['zad1', 'zad2', 'zad3', 'zad4', 'zad5'];
-              const taskListItems = tasks.map(task => {
-                const grade = data[task];
-                const icon = grade !== 'N/A' ? '✅' : '❌';
-                const iconColor = grade !== 'N/A' ? '#4CAF50' : '#e74c3c';
-    
-                return `<li><span style="color:${iconColor}">${icon}</span> <strong>Zadanie #${task.slice(-1)}:</strong> ${grade}</li>`;
-              }).join('');
-    
-              resultsElem.innerHTML = `
-              <div style="border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); padding:20px; background-color:#1e1e1e;">
-                <h2 style="margin-top:0; color:#eee;">${data.names} ${data.surname}</h2>
-                <h2 style="margin-top:0; color:#eee;">${data.id}</h2>
-                <ul style="list-style:none;padding-left:0;font-size:2.05em;color:#eee;">
-                  ${taskListItems}
-                </ul>
-              </div>`; 
-            } else {
-              resultsElem.innerHTML = `<div style="color:#e74c3c;">Error: ${await res.text()}</div>`;
-            }
-          } catch (err) {
-            resultsElem.innerHTML = `<div style="color:#e74c3c;">Fetch error: ${err.message}</div>`;
-          }
-        }
-      </script>
-    </div>
-    
-    
+    </section>
+
+    <section class="section surface">
+      <h2 class="section-title"><i class="fa-solid fa-list-check"></i> Zadania</h2>
+      <p class="section-desc">Zadania do wykonania na kursie.</p>
+      <div class="resource-grid">
+        <a class="resource-link" href="https://github.com/kkotysz/BASH-notebooks/blob/master/exercises/zad_1/zad_1.ipynb" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-solid fa-file-code"></i> Z1</strong>
+          <span>Zadanie 1.</span>
+        </a>
+        <a class="resource-link" href="https://github.com/kkotysz/BASH-notebooks/blob/master/exercises/zad_2/zad_2.ipynb" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-solid fa-file-code"></i> Z2</strong>
+          <span>Zadanie 2.</span>
+        </a>
+        <a class="resource-link" href="https://github.com/kkotysz/BASH-notebooks/blob/master/exercises/zad_3/zad_3.ipynb" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-solid fa-file-code"></i> Z3</strong>
+          <span>Zadanie 3.</span>
+        </a>
+        <a class="resource-link" href="https://github.com/kkotysz/BASH-notebooks/blob/master/exercises/zad_4/zad_4.ipynb" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-solid fa-file-code"></i> Z4</strong>
+          <span>Zadanie 4.</span>
+        </a>
+        <a class="resource-link" href="https://github.com/kkotysz/BASH-notebooks/blob/master/exercises/zad_5/zad_5.ipynb" target="_blank" rel="noopener noreferrer">
+          <strong><i class="fa-solid fa-file-code"></i> Z5</strong>
+          <span>Zadanie 5.</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section surface content-grid">
+      <div>
+        <div class="notebook-head">
+          <div>
+            <h2 class="section-title"><i class="fa-solid fa-book-open"></i> Notebooki z repo</h2>
+            <p class="section-desc">Lista ładuje się z jsDelivr, a kliknięcie otwiera notebook bezpośrednio na GitHubie.</p>
+          </div>
+          <span id="notebook-count">Ładuje listę...</span>
+        </div>
+
+        <div id="notebooks-container" class="notebook-grid">
+          <div class="state-note">Pobieram notebooki...</div>
+        </div>
+      </div>
+
+      <div class="results-panel">
+        <h2 class="section-title"><i class="fa-solid fa-chart-line"></i> Wyniki</h2>
+        <p class="section-desc">Wpisz numer albumu, aby pobrać oceny.</p>
+
+        <label class="field-label" for="id">Numer albumu</label>
+        <input id="id" class="text-input" placeholder="Wpisz nr albumu">
+        <button class="action-btn" onclick="fetchResults()">Pobierz wyniki</button>
+
+        <div class="results-output" id="results"></div>
+      </div>
+    </section>
+  </main>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const container = document.getElementById("notebooks-container");
-      const apiUrl = "https://api.github.com/repos/kkotysz/BASH-notebooks/git/trees/master?recursive=1";
+    async function fetchResults() {
+      const id = document.getElementById("id").value;
+      const apiURL = "https://student-results-worker.k-kotysz.workers.dev?id=" + encodeURIComponent(id) + "&course=bash";
+      const resultsElem = document.getElementById("results");
 
-      fetch(apiUrl)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok " + response.statusText);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (data && data.tree) {
-            // Filter for Jupyter notebooks (.ipynb) in the main directory that start with a number
-            const notebooks = data.tree.filter(item =>
-              item.path.endsWith(".ipynb") &&
-              !item.path.includes("/") &&
-              /^[0-9]/.test(item.path)
-            );
-            
-            // Sort the notebooks in numerical order based on the leading numeric prefix.
-            // This regex captures numbers with optional decimals.
-            notebooks.sort((a, b) => {
-              const aName = a.path.replace(/\.ipynb$/, "");
-              const bName = b.path.replace(/\.ipynb$/, "");
-              const aNumMatch = aName.match(/^(\d+(\.\d+)?)/);
-              const bNumMatch = bName.match(/^(\d+(\.\d+)?)/);
-              const aNum = aNumMatch ? parseFloat(aNumMatch[0]) : 0;
-              const bNum = bNumMatch ? parseFloat(bNumMatch[0]) : 0;
-              return aNum - bNum;
-            });
-            
-            // Create and append a link for each notebook, removing the .ipynb extension for display
-            notebooks.forEach(notebook => {
-              const link = document.createElement("a");
-              link.className = "button";
-              link.href = "https://nbviewer.org/github/kkotysz/BASH-notebooks/blob/master/" + notebook.path;
-              link.target = "_blank";
-              // Remove the .ipynb extension from the displayed text
-              const displayName = notebook.path.replace(/\.ipynb$/, "");
-              link.innerHTML = '<i class="fa-solid fa-file-alt"></i> ' + displayName;
-              container.appendChild(link);
-            });
-          }
-        })
-        .catch(error => {
-          console.error("Error fetching GitHub notebooks:", error);
-          const errorMessage = document.createElement("p");
-          errorMessage.textContent = "Failed to load notebook links.";
-          container.appendChild(errorMessage);
-        });
+      resultsElem.innerHTML = '<div class="state-note">Pobieram wyniki...</div>';
+
+      try {
+        const res = await fetch(apiURL);
+        if (res.ok) {
+          const data = await res.json();
+
+          const tasks = ["zad1", "zad2", "zad3", "zad4", "zad5"];
+          const taskListItems = tasks.map(task => {
+            const grade = data[task];
+            const ok = grade !== "N/A";
+            const icon = ok ? "fa-circle-check" : "fa-circle-xmark";
+            const statusClass = ok ? "status-ok" : "status-bad";
+
+            return '<li><span class="' + statusClass + '"><i class="fa-solid ' + icon + '"></i></span> <strong>Zadanie #' + task.slice(-1) + ":</strong> " + grade + "</li>";
+          }).join("");
+
+          resultsElem.innerHTML =
+            '<div class="results-card">' +
+              '<h3 class="results-name">' + data.names + " " + data.surname + "</h3>" +
+              '<p class="results-id">' + data.id + "</p>" +
+              '<ul class="results-list">' + taskListItems + "</ul>" +
+            "</div>";
+        } else {
+          resultsElem.innerHTML = '<div class="state-note error">Błąd: ' + await res.text() + "</div>";
+        }
+      } catch (err) {
+        resultsElem.innerHTML = '<div class="state-note error">Błąd pobierania: ' + err.message + "</div>";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      initCourseNotebooks({
+        owner: "kkotysz",
+        repo: "BASH-notebooks",
+        branches: ["master", "main"],
+        emptyCounterText: "Brak notebooków w katalogu głównym",
+        emptyMessage: "Notebooki zadaniowe są podlinkowane wyżej w sekcji Zadania."
+      });
     });
   </script>
 </body>
