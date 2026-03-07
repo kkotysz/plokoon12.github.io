@@ -1,8 +1,7 @@
 <html>
 <head>
 <title>Gallery</title>
-<link href="https://fonts.googleapis.com/css2?family=Abel&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Advent+Pro:wght@200&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" type="text/css" href="../assets/css/shuffle.css">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css">
@@ -34,141 +33,250 @@
 
 
 <style>
-
-/* The Modal (background) */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  padding-top: 2em;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: #1e1e1e;
+:root {
+  --bg-base: #1e1e1e;
+  --bg-soft: #121212;
+  --bg-panel: rgba(24, 24, 24, 0.9);
+  --line: rgba(255, 230, 0, 0.45);
+  --line-soft: rgba(255, 230, 0, 0.24);
+  --ink: #f2f2f2;
+  --muted: #bbbbbb;
+  --accent: #ffe600;
+  --accent-soft: #fff3a2;
 }
 
-/* Modal Content */
-.modal-content {
+body.gallery-page {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: "Space Grotesk", sans-serif;
+  text-align: center;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255, 230, 0, 0.09), transparent 42%),
+    radial-gradient(circle at 88% 18%, rgba(255, 230, 0, 0.06), transparent 38%),
+    linear-gradient(180deg, #1e1e1e 0%, #181818 42%, #101010 100%);
+  padding: 20px 14px 36px;
+}
+
+.gallery-shell {
+  max-width: 1320px;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.page-header {
   position: relative;
-  background-color: #1e1e1e;
-  display: block;
-  margin: auto;
-  padding-top: 0;
-  max-width: 90%;
-  max-height: 90vh;
+  margin: 0 auto 1rem;
+  max-width: 980px;
+  padding: 1.1rem 1rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 82% 14%, rgba(255, 230, 0, 0.12), transparent 35%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.22));
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.34);
 }
 
-/* The Close Button */
-.close {
-  color: white;
-  position: absolute;
-  top: 10px;
-  right: 25px;
-  font-size: 35px;
-  font-weight: bold;
+.page-title {
+  margin: 0;
+  font-family: "Merriweather", serif;
+  font-size: clamp(1.55rem, 2.7vw, 2.35rem);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1.05;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
 }
 
-.close:hover,
-.close:focus {
-  color: #999;
-  text-decoration: none;
-  cursor: pointer;
+.page-subtitle {
+  margin: 0.55rem auto 0;
+  max-width: 700px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
 }
 
-/* Hide the slides by default */
-.mySlides {
-  display: none;
-}
-
-
-
-/* Original text overlay */
-.text {
- color: #fff;
- font-size: 20px;
- line-height: 1.1em;
- text-shadow: 2px 2px 2px #000;
- text-align: center;
- position: absolute;
- top: 50%;
- left: 50%;
- transform: translate(-50%, -50%);
- width: 90%;
-}
-
-/* New overlay on hover */
-.hover {
- position: absolute;
- top: 0;
- height: 100%;
- width: 100%;
- opacity: 0;
- transition: .5s ease;
- background: #1e1e1e
-}
-
-/* New overlay appearance on hover */
-.grid-item:hover .hover {
- opacity: 0.7;
- cursor: pointer;
-}
-
-.filter-panel {
-  margin: 1em 0 1.5em;
-  display: grid;
-  gap: 0.75em;
-}
-
-.filter-toolbar {
-  display: flex;
-  gap: 0.6em;
+.page-kicker {
+  display: inline-flex;
   align-items: center;
+  gap: 0.38rem;
+  margin-bottom: 0.42rem;
+  padding: 0.26rem 0.62rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-soft);
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--accent-soft);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.page-kicker::before {
+  content: "";
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(255, 230, 0, 0.65);
+}
+
+.top-actions {
+  position: relative;
+  z-index: 120;
+  overflow: visible;
+  margin: 0 auto 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.55rem;
   flex-wrap: wrap;
 }
 
+.nav-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  min-height: 40px;
+  padding: 0.42rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.15));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: border-color 140ms ease, transform 120ms ease, box-shadow 160ms ease;
+}
+
+.nav-button:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(255, 230, 0, 0.3);
+}
+
+.nav-button:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.button-container {
+  position: relative;
+  display: inline-flex;
+  z-index: 125;
+  overflow: visible;
+}
+
+.expand-image {
+  position: absolute;
+  top: calc(100% + 10px);
+  bottom: auto;
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  opacity: 0;
+  width: 170px;
+  height: 170px;
+  max-height: min(42vh, 200px);
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.38);
+  transition: transform 180ms ease, opacity 180ms ease;
+  pointer-events: none;
+  z-index: 130;
+}
+
+.button-container:hover .expand-image {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.filter-panel {
+  position: sticky;
+  top: 12px;
+  z-index: 20;
+  margin: 0 auto 1rem;
+  padding: 0.95rem;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--bg-panel);
+  backdrop-filter: blur(9px);
+  display: grid;
+  gap: 0.75rem;
+  box-shadow: 0 18px 30px rgba(5, 11, 21, 0.35);
+}
+
+.filter-toolbar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto;
+  gap: 0.6rem;
+  align-items: center;
+}
+
 .filter-input {
-  min-width: 220px;
-  flex: 1 1 280px;
-  padding: 0.55em 0.8em;
-  border: 1px solid #3a3a3a;
-  border-radius: 8px;
-  background: #111;
-  color: #f2f2f2;
+  min-height: 40px;
+  padding: 0.52rem 0.8rem;
+  border: 1px solid var(--line-soft);
+  border-radius: 10px;
+  background: rgba(10, 10, 10, 0.7);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.93rem;
+}
+
+.filter-input::placeholder {
+  color: #9c9c9c;
 }
 
 .filter-input:focus {
-  outline: 1px solid #8ab4f8;
-  border-color: #8ab4f8;
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 230, 0, 0.2);
+}
+
+.clear-button {
+  min-height: 40px;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-soft);
+  background: rgba(10, 10, 10, 0.7);
+  color: var(--ink);
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.clear-button:hover {
+  border-color: var(--accent);
+}
+
+.filter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
 }
 
 .filter-meta {
-  color: #bbbbbb;
-  font-size: 0.9em;
+  color: #d8d8d8;
+  font-size: 0.86rem;
+  letter-spacing: 0.02em;
 }
 
 .filter-hint {
-  color: #9a9a9a;
-  font-size: 0.85em;
+  color: var(--muted);
+  font-size: 0.84rem;
 }
 
 .button-group {
   display: grid;
-  gap: 0.65em;
+  gap: 0.58rem;
   justify-items: center;
 }
 
 .filter-group {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   justify-content: center;
-  gap: 0.45em;
-}
-
-.filter-group--all {
-  justify-content: center;
+  gap: 0.45rem;
 }
 
 #country-tags,
@@ -176,186 +284,320 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.45em;
+  gap: 0.45rem;
 }
 
-.button-group .button {
+#filters .button {
   margin: 0;
-  transition: transform 90ms ease, filter 120ms ease, box-shadow 120ms ease;
+  min-height: 38px;
+  padding: 0.34rem 0.92rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-soft);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.18));
+  cursor: pointer;
+  transition: transform 100ms ease, filter 130ms ease, border-color 130ms ease, box-shadow 130ms ease;
+}
+
+#filters .button:hover {
+  border-color: var(--accent);
+  filter: brightness(1.12);
 }
 
 #filters .button:active {
   transform: translateY(1px) scale(0.97);
-  filter: brightness(1.18);
 }
 
-#country-tags .button:active {
-  box-shadow: 0 0 0 2px #ffffff, 0 0 10px rgba(255, 255, 255, 0.5);
+#filters .button.is-checked {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(255, 230, 0, 0.34);
+}
+
+#category-tags .button:hover,
+#category-tags .button:active,
+#category-tags .button.is-checked,
+#filters .filter-group:first-child .button:hover,
+#filters .filter-group:first-child .button:active,
+#filters .filter-group:first-child .button.is-checked {
+  color: #111;
+  text-shadow: none;
+  background: linear-gradient(165deg, rgba(255, 230, 0, 0.95), rgba(255, 230, 0, 0.82));
 }
 
 #country-tags .button {
+  width: 4.3em;
+  padding-left: 0;
+  padding-right: 0;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  background-color: #1e1e1e;
-  width: 4.1em;
-  padding-left: 0;
-  padding-right: 0;
-  text-align: center;
-  color: #f7f7f7;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
-}
-
-#country-tags .button:hover {
-  text-shadow: none;
+  color: #f8fbff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.72);
 }
 
 #country-tags .button.is-checked {
-  border-color: #ffffff;
-  color: #f7f7f7;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
-  box-shadow: 0 0 0 3px #ffe600, 0 0 14px rgba(255, 230, 0, 0.6);
-  filter: saturate(1.15) brightness(1.1);
+  color: #f8fbff;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(255, 230, 0, 0.68), 0 0 10px rgba(255, 230, 0, 0.5);
 }
 
 #country-tags .button[data-filter=".chile"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/cl.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/cl.png");
 }
 
 #country-tags .button[data-filter=".france"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/fr.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/fr.png");
 }
 
 #country-tags .button[data-filter=".greece"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/gr.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/gr.png");
 }
 
 #country-tags .button[data-filter=".ireland"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/ie.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/ie.png");
 }
 
 #country-tags .button[data-filter=".italy"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/it.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/it.png");
 }
 
 #country-tags .button[data-filter=".korea"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/kr.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/kr.png");
 }
 
 #country-tags .button[data-filter=".malta"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/mt.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/mt.png");
 }
 
 #country-tags .button[data-filter=".norway"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/no.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/no.png");
 }
 
 #country-tags .button[data-filter=".poland"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/pl.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/pl.png");
 }
 
 #country-tags .button[data-filter=".spain"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/es.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/es.png");
 }
 
 #country-tags .button[data-filter=".switzerland"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/ch.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/ch.png");
 }
 
 #country-tags .button[data-filter=".uae"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/ae.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/ae.png");
 }
 
 #country-tags .button[data-filter=".usa"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/us.png");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/us.png");
+}
+
+.grid-wrap {
+  border-radius: 16px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  background: rgba(20, 20, 20, 0.7);
+  box-shadow: 0 22px 34px rgba(0, 0, 0, 0.5);
+}
+
+.grid-item {
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #1b1b1b;
+}
+
+.grid-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform 280ms ease, filter 280ms ease;
+}
+
+.item:hover .grid-item img {
+  transform: scale(1.045);
+  filter: brightness(0.8);
+}
+
+.hover {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 280ms ease;
+  background: linear-gradient(175deg, rgba(18, 18, 18, 0.08), rgba(10, 10, 10, 0.85));
+}
+
+.grid-item:hover .hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.tile-caption {
+  position: relative;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0.7rem;
+  gap: 0.36rem;
+  color: #eff5ff;
+  text-align: left;
+}
+
+.tile-title {
+  font-size: 0.94rem;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.75);
+}
+
+.tile-tags {
+  color: var(--accent-soft);
+  font-size: 0.69rem;
+  line-height: 1.2;
+  opacity: 0.92;
+}
+
+@media (max-width: 840px) {
+  .filter-panel {
+    top: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  body.gallery-page {
+    padding: 14px 8px 24px;
+  }
+
+  .filter-toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .clear-button {
+    width: 100%;
+  }
+
+  #filters .button {
+    min-height: 36px;
+    font-size: 0.72rem;
+  }
+
+  .page-header {
+    padding: 0.9rem 0.75rem 0.82rem;
+  }
+
+  .page-title {
+    font-size: clamp(1.35rem, 7vw, 1.8rem);
+  }
+
+  .page-subtitle {
+    font-size: 0.87rem;
+  }
 }
 
 </style>
 
  {% include /analytics-providers/google-gtag.html %}
 </head>
-<body>
+<body class="gallery-page">
+<main class="gallery-shell">
+  <!-- <header class="page-header">
+    <span class="page-kicker">Curated Collection</span>
+    <h1 class="page-title">Photo Gallery</h1>
+    <p class="page-subtitle">Filter by country or theme and browse the story in full-screen.</p>
+  </header> -->
 
-<a class="button" style="margin-bottom: 1em;" href="/"><i class="fa-solid fa-house"></i></a>
-<div class="button-container">
-    <a class="expand-button" style="margin-bottom: 1em;" href="https://www.instagram.com/kkotysz">
-      <i class="fab fa-fw fa-instagram"></i>
-      <img src="../assets/images/insta_qr.png" alt="Expandable Image" class="expand-image">
-    </a>  
-</div>
-<div class="filter-panel">
-  <div class="filter-toolbar">
-    <input id="gallery-search" class="filter-input" type="search" placeholder="Search by hashtag or photo description..." list="gallery-search-suggestions">
-    <datalist id="gallery-search-suggestions"></datalist>
-    <span id="filter-meta" class="filter-meta"></span>
-  </div>
-  <div class="filter-hint">Try <code>#astrophoto</code> or any part of a description.</div>
-  <div id="filters" class="button-group">
-    <div class="filter-group filter-group--all">
-      <button class="button is-checked" data-filter="*">#all</button>
-    </div>
-    <div class="filter-group">
-      <span id="country-tags"></span>
-    </div>
-    <div class="filter-group">
-      <span id="category-tags"></span>
+  <div class="top-actions">
+    <a class="nav-button" href="/"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <div class="button-container">
+      <a class="nav-button" href="https://www.instagram.com/kkotysz">
+        <i class="fab fa-fw fa-instagram"></i><span>Instagram</span>
+        <img src="../assets/images/insta_qr.png" alt="Instagram QR" class="expand-image">
+      </a>
     </div>
   </div>
-</div>
 
+  <section class="filter-panel">
+    <div class="filter-toolbar">
+      <input id="gallery-search" class="filter-input" type="search" placeholder="Search by hashtag or photo description..." list="gallery-search-suggestions">
+      <datalist id="gallery-search-suggestions"></datalist>
+      <button id="clear-filters" class="clear-button" type="button">Clear Filters</button>
+    </div>
+    <div class="filter-row">
+      <span id="filter-meta" class="filter-meta"></span>
+      <span class="filter-hint">Try <code>#astrophoto</code> or any phrase from description.</span>
+    </div>
+    <div id="filters" class="button-group">
+      <div class="filter-group">
+        <button class="button is-checked" data-filter="*">#all</button>
+      </div>
+      <div class="filter-group">
+        <span id="country-tags"></span>
+      </div>
+      <div class="filter-group">
+        <span id="category-tags"></span>
+      </div>
+    </div>
+  </section>
 
-<div class="grid" id="lightgallery">
-  {% for photo in site.data.gallery %}
-    {% assign tags_list = photo.tags | split: " " %}
-    {% capture clean_tags %}
-      {% for tag in tags_list %}
-        {% assign clean_tag = tag | strip %}
-        {% if clean_tag != "" %}
-          {{ clean_tag }} 
-        {% endif %}
-      {% endfor %}
-    {% endcapture %}
-    <a href="../assets/photos/{{ photo.filename }}"
-      data-sub-html="<h2 style='font-family: Abel';>{{ photo.desc }}</h2>"
-      data-tags="{{ clean_tags | strip }}"
-      data-search="{{ photo.desc | strip_html | downcase }} {{ clean_tags | downcase | strip }}"
-      class="item {{ clean_tags | strip }}">
-      {% if photo.aspect == 'landscape' %}
-        <div class="grid-item grid-item--w2" id="{{ photo.id }}">
-          <img class="grid-item--w2" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
-            height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_landscape.jpg'" />
-      {% elsif photo.aspect == 'portrait' %}
-        <div class="grid-item grid-item--w2 grid-item--hportrait" id="{{ photo.id }}">
-          <img class="grid-item--w2 grid-item--hportrait" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
-            height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_portrait.jpg'">
-      {% elsif photo.aspect == 'square' %}
-        <div class="grid-item grid-item--w2 grid-item--h2" id="{{ photo.id }}">
-          <img class="grid-item--w2 grid-item--h2" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
-            height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_square.jpg'">
-      {% elsif photo.aspect == 'panorama' %}
-        <div class="grid-item grid-item--wpano" id="{{ photo.id }}">
-          <img class="grid-item--wpano" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
-            height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_pano.jpg'">
-      {% endif %}        
-          <div class="hover">
-            <div class="text" style="position: relative; min-height: 12vh; font-size: 1.3em;"><b>{{ photo.desc }}</b>
-              <div style="display: flex; justify-content: center; flex-wrap: wrap; position: absolute; bottom: 0; left: 0; right: 0;">
-                <span style="opacity: 1; color: cadetblue; margin-right: 5px; font-size: 0.65em;">
-                  <b class="sortid" style="display: none;">{{ photo.id }}</b>
-                  {% for tag in tags_list %}
-                    {% assign clean_tag = tag | strip %}
-                    {% if clean_tag != "" %}
-                      #{{ clean_tag }}
-                    {% endif %}
-                  {% endfor %}
-                </span>
+  <div class="grid-wrap">
+    <div class="grid" id="lightgallery">
+      {% for photo in site.data.gallery %}
+        {% assign tags_list = photo.tags | split: " " %}
+        {% capture clean_tags %}
+          {% for tag in tags_list %}
+            {% assign clean_tag = tag | strip %}
+            {% if clean_tag != "" %}
+              {{ clean_tag }} 
+            {% endif %}
+          {% endfor %}
+        {% endcapture %}
+        <a href="../assets/photos/{{ photo.filename }}"
+          data-sub-html="<h2 style='font-family: Merriweather, serif;'>{{ photo.desc }}</h2>"
+          data-tags="{{ clean_tags | strip }}"
+          data-search="{{ photo.desc | strip_html | downcase }} {{ clean_tags | downcase | strip }}"
+          class="item {{ clean_tags | strip }}">
+          {% if photo.aspect == 'landscape' %}
+            <div class="grid-item grid-item--w2" id="{{ photo.id }}">
+              <img class="grid-item--w2" src="../assets/photos/thumb_{{ photo.filename }}"
+                height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_landscape.jpg'" />
+          {% elsif photo.aspect == 'portrait' %}
+            <div class="grid-item grid-item--w2 grid-item--hportrait" id="{{ photo.id }}">
+              <img class="grid-item--w2 grid-item--hportrait" src="../assets/photos/thumb_{{ photo.filename }}"
+                height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_portrait.jpg'">
+          {% elsif photo.aspect == 'square' %}
+            <div class="grid-item grid-item--w2 grid-item--h2" id="{{ photo.id }}">
+              <img class="grid-item--w2 grid-item--h2" src="../assets/photos/thumb_{{ photo.filename }}"
+                height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_square.jpg'">
+          {% elsif photo.aspect == 'panorama' %}
+            <div class="grid-item grid-item--wpano" id="{{ photo.id }}">
+              <img class="grid-item--wpano" src="../assets/photos/thumb_{{ photo.filename }}"
+                height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_pano.jpg'">
+          {% endif %}
+              <div class="hover">
+                <div class="tile-caption">
+                  <b class="tile-title">{{ photo.desc }}</b>
+                  <div class="tile-tags">
+                    <b class="sortid" style="display: none;">{{ photo.id }}</b>
+                    {% for tag in tags_list %}
+                      {% assign clean_tag = tag | strip %}
+                      {% if clean_tag != "" %}
+                        #{{ clean_tag }}
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-    </a>
-  {% endfor %}
-</div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</main>
 
 
 <script src="../assets/js/shuffle.js"></script>

@@ -34,6 +34,7 @@ var currentFilter = '*';
 var currentQuery = '';
 var $meta = $('#filter-meta');
 var $searchInput = $('#gallery-search');
+var $clearButton = $('#clear-filters');
 var $suggestions = $('#gallery-search-suggestions');
 var $countryTags = $('#country-tags');
 var $categoryTags = $('#category-tags');
@@ -53,7 +54,7 @@ var COUNTRY_CODES = {
   norway: 'NOR',
   poland: 'POL',
   spain: 'SPA',
-  switzerland: 'SUI',
+  switzerland: 'SWI',
   uae: 'UAE',
   usa: 'USA'
 };
@@ -72,8 +73,8 @@ function updateMeta() {
     return $(this).css('display') !== 'none';
   });
   var selectedTag = currentFilter === '*' ? '#all' : currentFilter.replace('.', '#');
-  var queryInfo = currentQuery ? ' | query: "' + currentQuery + '"' : '';
-  $meta.text('Tag: ' + selectedTag + queryInfo + ' | photos: ' + allItems.length);
+  var queryInfo = currentQuery ? ' | query "' + currentQuery + '"' : '';
+  $meta.text('Active: ' + selectedTag + queryInfo + ' | photos: ' + allItems.length);
 }
 
 function getVisibleGalleryKey() {
@@ -235,6 +236,15 @@ $searchInput.on('keydown', function(event) {
     $('#filters').find('button[data-filter="*"]').addClass('is-checked');
     applyFilters(true);
   }
+});
+
+$clearButton.on('click', function() {
+  $searchInput.val('');
+  currentQuery = '';
+  currentFilter = '*';
+  $('#filters').find('.is-checked').removeClass('is-checked');
+  $('#filters').find('button[data-filter="*"]').addClass('is-checked');
+  applyFilters(true);
 });
 
 var tagCounts = getAllTags();
