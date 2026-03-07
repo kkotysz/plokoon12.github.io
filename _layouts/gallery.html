@@ -115,6 +115,161 @@
  cursor: pointer;
 }
 
+.filter-panel {
+  margin: 1em 0 1.5em;
+  display: grid;
+  gap: 0.75em;
+}
+
+.filter-toolbar {
+  display: flex;
+  gap: 0.6em;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-input {
+  min-width: 220px;
+  flex: 1 1 280px;
+  padding: 0.55em 0.8em;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  background: #111;
+  color: #f2f2f2;
+}
+
+.filter-input:focus {
+  outline: 1px solid #8ab4f8;
+  border-color: #8ab4f8;
+}
+
+.filter-meta {
+  color: #bbbbbb;
+  font-size: 0.9em;
+}
+
+.filter-hint {
+  color: #9a9a9a;
+  font-size: 0.85em;
+}
+
+.button-group {
+  display: grid;
+  gap: 0.65em;
+  justify-items: center;
+}
+
+.filter-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+}
+
+.filter-group--all {
+  justify-content: center;
+}
+
+#country-tags,
+#category-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45em;
+}
+
+.button-group .button {
+  margin: 0;
+  transition: transform 90ms ease, filter 120ms ease, box-shadow 120ms ease;
+}
+
+#filters .button:active {
+  transform: translateY(1px) scale(0.97);
+  filter: brightness(1.18);
+}
+
+#country-tags .button:active {
+  box-shadow: 0 0 0 2px #ffffff, 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+#country-tags .button {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-color: #1e1e1e;
+  width: 4.1em;
+  padding-left: 0;
+  padding-right: 0;
+  text-align: center;
+  color: #f7f7f7;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+}
+
+#country-tags .button:hover {
+  text-shadow: none;
+}
+
+#country-tags .button.is-checked {
+  border-color: #ffffff;
+  color: #f7f7f7;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 0 0 3px #ffe600, 0 0 14px rgba(255, 230, 0, 0.6);
+  filter: saturate(1.15) brightness(1.1);
+}
+
+#country-tags .button[data-filter=".chile"] {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/cl.png");
+}
+
+#country-tags .button[data-filter=".france"] {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/fr.png");
+}
+
+#country-tags .button[data-filter=".greece"] {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/gr.png");
+}
+
+#country-tags .button[data-filter=".ireland"] {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/ie.png");
+}
+
+#country-tags .button[data-filter=".italy"] {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/it.png");
+}
+
+#country-tags .button[data-filter=".korea"] {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/kr.png");
+}
+
+#country-tags .button[data-filter=".malta"] {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/mt.png");
+}
+
+#country-tags .button[data-filter=".norway"] {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/no.png");
+}
+
+#country-tags .button[data-filter=".poland"] {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/pl.png");
+}
+
+#country-tags .button[data-filter=".spain"] {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/es.png");
+}
+
+#country-tags .button[data-filter=".switzerland"] {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/ch.png");
+}
+
+#country-tags .button[data-filter=".uae"] {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/ae.png");
+}
+
+#country-tags .button[data-filter=".usa"] {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url("https://flagcdn.com/w160/us.png");
+}
+
 </style>
 
  {% include /analytics-providers/google-gtag.html %}
@@ -128,29 +283,43 @@
       <img src="../assets/images/insta_qr.png" alt="Expandable Image" class="expand-image">
     </a>  
 </div>
-<div id="filters" class="button-group">  
-  <button class="button is-checked" data-filter="*">#all</button>
-  <button class="button" data-filter=".bialkow">#bialkow</button>
-  <button class="button" data-filter=".wroclaw">#wroclaw</button>
-  <button class="button" data-filter=".warsaw">#warsaw</button>
-  <button class="button" data-filter=".astrophoto">#astro</button>
-  <button class="button" data-filter=".bw">#bnw</button><br>
-  <button class="button" data-sort-by="sortid" data-filter=".tromso">#tromso</button>
-  <button class="button" data-filter=".chile">#chile</button>
-  <button class="button" data-filter=".switzerland">#switzerland</button>
-  <button class="button" data-filter=".barcelona">#barcelona</button>
-  <button class="button" data-filter=".ireland">#ireland</button>
-  <button class="button" data-filter=".korea">#korea</button>
-  <button class="button" data-filter=".dubai">#dubai</button>
-  <button class="button" data-filter=".italy">#italy</button>
-  <button class="button" data-filter=".malta">#malta</button>
-  <button class="button" data-filter=".crete">#crete</button>
+<div class="filter-panel">
+  <div class="filter-toolbar">
+    <input id="gallery-search" class="filter-input" type="search" placeholder="Search by hashtag or photo description..." list="gallery-search-suggestions">
+    <datalist id="gallery-search-suggestions"></datalist>
+    <span id="filter-meta" class="filter-meta"></span>
+  </div>
+  <div class="filter-hint">Try <code>#astrophoto</code> or any part of a description.</div>
+  <div id="filters" class="button-group">
+    <div class="filter-group filter-group--all">
+      <button class="button is-checked" data-filter="*">#all</button>
+    </div>
+    <div class="filter-group">
+      <span id="country-tags"></span>
+    </div>
+    <div class="filter-group">
+      <span id="category-tags"></span>
+    </div>
+  </div>
 </div>
 
 
 <div class="grid" id="lightgallery">
   {% for photo in site.data.gallery %}
-    <a href="../assets/photos/{{ photo.filename }}" data-sub-html="<h2 style='font-family: Abel';>{{ photo.desc }}</h2>" class="item {{ photo.tags }}">
+    {% assign tags_list = photo.tags | split: " " %}
+    {% capture clean_tags %}
+      {% for tag in tags_list %}
+        {% assign clean_tag = tag | strip %}
+        {% if clean_tag != "" %}
+          {{ clean_tag }} 
+        {% endif %}
+      {% endfor %}
+    {% endcapture %}
+    <a href="../assets/photos/{{ photo.filename }}"
+      data-sub-html="<h2 style='font-family: Abel';>{{ photo.desc }}</h2>"
+      data-tags="{{ clean_tags | strip }}"
+      data-search="{{ photo.desc | strip_html | downcase }} {{ clean_tags | downcase | strip }}"
+      class="item {{ clean_tags | strip }}">
       {% if photo.aspect == 'landscape' %}
         <div class="grid-item grid-item--w2" id="{{ photo.id }}">
           <img class="grid-item--w2" style="object-fit: cover;" src="../assets/photos/thumb_{{ photo.filename }}"
@@ -173,9 +342,11 @@
               <div style="display: flex; justify-content: center; flex-wrap: wrap; position: absolute; bottom: 0; left: 0; right: 0;">
                 <span style="opacity: 1; color: cadetblue; margin-right: 5px; font-size: 0.65em;">
                   <b class="sortid" style="display: none;">{{ photo.id }}</b>
-                  {% assign tags_list = photo.tags | split: " " %}
                   {% for tag in tags_list %}
-                    #{{ tag }}
+                    {% assign clean_tag = tag | strip %}
+                    {% if clean_tag != "" %}
+                      #{{ clean_tag }}
+                    {% endif %}
                   {% endfor %}
                 </span>
               </div>
