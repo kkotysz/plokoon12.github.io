@@ -467,15 +467,15 @@
   aspect: landscape
   desc: Comet C/2020 F3 (NEOWISE) in the tree gap with ion tail
 - filename: 2020-07-20_18-06-56.jpg
-  tags: rainbow architecture nature wroclaw poland
+  tags: rainbow architecture nature wroclaw poland square
   aspect: square
   desc: Norainbow
 - filename: 2020-07-20_18-06-56_a.jpg
-  tags: rainbow architecture nature wroclaw poland
+  tags: rainbow architecture nature wroclaw poland square
   aspect: square
   desc: Rainbow
 - filename: 2020-07-20_18-06-56_b.jpg
-  tags: rainbow architecture nature wroclaw poland
+  tags: rainbow architecture nature wroclaw poland square
   aspect: square
   desc: Yesrainbow
 - filename: 2020-08-01_21-21-35.jpg
@@ -483,7 +483,7 @@
   aspect: square
   desc: Conjunction of Moon, Jupiter and Saturn
 - filename: 2021-04-04_14-40-58.jpg
-  tags: architecture opole poland
+  tags: architecture opole poland square
   aspect: square
   desc: Joachim Halupczok Bridge in Opole
 - filename: 2021-04-04_15-06-44.jpg
@@ -495,7 +495,7 @@
   aspect: landscape
   desc: Trees 2, Bolko Island, Opole
 - filename: 2021-04-04_15-39-08.jpg
-  tags: nature poland opole trees bw
+  tags: nature poland opole trees bw square
   aspect: square
   desc: Trees 3, Bolko Island, Opole
 - filename: 2021-04-20_04-51-12.jpg
@@ -1151,11 +1151,11 @@
   aspect: landscape
   desc: Plane to Heraklion
 - filename: 2025-02-10_18-11-55.jpg
-  tags: usa california landscape space launch spacex venus
+  tags: usa california landscape space launch spacex venus square
   aspect: square
   desc: SpaceX Falcon 9 launch with Venus from Goleta, California
 - filename: 2025-02-10_18-13-08.jpg
-  tags: usa california landscape space launch spacex venus
+  tags: usa california landscape space launch spacex venus square
   aspect: square
   desc: SpaceX Falcon 9 Octaweb, Goleta, California
 - filename: 2025-02-12_01-56-51.jpg
@@ -1299,9 +1299,9 @@
   aspect: landscape
   desc: Rano Kau
 - filename: 2025-06-21_09-27-04.jpg
-  tags: new
+  tags: architecture chile santiago bw square
   aspect: square
-  desc: 19105E59-AD1C-4298-A178-7131F7A40C0F
+  desc: Sky Costanera, Santiago
 - filename: 2025-06-22_19-51-42.jpg
   tags: atacama chile landscape
   aspect: landscape
@@ -1311,15 +1311,15 @@
   aspect: landscape
   desc: E-ELT
 - filename: 2025-08-11_11-03-41.jpg
-  tags: architecture poland wroclaw
+  tags: architecture poland wroclaw square
   aspect: square
   desc: Psie Budy street - library, Wrocław
 - filename: 2025-08-15_19-47-24.jpg
-  tags: architecture poland wroclaw fromabove
+  tags: architecture poland wroclaw fromabove square
   aspect: square
   desc: Bardzka street, Wrocław
 - filename: 2025-08-15_19-59-24.jpg
-  tags: nature poland wroclaw fromabove
+  tags: nature poland wroclaw fromabove square
   aspect: square
   desc: Wzgorze gajowe, Wrocław
 - filename: 2025-08-26_08-17-24.jpg
@@ -1475,15 +1475,15 @@
   aspect: portrait
   desc: Catania
 - filename: 2025-10-20_13-55-06.jpg
-  tags: nature poland wroclaw fromabove
+  tags: nature poland wroclaw fromabove square
   aspect: square
   desc: Centennial Hall and Sky Tower, Park Szczytnicki, Wrocław
 - filename: 2025-10-20_13-56-53.jpg
-  tags: nature poland wroclaw fromabove trees
+  tags: nature poland wroclaw fromabove trees square
   aspect: square
   desc: Park Szczytnicki from above, Wrocław
 - filename: 2025-10-20_17-30-11.jpg
-  tags: nature poland wroclaw fromabove
+  tags: nature poland wroclaw fromabove square
   aspect: square
   desc: Instytut Astronomiczny UWr, Park Szczytnicki, Wrocław
 - filename: 2025-11-29_07-34-28.jpg
