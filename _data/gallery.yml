@@ -203,7 +203,7 @@
   aspect: landscape
   desc: Sunset over Paranal
 - filename: 2019-04-18_02-13-39.jpg
-  tags: astrophoto chile
+  tags: astrophoto chile startrails
   aspect: landscape
   desc: Moving clouds and stars
 - filename: 2019-04-18_03-45-20.jpg
@@ -325,7 +325,7 @@
 - filename: 2019-09-24_01-55-52.jpg
   tags: astrophoto tromso norway
   aspect: landscape
-  desc: "Aurora Borealis with visible colors from O<sub>2</sub> and N<sub>2</sub>"
+  desc: Aurora Borealis with visible colors from O<sub>2</sub> and N<sub>2</sub>
 - filename: 2019-09-24_02-25-24.jpg
   tags: astrophoto tromso norway
   aspect: portrait
@@ -657,7 +657,7 @@
 - filename: 2022-08-04_10-31-39.jpg
   tags: architecture busan korea
   aspect: landscape
-  desc: Haedong Yonggungsa Temple #1
+  desc: Haedong Yonggungsa Temple
 - filename: 2022-08-04_10-43-31.jpg
   tags: busan korea
   aspect: landscape
@@ -697,43 +697,43 @@
 - filename: 2022-08-09_16-04-25.jpg
   tags: busan korea
   aspect: landscape
-  desc: Gwangalli Beach #5
+  desc: Gwangalli Beach
 - filename: 2022-08-12_10-21-19.jpg
   tags: daegu korea
   aspect: landscape
-  desc: Korean red pine trees in Donghwasa Temple #1
+  desc: Korean red pine trees in Donghwasa Temple
 - filename: 2022-08-12_11-04-22.jpg
   tags: daegu korea
   aspect: landscape
-  desc: Walk around Donghwasa Temple #1
+  desc: Walk around Donghwasa Temple
 - filename: 2022-08-12_11-04-51.jpg
   tags: daegu korea
   aspect: landscape
-  desc: Walk around Donghwasa Temple #3
+  desc: Walk around Donghwasa Temple
 - filename: 2022-08-12_11-19-11.jpg
   tags: daegu korea
   aspect: landscape
-  desc: Walk around Donghwasa Temple #6
+  desc: Walk around Donghwasa Temple
 - filename: 2022-08-12_11-47-01.jpg
   tags: daegu korea
   aspect: landscape
-  desc: Thirty Metre Tall Statue of Buddha at Donghwasa Temple #2
+  desc: Thirty Metre Tall Statue of Buddha at Donghwasa Temple
 - filename: 2022-08-13_00-01-58.jpg
   tags: architecture daegu korea
   aspect: landscape
-  desc: Donghwasa Temple #4
+  desc: Donghwasa Temple
 - filename: 2022-08-13_00-03-57.jpg
   tags: bw daegu korea
   aspect: landscape
-  desc: Donghwasa Temple - prayers #1
+  desc: Donghwasa Temple - prayers
 - filename: 2022-08-14_10-49-39.jpg
   tags: busan korea
   aspect: landscape
-  desc: Dadaepo Beach #5
+  desc: Dadaepo Beach
 - filename: 2022-08-14_10-55-08.jpg
   tags: busan korea
   aspect: landscape
-  desc: Dadaepo Beach #7
+  desc: Dadaepo Beach
 - filename: 2022-08-14_11-46-53.jpg
   tags: busan korea
   aspect: landscape
@@ -994,6 +994,102 @@
   tags: landscape malta nature
   aspect: landscape
   desc: Comino Island
+- filename: 2024-08-18_19-32-56.jpg
+  tags: landscape nature atacama chile
+  aspect: landscape
+  desc: VLT - Paranal
+- filename: 2024-08-19_23-39-48.jpg
+  tags: landscape nature atacama chile moon
+  aspect: landscape
+  desc: Moonrise at OCM
+- filename: 2024-08-22_20-50-54.jpg
+  tags: landscape nature atacama chile ocm
+  aspect: landscape
+  desc: OCM from Cerro Armazones
+- filename: 2024-08-22_21-32-38.jpg
+  tags: landscape architecture atacama chile elt
+  aspect: landscape
+  desc: E-ELT Construction site 1
+- filename: 2024-08-22_21-36-33.jpg
+  tags: landscape architecture atacama chile elt
+  aspect: landscape
+  desc: Inside E-ELT 1
+- filename: 2024-08-22_21-38-37.jpg
+  tags: landscape architecture atacama chile elt
+  aspect: landscape
+  desc: Inside E-ELT 2
+- filename: 2024-08-22_21-39-09.jpg
+  tags: landscape architecture atacama chile elt
+  aspect: landscape
+  desc: Inside E-ELT 3
+- filename: 2024-08-22_21-50-40.jpg
+  tags: landscape architecture atacama chile elt
+  aspect: landscape
+  desc: Inside E-ELT 4
+- filename: 2024-08-22_21-52-13.jpg
+  tags: landscape architecture atacama chile elt
+  aspect: landscape
+  desc: Inside E-ELT 5
+- filename: 2024-08-23_01-50-58.jpg
+  tags: landscape nature atacama chile astrophoto
+  aspect: landscape
+  desc: Zodiacal Light and JK15
+- filename: 2024-08-26_04-47-05.jpg
+  tags: landscape nature atacama chile astrophoto
+  aspect: landscape
+  desc: Startrails with E-ELT
+- filename: 2024-08-30_23-53-21.jpg
+  tags: landscape nature atacama chile sunset
+  aspect: landscape
+  desc: Sunset from OCM
+- filename: 2024-09-02_04-06-37.jpg
+  tags: landscape nature atacama chile astrophoto
+  aspect: landscape
+  desc: E-ELT and M31
+- filename: 2024-09-04_11-33-45.jpg
+  tags: landscape nature atacama chile sunrise volcano
+  aspect: landscape
+  desc: Llullaillaco at sunrise
+- filename: 2024-09-05_00-32-38.jpg
+  tags: landscape nature atacama chile moon paranal astrophoto
+  aspect: landscape
+  desc: Moonrise with Paranal
+- filename: 2024-09-06_17-49-36.jpg
+  tags: landscape nature chile taltal
+  aspect: landscape
+  desc: On the way to Tal Tal
+- filename: 2024-09-06_20-13-27.jpg
+  tags: landscape nature chile taltal
+  aspect: landscape
+  desc: Turkey vulture
+- filename: 2024-09-06_20-13-53.jpg
+  tags: landscape nature chile taltal
+  aspect: landscape
+  desc: Taltal
+- filename: 2024-09-06_20-14-16.jpg
+  tags: landscape nature chile taltal
+  aspect: landscape
+  desc: 3 Turkey vultures
+- filename: 2024-09-06_20-24-15.jpg
+  tags: landscape nature chile taltal
+  aspect: landscape
+  desc: Bay in Taltal
+- filename: 2024-09-07_22-44-58.jpg
+  tags: landscape architecture chile santiago
+  aspect: portrait
+  desc: Santa Lucia Hill, Santiago 1
+- filename: 2024-09-07_22-52-57.jpg
+  tags: landscape architecture chile santiago
+  aspect: landscape
+  desc: Santa Lucia Hill, Santiago 2
+- filename: 2024-09-07_23-01-54.jpg
+  tags: landscape nature chile santiago
+  aspect: landscape
+  desc: Santa Lucia Hill, Santiago 3
+- filename: 2024-09-07_23-16-46.jpg
+  tags: landscape architecture chile santiago
+  aspect: landscape
+  desc: Neptune Fountain, Santa Lucia Hill - Santiago
 - filename: 2024-09-24_16-50-02.jpg
   tags: crete greece landscape nature sunset
   aspect: landscape
@@ -1215,7 +1311,7 @@
   aspect: landscape
   desc: Fauna at Teide teleferico
 - filename: 2025-08-29_20-22-47.jpg
-  tags: landscape nature spain tenerife
+  tags: landscape nature spain tenerife volcano
   aspect: landscape
   desc: El Teide
 - filename: 2025-08-29_20-28-29.jpg
@@ -1227,7 +1323,7 @@
   aspect: landscape
   desc: Mirador de las Narices 1
 - filename: 2025-08-29_21-04-11.jpg
-  tags: landscape nature spain tenerife
+  tags: landscape nature spain tenerife volcano
   aspect: landscape
   desc: Mirador de las Narices 2
 - filename: 2025-08-29_21-05-57.jpg
@@ -1275,19 +1371,19 @@
   aspect: portrait
   desc: Anaga 3
 - filename: 2025-09-12_17-18-13.jpg
-  tags: etna italy landscape nature sicily
+  tags: etna italy landscape nature sicily volcano
   aspect: landscape
   desc: Near Crateri Silvestri 1
 - filename: 2025-09-12_17-25-03.jpg
-  tags: etna italy landscape nature sicily
+  tags: etna italy landscape nature sicily volcano
   aspect: landscape
   desc: Near Crateri Silvestri 2
 - filename: 2025-09-12_17-25-51.jpg
-  tags: etna italy landscape nature sicily
+  tags: etna italy landscape nature sicily volcano
   aspect: landscape
   desc: Near Crateri Silvestri 3
 - filename: 2025-09-12_17-28-06.jpg
-  tags: etna italy landscape nature sicily
+  tags: etna italy landscape nature sicily volcano
   aspect: landscape
   desc: Near Crateri Silvestri 4
 - filename: 2025-09-13_13-33-45.jpg
@@ -1375,7 +1471,7 @@
   aspect: square
   desc: Torre reloj, Plaza Colón (Antofagasta)
 - filename: 2026-01-19_06-40-25.jpg
-  tags: atacama chile nature square
+  tags: atacama chile nature square volcano
   aspect: square
   desc: Volcano Llullaillaco
 - filename: 2026-01-19_06-59-54.jpg
