@@ -462,6 +462,55 @@ body.gallery-page {
   opacity: 0.92;
 }
 
+.lg-sub-html {
+  max-width: min(92vw, 760px);
+  margin: 0 auto;
+}
+
+.lg-exif-panel {
+  margin: 0.68rem auto 0;
+  padding: 0.58rem 0.72rem;
+  border: 1px solid var(--line-soft);
+  border-radius: 10px;
+  background: rgba(8, 8, 8, 0.74);
+  text-align: left;
+  font-family: "Space Grotesk", sans-serif;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.lg-exif-panel.is-loading,
+.lg-exif-panel.is-empty {
+  text-align: center;
+  color: #cecece;
+  font-size: 0.77rem;
+}
+
+.lg-exif-row {
+  display: grid;
+  grid-template-columns: minmax(68px, auto) 1fr;
+  gap: 0.52rem;
+  align-items: baseline;
+  font-size: 0.8rem;
+  line-height: 1.25;
+}
+
+.lg-exif-row + .lg-exif-row {
+  margin-top: 0.2rem;
+}
+
+.lg-exif-key {
+  color: var(--accent-soft);
+  text-transform: uppercase;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+.lg-exif-value {
+  color: #f0f0f0;
+  word-break: break-word;
+}
+
 @media (max-width: 840px) {
   .filter-panel {
     top: 8px;
@@ -559,22 +608,23 @@ body.gallery-page {
         <a href="../assets/photos/{{ photo.filename }}"
           data-sub-html="<h2 style='font-family: Merriweather, serif;'>{{ photo.desc }}</h2>"
           data-tags="{{ clean_tags | strip }}"
+          data-sort="{{ photo.filename }}"
           data-search="{{ photo.desc | strip_html | downcase }} {{ clean_tags | downcase | strip }}"
           class="item {{ clean_tags | strip }}">
           {% if photo.aspect == 'landscape' %}
-            <div class="grid-item grid-item--w2" id="{{ photo.id }}">
+            <div class="grid-item grid-item--w2">
               <img class="grid-item--w2" src="../assets/photos/thumb_{{ photo.filename }}"
                 height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_landscape.jpg'" />
           {% elsif photo.aspect == 'portrait' %}
-            <div class="grid-item grid-item--w2 grid-item--hportrait" id="{{ photo.id }}">
+            <div class="grid-item grid-item--w2 grid-item--hportrait">
               <img class="grid-item--w2 grid-item--hportrait" src="../assets/photos/thumb_{{ photo.filename }}"
                 height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_portrait.jpg'">
           {% elsif photo.aspect == 'square' %}
-            <div class="grid-item grid-item--w2 grid-item--h2" id="{{ photo.id }}">
+            <div class="grid-item grid-item--w2 grid-item--h2">
               <img class="grid-item--w2 grid-item--h2" src="../assets/photos/thumb_{{ photo.filename }}"
                 height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_square.jpg'">
           {% elsif photo.aspect == 'panorama' %}
-            <div class="grid-item grid-item--wpano" id="{{ photo.id }}">
+            <div class="grid-item grid-item--wpano">
               <img class="grid-item--wpano" src="../assets/photos/thumb_{{ photo.filename }}"
                 height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_pano.jpg'">
           {% endif %}
@@ -582,7 +632,6 @@ body.gallery-page {
                 <div class="tile-caption">
                   <b class="tile-title">{{ photo.desc }}</b>
                   <div class="tile-tags">
-                    <b class="sortid" style="display: none;">{{ photo.id }}</b>
                     {% for tag in tags_list %}
                       {% assign clean_tag = tag | strip %}
                       {% if clean_tag != "" %}
