@@ -5,6 +5,7 @@
 
 <link rel="stylesheet" type="text/css" href="../assets/css/shuffle.css">
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-zoom.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <link rel="shortcut icon" type="image/png" href="/favicon.png">
@@ -44,6 +45,8 @@
   --accent: #ffe600;
   --accent-soft: #fff3a2;
   --timeline-top-offset: 12px;
+  --panel-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --panel-fade-ease: cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 body.gallery-page {
@@ -202,7 +205,10 @@ body.gallery-page {
   display: grid;
   gap: 0.75rem;
   box-shadow: 0 18px 30px rgba(5, 11, 21, 0.35);
-  transition: padding 180ms ease, gap 180ms ease, box-shadow 180ms ease;
+  transition:
+    padding 340ms var(--panel-ease),
+    gap 340ms var(--panel-ease),
+    box-shadow 420ms var(--panel-ease);
 }
 
 .filter-panel.is-compact {
@@ -303,7 +309,11 @@ body.gallery-page {
   opacity: 1;
   transform: translateY(0);
   overflow: hidden;
-  transition: max-height 180ms ease, opacity 160ms ease, transform 180ms ease, margin 180ms ease;
+  transition:
+    max-height 360ms var(--panel-ease),
+    opacity 300ms var(--panel-fade-ease),
+    transform 340ms var(--panel-ease),
+    margin 340ms var(--panel-ease);
 }
 
 .filter-meta {
@@ -325,7 +335,11 @@ body.gallery-page {
   opacity: 1;
   transform: translateY(0);
   overflow: hidden;
-  transition: max-height 220ms ease, opacity 160ms ease, transform 180ms ease, margin 180ms ease;
+  transition:
+    max-height 420ms var(--panel-ease),
+    opacity 300ms var(--panel-fade-ease),
+    transform 340ms var(--panel-ease),
+    margin 340ms var(--panel-ease);
 }
 
 .filter-panel.is-compact .filter-row,
@@ -651,6 +665,96 @@ img.grid-item--wpano {
   margin: 0 auto;
 }
 
+.lg-toolbar [id^="lg-zoom-in-"],
+.lg-toolbar [id^="lg-zoom-out-"] {
+  display: none !important;
+}
+
+.lg-toolbar .lg-icon.lg-custom-zoom-in,
+.lg-toolbar .lg-icon.lg-custom-zoom-out,
+.lg-toolbar .lg-icon.lg-actual-size,
+.lg-toolbar .lg-icon.lg-custom-fill {
+  color: #f7f7f7 !important;
+  opacity: 1 !important;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.48);
+  margin-top: 6px;
+}
+
+.lg-toolbar .lg-icon.lg-custom-zoom-in::before,
+.lg-toolbar .lg-icon.lg-custom-zoom-out::before,
+.lg-toolbar .lg-icon.lg-actual-size::before,
+.lg-toolbar .lg-icon.lg-custom-fill::before,
+.lg-toolbar .lg-icon.lg-custom-zoom-in::after,
+.lg-toolbar .lg-icon.lg-custom-zoom-out::after,
+.lg-toolbar .lg-icon.lg-actual-size::after,
+.lg-toolbar .lg-icon.lg-custom-fill::after {
+  content: "" !important;
+}
+
+.lg-toolbar .lg-icon.lg-zoom-label {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  font-family: "Space Grotesk", sans-serif !important;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.lg-toolbar .lg-icon.lg-zoom-label--actual {
+  font-size: 0.78rem;
+}
+
+.lg-toolbar .lg-icon.lg-custom-zoom-in:hover,
+.lg-toolbar .lg-icon.lg-custom-zoom-out:hover,
+.lg-toolbar .lg-icon.lg-actual-size:hover,
+.lg-toolbar .lg-icon.lg-custom-fill:hover {
+  background: rgba(255, 230, 0, 0.22);
+}
+
+.lg-toolbar .lg-icon.lg-custom-fill {
+  font-size: 0.74rem;
+  letter-spacing: 0.03em;
+}
+
+.lg-toolbar .lg-icon.lg-custom-fill.is-active {
+  background: rgba(255, 230, 0, 0.35);
+  color: #1f1f1f !important;
+}
+
+.lg-outer.lg-photo-fill-mode .lg-current,
+.lg-outer.lg-photo-fill-mode .lg-current .lg-img-wrap {
+  width: 100vw !important;
+  width: 100dvw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.lg-outer.lg-photo-fill-mode .lg-current .lg-img-wrap {
+  inset: 0 !important;
+  transform: none !important;
+  background: #000 !important;
+}
+
+.lg-outer.lg-photo-fill-mode .lg-current .lg-image,
+.lg-outer.lg-photo-fill-mode .lg-current .lg-object {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+.lg-outer.lg-photo-fill-mode .lg-exif-panel {
+  display: none !important;
+}
+
 .lg-exif-panel {
   margin: 0.68rem auto 0;
   padding: 0.58rem 0.72rem;
@@ -861,7 +965,7 @@ img.grid-item--wpano {
 </main>
 
 
-<script src="../assets/js/shuffle.js"></script>
+<script src="../assets/js/shuffle.js?v=20260309-fill2"></script>
 
 
 </body>
