@@ -1212,6 +1212,7 @@ function debounce(fn, delay) {
 
 var debouncedTimelineOffsetUpdate = debounce(function() {
   updateFilterPanelCompactState(true);
+  $grid.isotope('layout');
   syncActiveMonthWithViewport(true);
 }, 120);
 $(window).on('resize', debouncedTimelineOffsetUpdate);
