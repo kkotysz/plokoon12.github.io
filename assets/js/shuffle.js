@@ -1,5 +1,8 @@
 // external js: isotope.pkgd.js
 
+var $gridElement = $('.grid');
+prepareDateMetadata($gridElement.find('.item'));
+
 var plugin = lightGallery(document.getElementById('lightgallery'), {
   plugins: [lgZoom],
   speed: 300,
@@ -7,7 +10,7 @@ var plugin = lightGallery(document.getElementById('lightgallery'), {
 });
 
 // init Isotope
-var $grid = $('.grid').isotope({
+var $grid = $gridElement.isotope({
   itemSelector: '.item',
   // layoutMode: '',
   // isfitWidth: true,
@@ -18,11 +21,17 @@ var $grid = $('.grid').isotope({
     // horizontalOrder: true,
     },
   getSortData: {
-    sortdate: '[data-sort]',
+    sortdate: function(itemElem) {
+      return getItemTimestamp(itemElem);
+    },
+    randomrank: function(itemElem) {
+      return getItemRandomRank(itemElem);
+    }
   },
-  sortBy: 'sortdate',
+  sortBy: 'randomrank',
   sortAscending: {
-    sortdate: true
+    sortdate: false,
+    randomrank: true
   }
 });
 
@@ -38,6 +47,25 @@ var $clearButton = $('#clear-filters');
 var $suggestions = $('#gallery-search-suggestions');
 var $countryTags = $('#country-tags');
 var $categoryTags = $('#category-tags');
+var $sortSelect = $('#gallery-sort');
+var $timelineMonths = $('#timeline-months');
+var $galleryContent = $('.gallery-content');
+var $timelinePanel = $('.timeline-panel');
+var $filterPanel = $('.filter-panel');
+var filterPanelCompact = false;
+var filterPanelHovered = false;
+var filterPanelOffsetTimer = null;
+var sortValue = String($sortSelect.val() || '').toLowerCase();
+var currentSort = (sortValue === 'date-asc' || sortValue === 'date-desc') ? sortValue : 'random';
+var activeMonthKey = '';
+var monthTargets = {};
+var timelineMonthSequence = [];
+var monthLabelFormatter = null;
+try {
+  monthLabelFormatter = new Intl.DateTimeFormat(undefined, { month: 'short', year: 'numeric' });
+} catch (error) {
+  monthLabelFormatter = null;
+}
 
 var COUNTRY_TAGS = [
   'chile', 'france', 'greece', 'ireland', 'italy', 'korea',
@@ -99,6 +127,79 @@ function isFiniteNumber(value) {
 
 function firstValue(value) {
   return Array.isArray(value) ? value[0] : value;
+}
+
+function pad2(value) {
+  return value < 10 ? ('0' + value) : String(value);
+}
+
+function parseDateFromFilename(value) {
+  var match = String(value || '').match(/(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})/);
+  if (!match) {
+    return null;
+  }
+
+  var year = Number(match[1]);
+  var month = Number(match[2]);
+  var day = Number(match[3]);
+  var hour = Number(match[4]);
+  var minute = Number(match[5]);
+  var second = Number(match[6]);
+  var parsed = new Date(year, month - 1, day, hour, minute, second);
+  if (!isFiniteNumber(parsed.getTime())) {
+    return null;
+  }
+  if (parsed.getFullYear() !== year || parsed.getMonth() !== month - 1 ||
+      parsed.getDate() !== day || parsed.getHours() !== hour ||
+      parsed.getMinutes() !== minute || parsed.getSeconds() !== second) {
+    return null;
+  }
+  return parsed;
+}
+
+function monthKeyFromDate(date) {
+  return date.getFullYear() + '-' + pad2(date.getMonth() + 1);
+}
+
+function prepareDateMetadata($items) {
+  $items.each(function() {
+    var source = this.getAttribute('data-sort') || '';
+    var parsedDate = parseDateFromFilename(source);
+    this.setAttribute('data-random-rank', String(Math.random()));
+    if (!parsedDate) {
+      this.setAttribute('data-date-ts', '0');
+      this.setAttribute('data-month-key', '');
+      return;
+    }
+    this.setAttribute('data-date-ts', String(parsedDate.getTime()));
+    this.setAttribute('data-month-key', monthKeyFromDate(parsedDate));
+  });
+}
+
+function getItemTimestamp(itemElement) {
+  var value = Number(itemElement.getAttribute('data-date-ts'));
+  return isFiniteNumber(value) ? value : 0;
+}
+
+function getItemMonthKey(itemElement) {
+  return String(itemElement.getAttribute('data-month-key') || '');
+}
+
+function getItemRandomRank(itemElement) {
+  var value = Number(itemElement.getAttribute('data-random-rank'));
+  return isFiniteNumber(value) ? value : 0;
+}
+
+function formatMonthLabel(monthKey) {
+  var match = monthKey.match(/^(\d{4})-(\d{2})$/);
+  if (!match) {
+    return monthKey;
+  }
+  var parsedDate = new Date(Number(match[1]), Number(match[2]) - 1, 1);
+  if (monthLabelFormatter) {
+    return monthLabelFormatter.format(parsedDate);
+  }
+  return match[2] + '/' + match[1];
 }
 
 function readAsciiString(view, offset, length) {
@@ -603,19 +704,109 @@ function escapeRegex(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function updateMeta() {
-  var allItems = $grid.find('.item').filter(function() {
+function getVisibleItems() {
+  return $grid.find('.item').filter(function() {
     return $(this).css('display') !== 'none';
   });
+}
+
+function isDateSortActive() {
+  return currentSort === 'date-asc' || currentSort === 'date-desc';
+}
+
+function getSortLabel() {
+  if (currentSort === 'date-asc') {
+    return 'date oldest first';
+  }
+  if (currentSort === 'date-desc') {
+    return 'date newest first';
+  }
+  return 'random';
+}
+
+function resetSortToRandom() {
+  currentSort = 'random';
+  if ($sortSelect.length) {
+    $sortSelect.val('random');
+  }
+}
+
+function reseedRandomRanks() {
+  var $items = $grid.find('.item');
+  $items.each(function() {
+    this.setAttribute('data-random-rank', String(Math.random()));
+  });
+  $grid.isotope('updateSortData', $items);
+}
+
+function updateSortUI() {
+  updateTimelineTopOffset();
+  var showTimeline = isDateSortActive();
+  $galleryContent.toggleClass('is-sort-active', showTimeline);
+  $timelinePanel.toggleClass('is-hidden', !showTimeline);
+
+  if (!showTimeline) {
+    clearMonthPreview();
+    activeMonthKey = '';
+    monthTargets = {};
+    timelineMonthSequence = [];
+    $timelineMonths.empty().removeClass('is-empty');
+  }
+}
+
+function updateTimelineTopOffset() {
+  if (!$timelinePanel.length || !$filterPanel.length) {
+    return;
+  }
+
+  var panelHeight = $filterPanel.outerHeight();
+  var panelTop = parseFloat($filterPanel.css('top'));
+  if (!isFiniteNumber(panelHeight)) {
+    panelHeight = 0;
+  }
+  if (!isFiniteNumber(panelTop)) {
+    panelTop = 0;
+  }
+
+  var offset = Math.max(0, panelTop + panelHeight + 8);
+  document.documentElement.style.setProperty('--timeline-top-offset', Math.round(offset) + 'px');
+}
+
+function updateFilterPanelCompactState(force) {
+  if (!$filterPanel.length) {
+    return;
+  }
+
+  var shouldCompact = window.pageYOffset > 120 && !filterPanelHovered;
+  if (!force && shouldCompact === filterPanelCompact) {
+    return;
+  }
+
+  var changed = shouldCompact !== filterPanelCompact;
+  filterPanelCompact = shouldCompact;
+  $filterPanel.toggleClass('is-compact', shouldCompact);
+  updateTimelineTopOffset();
+
+  if (changed) {
+    if (filterPanelOffsetTimer) {
+      clearTimeout(filterPanelOffsetTimer);
+    }
+    filterPanelOffsetTimer = setTimeout(function() {
+      updateTimelineTopOffset();
+      filterPanelOffsetTimer = null;
+    }, 240);
+  }
+}
+
+function updateMeta() {
+  var allItems = getVisibleItems();
   var selectedTag = currentFilter === '*' ? '#all' : currentFilter.replace('.', '#');
   var queryInfo = currentQuery ? ' | query "' + currentQuery + '"' : '';
-  $meta.text('Active: ' + selectedTag + queryInfo + ' | photos: ' + allItems.length);
+  $meta.text('Active: ' + selectedTag + queryInfo + ' | sort: ' + getSortLabel() + ' | photos: ' + allItems.length);
 }
 
 function getVisibleGalleryKey() {
-  return $grid.find('.item').filter(function() {
-    return $(this).css('display') !== 'none';
-  }).map(function() {
+  return getVisibleItems().map(function() {
     return this.getAttribute('href') || '';
   }).get().join('|');
 }
@@ -629,7 +820,285 @@ function syncLightGallery() {
   plugin.refresh();
 }
 
-function applyFilters(reshuffleAll) {
+function getVisibleItemInfos() {
+  var visibleInfos = [];
+  getVisibleItems().each(function() {
+    var monthKey = getItemMonthKey(this);
+    if (!monthKey) {
+      return;
+    }
+    visibleInfos.push({
+      element: this,
+      monthKey: monthKey,
+      timestamp: getItemTimestamp(this)
+    });
+  });
+
+  visibleInfos.sort(function(a, b) {
+    return currentSort === 'date-asc' ? (a.timestamp - b.timestamp) : (b.timestamp - a.timestamp);
+  });
+  return visibleInfos;
+}
+
+function updateTimeline() {
+  if (!$timelineMonths.length) {
+    return;
+  }
+  if (!isDateSortActive()) {
+    return;
+  }
+
+  var visibleInfos = getVisibleItemInfos();
+  var monthCounts = {};
+  var monthOrder = [];
+  var monthElements = {};
+  monthTargets = {};
+
+  for (var i = 0; i < visibleInfos.length; i++) {
+    var info = visibleInfos[i];
+    if (!monthCounts[info.monthKey]) {
+      monthCounts[info.monthKey] = 0;
+      monthOrder.push(info.monthKey);
+      monthElements[info.monthKey] = [];
+    }
+    monthCounts[info.monthKey] += 1;
+    monthElements[info.monthKey].push(info.element);
+  }
+
+  for (var k = 0; k < monthOrder.length; k++) {
+    var monthKeyForTarget = monthOrder[k];
+    var elements = monthElements[monthKeyForTarget] || [];
+    if (!elements.length) {
+      continue;
+    }
+    monthTargets[monthKeyForTarget] = elements[Math.floor(elements.length / 2)];
+  }
+  timelineMonthSequence = monthOrder.slice();
+
+  $timelineMonths.empty();
+  if (!monthOrder.length) {
+    activeMonthKey = '';
+    timelineMonthSequence = [];
+    $timelineMonths.addClass('is-empty').text('No dated photos in current view');
+    return;
+  }
+
+  $timelineMonths.removeClass('is-empty');
+  if (!monthTargets[activeMonthKey]) {
+    activeMonthKey = monthOrder[0];
+  }
+
+  for (var j = 0; j < monthOrder.length; j++) {
+    var monthKey = monthOrder[j];
+    var $button = $('<button>', {
+      type: 'button',
+      'class': 'timeline-month' + (monthKey === activeMonthKey ? ' is-active' : ''),
+      'data-month': monthKey
+    });
+    $button.append($('<span>', { 'class': 'timeline-label', text: formatMonthLabel(monthKey) }));
+    $button.append($('<span>', { 'class': 'timeline-count', text: String(monthCounts[monthKey]) }));
+    $timelineMonths.append($button);
+  }
+
+  syncActiveMonthWithViewport(true);
+}
+
+function scrollToMonth(monthKey) {
+  var target = monthTargets[monthKey];
+  if (!target) {
+    return;
+  }
+
+  var centerY = getViewportCenterReferenceY();
+  var rect = target.getBoundingClientRect();
+  var targetCenterDocY = window.pageYOffset + rect.top + (rect.height / 2);
+  var top = targetCenterDocY - centerY;
+  window.scrollTo({
+    top: Math.max(0, top),
+    behavior: 'smooth'
+  });
+}
+
+function ensureTimelineButtonVisible($button, smooth) {
+  if (!$button || !$button.length || !$timelineMonths.length) {
+    return;
+  }
+
+  var container = $timelineMonths.get(0);
+  var button = $button.get(0);
+  if (!container || !button) {
+    return;
+  }
+
+  var margin = 8;
+  var containerRect = container.getBoundingClientRect();
+  var buttonRect = button.getBoundingClientRect();
+
+  var nextTop = container.scrollTop;
+  if (buttonRect.top < containerRect.top + margin) {
+    nextTop += buttonRect.top - (containerRect.top + margin);
+  } else if (buttonRect.bottom > containerRect.bottom - margin) {
+    nextTop += buttonRect.bottom - (containerRect.bottom - margin);
+  }
+
+  var nextLeft = container.scrollLeft;
+  if (buttonRect.left < containerRect.left + margin) {
+    nextLeft += buttonRect.left - (containerRect.left + margin);
+  } else if (buttonRect.right > containerRect.right - margin) {
+    nextLeft += buttonRect.right - (containerRect.right - margin);
+  }
+
+  nextTop = Math.max(0, Math.round(nextTop));
+  nextLeft = Math.max(0, Math.round(nextLeft));
+  if (nextTop === container.scrollTop && nextLeft === container.scrollLeft) {
+    return;
+  }
+
+  if (typeof container.scrollTo === 'function') {
+    container.scrollTo({
+      top: nextTop,
+      left: nextLeft,
+      behavior: smooth ? 'smooth' : 'auto'
+    });
+    return;
+  }
+
+  container.scrollTop = nextTop;
+  container.scrollLeft = nextLeft;
+}
+
+function setTimelineActiveMonth(monthKey, smoothTimelineScroll) {
+  if (!monthKey || !$timelineMonths.length) {
+    return;
+  }
+
+  activeMonthKey = monthKey;
+  var $buttons = $timelineMonths.find('.timeline-month');
+  $buttons.removeClass('is-active');
+  var $activeButton = $buttons.filter(function() {
+    return String($(this).attr('data-month') || '') === monthKey;
+  });
+  $activeButton.addClass('is-active');
+  ensureTimelineButtonVisible($activeButton, !!smoothTimelineScroll);
+}
+
+function getTimelineReferenceY() {
+  var rawOffset = getComputedStyle(document.documentElement).getPropertyValue('--timeline-top-offset');
+  var parsedOffset = parseFloat(rawOffset);
+  if (!isFiniteNumber(parsedOffset)) {
+    parsedOffset = 92;
+  }
+  return Math.max(36, parsedOffset + 6);
+}
+
+function getViewportCenterReferenceY() {
+  var topBound = getTimelineReferenceY();
+  var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+  if (!isFiniteNumber(viewportHeight) || viewportHeight <= topBound) {
+    return topBound;
+  }
+  return topBound + ((viewportHeight - topBound) / 2);
+}
+
+function isNearPageTop() {
+  return (window.pageYOffset || document.documentElement.scrollTop || 0) <= 24;
+}
+
+function isNearPageBottom() {
+  var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+  var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+  var docEl = document.documentElement;
+  var body = document.body;
+  var docHeight = Math.max(
+    docEl ? docEl.scrollHeight : 0,
+    body ? body.scrollHeight : 0
+  );
+  return scrollY + viewportHeight >= docHeight - 24;
+}
+
+function getMonthKeyInViewport() {
+  if (!isDateSortActive()) {
+    return '';
+  }
+  if (timelineMonthSequence.length) {
+    if (isNearPageTop()) {
+      return timelineMonthSequence[0];
+    }
+    if (isNearPageBottom()) {
+      return timelineMonthSequence[timelineMonthSequence.length - 1];
+    }
+  }
+
+  var referenceY = getViewportCenterReferenceY();
+  var closestMonth = '';
+  var closestDistance = Infinity;
+
+  getVisibleItems().each(function() {
+    var monthKey = getItemMonthKey(this);
+    if (!monthKey) {
+      return;
+    }
+
+    var rect = this.getBoundingClientRect();
+    var distance = 0;
+    if (rect.top <= referenceY && rect.bottom >= referenceY) {
+      distance = 0;
+    } else if (rect.bottom < referenceY) {
+      distance = referenceY - rect.bottom;
+    } else {
+      distance = rect.top - referenceY;
+    }
+
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      closestMonth = monthKey;
+    }
+  });
+
+  return closestMonth;
+}
+
+function syncActiveMonthWithViewport(force) {
+  if (!$timelineMonths.length || !isDateSortActive() || $timelineMonths.hasClass('is-empty')) {
+    return;
+  }
+
+  var visibleMonth = getMonthKeyInViewport();
+  if (!visibleMonth) {
+    return;
+  }
+  if (!force && visibleMonth === activeMonthKey) {
+    return;
+  }
+
+  setTimelineActiveMonth(visibleMonth, false);
+}
+
+function clearMonthPreview() {
+  $gridElement.removeClass('month-hover-active');
+  $grid.find('.item.is-month-hover-target').removeClass('is-month-hover-target');
+}
+
+function previewMonth(monthKey) {
+  clearMonthPreview();
+  if (!monthKey) {
+    return;
+  }
+
+  var $targets = getVisibleItems().filter(function() {
+    return getItemMonthKey(this) === monthKey;
+  });
+
+  if (!$targets.length) {
+    return;
+  }
+
+  $gridElement.addClass('month-hover-active');
+  $targets.addClass('is-month-hover-target');
+}
+
+function applyFilters(reshuffleRandom) {
+  clearMonthPreview();
   var queryText = currentQuery.charAt(0) === '#' ? currentQuery.slice(1) : currentQuery;
   var queryRegex = queryText ? new RegExp(escapeRegex(queryText), 'i') : null;
   var filterFn = function() {
@@ -645,20 +1114,19 @@ function applyFilters(reshuffleAll) {
     return queryRegex.test(searchText);
   };
 
-  var options = {
-    filter: filterFn
-  };
-
-  if (currentFilter !== '*') {
+  var options = { filter: filterFn };
+  if (isDateSortActive()) {
     options.sortBy = 'sortdate';
-    options.sortAscending = { sortdate: true };
+    options.sortAscending = { sortdate: currentSort === 'date-asc' };
+  } else {
+    if (reshuffleRandom) {
+      reseedRandomRanks();
+    }
+    options.sortBy = 'randomrank';
+    options.sortAscending = { randomrank: true };
   }
 
   $grid.isotope(options);
-
-  if (currentFilter === '*' && reshuffleAll) {
-    $grid.isotope('shuffle');
-  }
 }
 
 function getAllTags() {
@@ -742,16 +1210,75 @@ function debounce(fn, delay) {
   };
 }
 
+var debouncedTimelineOffsetUpdate = debounce(function() {
+  updateFilterPanelCompactState(true);
+  syncActiveMonthWithViewport(true);
+}, 120);
+$(window).on('resize', debouncedTimelineOffsetUpdate);
+$(window).on('load', function() {
+  updateFilterPanelCompactState(true);
+  syncActiveMonthWithViewport(true);
+});
+if ($filterPanel.length) {
+  $filterPanel.on('mouseenter', function() {
+    filterPanelHovered = true;
+    updateFilterPanelCompactState(true);
+  });
+  $filterPanel.on('mouseleave', function() {
+    filterPanelHovered = false;
+    updateFilterPanelCompactState(true);
+  });
+}
+var filterPanelScrollScheduled = false;
+$(window).on('scroll', function() {
+  if (filterPanelScrollScheduled) {
+    return;
+  }
+
+  filterPanelScrollScheduled = true;
+  var runUpdate = function() {
+    filterPanelScrollScheduled = false;
+    updateFilterPanelCompactState(false);
+    syncActiveMonthWithViewport(false);
+  };
+
+  if (window.requestAnimationFrame) {
+    window.requestAnimationFrame(runUpdate);
+  } else {
+    setTimeout(runUpdate, 16);
+  }
+});
+
 $grid.on('arrangeComplete', function() {
   syncLightGallery();
   updateMeta();
+  updateTimeline();
+  syncActiveMonthWithViewport(true);
 });
 
 $('#filters').on('click', 'button', function() {
-  currentFilter = $(this).attr('data-filter');
+  var nextFilter = $(this).attr('data-filter');
+  currentFilter = nextFilter;
   $('#filters').find('.is-checked').removeClass('is-checked');
   $(this).addClass('is-checked');
-  applyFilters(currentFilter === '*');
+  if (nextFilter === '*') {
+    resetSortToRandom();
+    updateSortUI();
+    applyFilters(true);
+    return;
+  }
+  applyFilters(false);
+});
+
+$sortSelect.on('change', function() {
+  var nextSort = String($(this).val() || '').toLowerCase();
+  if (nextSort !== 'date-asc' && nextSort !== 'date-desc') {
+    nextSort = 'random';
+  }
+  currentSort = nextSort;
+  activeMonthKey = '';
+  updateSortUI();
+  applyFilters(nextSort === 'random');
 });
 
 var debouncedApplyFilters = debounce(applyFilters, 120);
@@ -767,6 +1294,8 @@ $searchInput.on('keydown', function(event) {
     $(this).val('');
     currentQuery = '';
     currentFilter = '*';
+    resetSortToRandom();
+    updateSortUI();
     $('#filters').find('.is-checked').removeClass('is-checked');
     $('#filters').find('button[data-filter="*"]').addClass('is-checked');
     applyFilters(true);
@@ -777,13 +1306,39 @@ $clearButton.on('click', function() {
   $searchInput.val('');
   currentQuery = '';
   currentFilter = '*';
+  resetSortToRandom();
+  updateSortUI();
   $('#filters').find('.is-checked').removeClass('is-checked');
   $('#filters').find('button[data-filter="*"]').addClass('is-checked');
   applyFilters(true);
+});
+
+$timelineMonths.on('click', '.timeline-month', function() {
+  var monthKey = String($(this).attr('data-month') || '');
+  if (!monthKey || !monthTargets[monthKey]) {
+    return;
+  }
+  setTimelineActiveMonth(monthKey, true);
+  scrollToMonth(monthKey);
+});
+
+$timelineMonths.on('mouseenter focusin', '.timeline-month', function() {
+  var monthKey = String($(this).attr('data-month') || '');
+  previewMonth(monthKey);
+});
+
+$timelineMonths.on('mouseleave focusout', '.timeline-month', function() {
+  clearMonthPreview();
+});
+
+$timelineMonths.on('mouseleave', function() {
+  clearMonthPreview();
 });
 
 var tagCounts = getAllTags();
 buildPresetButtons(tagCounts);
 buildSearchSuggestions(tagCounts);
 setupExifPanel();
+updateSortUI();
+updateFilterPanelCompactState(true);
 applyFilters(true);

@@ -3,19 +3,19 @@
   aspect: landscape
   desc: Contrail and a plane
 - filename: 2013-04-15_20-38-26.jpg
-  tags: astrophoto
+  tags: astrophoto landscape
   aspect: landscape
   desc: Moon meets Jupiter
 - filename: 2013-04-15_20-56-09.jpg
-  tags: astrophoto synta8
+  tags: astrophoto synta8 landscape
   aspect: landscape
   desc: Crescent Moon
 - filename: 2013-05-18_17-10-14.jpg
-  tags: astrophoto synta8
+  tags: astrophoto synta8 landscape
   aspect: landscape
   desc: Sun wit spots
 - filename: 2013-05-19_19-08-01.jpg
-  tags: astrophoto synta8
+  tags: astrophoto synta8 landscape
   aspect: landscape
   desc: Sun with spots 2
 - filename: 2013-06-13_21-05-22.jpg
@@ -23,27 +23,27 @@
   aspect: portrait
   desc: Contrails with reflecting plane
 - filename: 2013-06-13_21-10-30.jpg
-  tags: astrophoto synta8
+  tags: astrophoto synta8 landscape
   aspect: landscape
   desc: Simply moon
 - filename: 2013-06-19_23-38-46.jpg
-  tags: astrophoto synta8
+  tags: astrophoto synta8 landscape
   aspect: landscape
   desc: Moon
 - filename: 2013-08-16_10-27-32.jpg
-  tags: nature poland tatra mountains
+  tags: nature poland tatra mountains landscape
   aspect: landscape
   desc: Giewont
 - filename: 2013-08-16_10-27-41.jpg
-  tags: nature poland tatra mountains
+  tags: nature poland tatra mountains landscape
   aspect: landscape
   desc: Czerwone Wierchy
 - filename: 2013-08-16_10-28-09.jpg
-  tags: nature poland tatra mountains
+  tags: nature poland tatra mountains landscape
   aspect: landscape
   desc: Tatra Mountains
 - filename: 2013-08-16_10-29-30.jpg
-  tags: nature poland tatra mountains
+  tags: nature poland tatra mountains landscape
   aspect: landscape
   desc: High Tatras
 - filename: 2015-02-20_19-20-07.jpg
@@ -51,11 +51,11 @@
   aspect: square
   desc: Moon, Venus & Mars
 - filename: 2015-03-20_09-55-00.jpg
-  tags: astrophoto synta8
+  tags: astrophoto synta8 landscape
   aspect: landscape
   desc: Partial Eclipse in March 2015
 - filename: 2016-05-01_16-02-57.jpg
-  tags: bw nature
+  tags: bw nature landscape
   aspect: landscape
   desc: Izera Mountains
 - filename: 2016-05-05_22-44-40.jpg
@@ -63,7 +63,7 @@
   aspect: square
   desc: Startrails in Białków
 - filename: 2016-05-06_21-49-48.jpg
-  tags: astrophoto bialkow poland
+  tags: astrophoto bialkow poland landscape
   aspect: landscape
   desc: Białków trails part 1
 - filename: 2016-05-09_16-08-24.jpg
@@ -75,7 +75,7 @@
   aspect: square
   desc: Cheyen the Dog
 - filename: 2017-09-30_20-24-54.jpg
-  tags: astrophoto bialkow poland
+  tags: astrophoto bialkow poland landscape
   aspect: landscape
   desc: Białków trails part 2
 - filename: 2019-02-23_07-03-17.jpg
@@ -83,7 +83,7 @@
   aspect: panorama
   desc: Śnieżka at dawn
 - filename: 2019-02-23_12-26-18.jpg
-  tags: nature bw
+  tags: nature bw landscape
   aspect: landscape
   desc: Ice desert near Śnieżka peak
 - filename: 2019-03-23_06-46-56.jpg
@@ -91,7 +91,7 @@
   aspect: panorama
   desc: From Śnieżka during sunrise
 - filename: 2019-03-26_15-44-09.jpg
-  tags: architecture wroclaw poland
+  tags: architecture wroclaw poland landscape
   aspect: landscape
   desc: Astronomical Institute in Wroclaw
 - filename: 2019-03-26_16-37-06.jpg
@@ -103,43 +103,43 @@
   aspect: landscape
   desc: Rooftops and Skytower
 - filename: 2019-03-30_17-24-46.jpg
-  tags: nature
+  tags: nature landscape
   aspect: landscape
   desc: Birds and balloons
 - filename: 2019-04-02_05-34-53.jpg
-  tags: bialkow poland
+  tags: bialkow poland landscape
   aspect: landscape
   desc: Sunrise at Bialkow Observatory
 - filename: 2019-04-02_05-35-52.jpg
-  tags: bialkow poland
+  tags: bialkow poland landscape
   aspect: landscape
   desc: Sunrise at Bialkow Observatory
 - filename: 2019-04-02_05-36-40.jpg
-  tags: bialkow poland
+  tags: bialkow poland landscape
   aspect: landscape
   desc: Sunrise at Bialkow Observatory
 - filename: 2019-04-02_05-36-47.jpg
-  tags: bialkow poland
+  tags: bialkow poland landscape
   aspect: landscape
   desc: Sunrise at Bialkow Observatory
 - filename: 2019-04-02_05-52-09.jpg
-  tags: bialkow poland
+  tags: bialkow poland landscape
   aspect: landscape
   desc: Palace in Bialkow
 - filename: 2019-04-02_05-52-31.jpg
-  tags: bialkow poland
+  tags: bialkow poland landscape
   aspect: landscape
   desc: Bialkow Observatory at sunrise
 - filename: 2019-04-02_05-53-31.jpg
-  tags: bialkow poland
+  tags: bialkow poland landscape
   aspect: landscape
   desc: Coronagraph at sunrise
 - filename: 2019-04-02_05-54-40.jpg
-  tags: bialkow poland
+  tags: bialkow poland landscape
   aspect: landscape
   desc: Bialkow Observatory
 - filename: 2019-04-02_05-57-30.jpg
-  tags: bialkow poland
+  tags: bialkow poland landscape
   aspect: landscape
   desc: Bialkow Observatory
 - filename: 2019-04-02_06-00-32.jpg
@@ -147,191 +147,191 @@
   aspect: square
   desc: Bialkow Observatory in B&W
 - filename: 2019-04-02_06-01-13.jpg
-  tags: bialkow poland
+  tags: bialkow poland landscape
   aspect: landscape
   desc: Coronagraph in Bialkow
 - filename: 2019-04-12_23-13-39.jpg
-  tags: chile
+  tags: chile landscape
   aspect: landscape
   desc: Chilean road
 - filename: 2019-04-12_23-37-19.jpg
-  tags: chile
+  tags: chile landscape
   aspect: landscape
   desc: On the road to Cerro Armazones
 - filename: 2019-04-13_00-21-02.jpg
-  tags: chile
+  tags: chile landscape
   aspect: landscape
   desc: Cerro Murphy
 - filename: 2019-04-13_00-21-07.jpg
-  tags: chile
+  tags: chile landscape
   aspect: landscape
   desc: Cerro Armazones
 - filename: 2019-04-14_01-14-50.jpg
-  tags: chile
+  tags: chile landscape
   aspect: landscape
   desc: Sunset over Paranal
 - filename: 2019-04-14_04-42-58.jpg
-  tags: astrophoto chile
+  tags: astrophoto chile landscape
   aspect: landscape
   desc: Shooting for the stars
 - filename: 2019-04-14_08-50-14.jpg
-  tags: astrophoto chile
+  tags: astrophoto chile landscape
   aspect: landscape
   desc: Milky Way over Atacama
 - filename: 2019-04-15_13-44-24.jpg
-  tags: chile
+  tags: chile landscape
   aspect: landscape
   desc: View on Atacama dessert from Cerro Murphy
 - filename: 2019-04-17_10-55-37.jpg
-  tags: astrophoto chile
+  tags: astrophoto chile portrait
   aspect: portrait
   desc: Milky Way Core
 - filename: 2019-04-17_11-15-49.jpg
-  tags: astrophoto chile
+  tags: astrophoto chile landscape
   aspect: landscape
   desc: Short Startrails
 - filename: 2019-04-17_11-57-27.jpg
-  tags: astrophoto chile
+  tags: astrophoto chile landscape
   aspect: landscape
   desc: Nearing sunrise at the Atacama dessert
 - filename: 2019-04-18_00-25-12.jpg
-  tags: chile
+  tags: chile landscape
   aspect: landscape
   desc: Sunset over Atacama Desert wit VLT
 - filename: 2019-04-18_00-57-44.jpg
-  tags: chile
+  tags: chile landscape
   aspect: landscape
   desc: Sunset over Paranal
 - filename: 2019-04-18_02-13-39.jpg
-  tags: astrophoto chile startrails
+  tags: astrophoto chile startrails landscape
   aspect: landscape
   desc: Moving clouds and stars
 - filename: 2019-04-18_03-45-20.jpg
-  tags: astrophoto chile
+  tags: astrophoto chile landscape
   aspect: landscape
   desc: Startrails over Atacama Desert part 2
 - filename: 2019-04-18_05-37-42.jpg
-  tags: astrophoto chile
+  tags: astrophoto chile landscape
   aspect: landscape
   desc: Moonlit Atacama
 - filename: 2019-04-20_02-35-27.jpg
-  tags: astrophoto chile
+  tags: astrophoto chile landscape
   aspect: landscape
   desc: Startrails over Atacama Desert part 1
 - filename: 2019-04-27_21-45-15.jpg
-  tags: chile
+  tags: chile landscape
   aspect: landscape
   desc: 1/4 of the VLT
 - filename: 2019-04-29_02-06-33.jpg
-  tags: astrophoto chile
+  tags: astrophoto chile landscape
   aspect: landscape
   desc: LMC
 - filename: 2019-04-29_06-35-16.jpg
-  tags: astrophoto chile
+  tags: astrophoto chile landscape
   aspect: landscape
   desc: Looking into the heart of the Milky Way
 - filename: 2019-09-20_12-31-54.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Shed in Tromsø
 - filename: 2019-09-20_14-38-54.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Walking in Tromsø
 - filename: 2019-09-20_18-48-43.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Harbor in Tromsø
 - filename: 2019-09-21_17-42-05.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Rain near Tromsø
 - filename: 2019-09-21_17-44-03.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Lake in Tromsø
 - filename: 2019-09-21_17-44-12.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Tromsø area
 - filename: 2019-09-21_17-45-13.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Near Tromsø
 - filename: 2019-09-21_17-52-49.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Kvaløysletta or Skellige?
 - filename: 2019-09-21_17-52-50.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Kvaløya near Tromsø, Norway
 - filename: 2019-09-21_17-53-01.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Kvaløya near Tromsø, Norway
 - filename: 2019-09-21_17-53-11.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Kvaløya near Tromsø, Norway
 - filename: 2019-09-22_18-53-39.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: View from Storsteinen
 - filename: 2019-09-22_19-03-33.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Tromsø from Storsteinen Part 1
 - filename: 2019-09-22_19-07-28.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Tromsø from Storsteinen Part 2
 - filename: 2019-09-23_09-23-26.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Window view in Tromsø
 - filename: 2019-09-23_15-47-28.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Lake Blåvatnet
 - filename: 2019-09-23_16-03-42.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Lake Blåvatnet
 - filename: 2019-09-23_16-13-43.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Glacier over Lake Blåvatnet
 - filename: 2019-09-23_16-14-07.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Mountains near Lake Blåvatnet
 - filename: 2019-09-23_16-59-00.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Lyngen Alps near Lake Blåvatnet
 - filename: 2019-09-23_17-40-12.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: On the way back from Lake Blåvatnet
 - filename: 2019-09-23_17-43-28.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Sunset over Lyngen Alps
 - filename: 2019-09-24_01-42-27.jpg
-  tags: astrophoto tromso norway
+  tags: astrophoto tromso norway landscape
   aspect: landscape
   desc: View on Aurora Borealis, Rekvik near Tromsø - Norway
 - filename: 2019-09-24_01-55-52.jpg
-  tags: astrophoto tromso norway
+  tags: astrophoto tromso norway landscape
   aspect: landscape
   desc: Aurora Borealis with visible colors from O<sub>2</sub> and N<sub>2</sub>
 - filename: 2019-09-24_02-25-24.jpg
-  tags: astrophoto tromso norway
+  tags: astrophoto tromso norway portrait
   aspect: portrait
   desc: Brightest moment of the aurora
 - filename: 2019-09-24_02-34-25.jpg
-  tags: astrophoto tromso norway
+  tags: astrophoto tromso norway landscape
   aspect: landscape
   desc: Aurora Borealis over Rekvik near Tromsø - Norway
 - filename: 2019-09-24_02-37-22.jpg
@@ -339,131 +339,131 @@
   aspect: landscape
   desc: Aurora Borealis over Tromsø area
 - filename: 2019-09-24_02-39-02.jpg
-  tags: astrophoto tromso norway
+  tags: astrophoto tromso norway landscape
   aspect: landscape
   desc: Aurora Borealis over Tromsø area
 - filename: 2019-09-24_02-44-27.jpg
-  tags: astrophoto tromso norway
+  tags: astrophoto tromso norway landscape
   aspect: landscape
   desc: Something evil in the sky...
 - filename: 2019-09-24_02-53-16.jpg
-  tags: astrophoto tromso norway
+  tags: astrophoto tromso norway landscape
   aspect: landscape
   desc: Aurora Borealis over Tromsø area
 - filename: 2019-09-24_10-30-34.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Lyngen Alps
 - filename: 2019-09-24_10-32-30.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: On the way to glacier
 - filename: 2019-09-24_12-52-12.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Creek in Norway
 - filename: 2019-09-24_13-02-12.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Peaking out of the glacier
 - filename: 2019-09-24_14-05-52.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Glacier with 400 m AMSL elevation
 - filename: 2019-09-24_14-11-53.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Lonely island on glacier lake
 - filename: 2019-09-24_14-12-49.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Cracked ice on the glacier
 - filename: 2019-09-24_14-44-01.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: Walking on the glacier
 - filename: 2019-09-24_15-24-24.jpg
-  tags: tromso norway
+  tags: tromso norway landscape
   aspect: landscape
   desc: On the way back from glacier
 - filename: 2019-11-09_11-54-40.jpg
-  tags: switzerland
+  tags: switzerland landscape
   aspect: landscape
   desc: On the way to Geneva
 - filename: 2019-11-09_15-50-11.jpg
-  tags: switzerland
+  tags: switzerland landscape
   aspect: landscape
   desc: On the way to Geneva, Switzerland
 - filename: 2019-11-09_18-08-05.jpg
-  tags: switzerland
+  tags: switzerland portrait
   aspect: portrait
   desc: Watrerfall near Lavaux Vinorama
 - filename: 2019-11-09_18-11-37.jpg
-  tags: switzerland
+  tags: switzerland landscape
   aspect: landscape
   desc: Vineyards near Geneva Lake
 - filename: 2019-11-09_18-16-48.jpg
-  tags: switzerland
+  tags: switzerland portrait
   aspect: portrait
   desc: Vineyards and railroad at Lavaux
 - filename: 2019-11-09_18-17-49.jpg
-  tags: switzerland
+  tags: switzerland landscape
   aspect: landscape
   desc: Geneva Lake after sunset
 - filename: 2019-11-09_18-26-08.jpg
-  tags: switzerland
+  tags: switzerland landscape
   aspect: landscape
   desc: View from Lavaux on Montreux and Bernese Alps
 - filename: 2019-11-09_20-19-04.jpg
-  tags: switzerland
+  tags: switzerland landscape
   aspect: landscape
   desc: Le Grammont from Montreux
 - filename: 2019-11-10_14-07-33.jpg
-  tags: switzerland
+  tags: switzerland landscape
   aspect: landscape
   desc: Le Moléson (2002 m AMSL) from Grueyere
 - filename: 2019-11-10_14-17-19.jpg
-  tags: switzerland
+  tags: switzerland landscape
   aspect: landscape
   desc: Dent du Bourgo (1913 m AMSL) from Gruyere
 - filename: 2019-11-10_14-18-31.jpg
-  tags: switzerland
+  tags: switzerland landscape
   aspect: landscape
   desc: Surroundings of Gruyere
 - filename: 2019-11-10_14-27-36.jpg
-  tags: switzerland
+  tags: switzerland landscape
   aspect: landscape
   desc: More surroundings of Gruyere
 - filename: 2019-11-10_16-47-32.jpg
-  tags: switzerland
+  tags: switzerland landscape
   aspect: landscape
   desc: Scenic trail no. 1
 - filename: 2019-11-10_16-48-31.jpg
-  tags: switzerland
+  tags: switzerland portrait
   aspect: portrait
   desc: Scenic trail no. 2
 - filename: 2019-11-10_16-49-52.jpg
-  tags: switzerland
+  tags: switzerland landscape
   aspect: landscape
   desc: Scenic trail no. 3
 - filename: 2019-11-10_16-51-51.jpg
-  tags: switzerland
+  tags: switzerland landscape
   aspect: landscape
   desc: Scenic trail no. 4
 - filename: 2019-11-10_17-18-43.jpg
-  tags: switzerland
+  tags: switzerland landscape
   aspect: landscape
   desc: Scenic trail no. 5
 - filename: 2020-07-14_01-21-48.jpg
-  tags: astrophoto bialkow poland
+  tags: astrophoto bialkow poland landscape
   aspect: landscape
   desc: Comet C/2020 F3 (NEOWISE) in Białków
 - filename: 2020-07-14_01-38-26.jpg
-  tags: astrophoto bialkow poland
+  tags: astrophoto bialkow poland portrait
   aspect: portrait
   desc: Comet C/2020 F3 (NEOWISE) close-up view with greenish head
 - filename: 2020-07-14_22-29-00.jpg
-  tags: astrophoto bialkow poland
+  tags: astrophoto bialkow poland landscape
   aspect: landscape
   desc: Comet C/2020 F3 (NEOWISE) in the tree gap with ion tail
 - filename: 2020-07-20_18-06-56.jpg
@@ -487,11 +487,11 @@
   aspect: square
   desc: Joachim Halupczok Bridge in Opole
 - filename: 2021-04-04_15-06-44.jpg
-  tags: nature poland opole trees bw
+  tags: nature poland opole trees bw landscape
   aspect: landscape
   desc: Trees 1, Bolko Island, Opole
 - filename: 2021-04-04_15-19-34.jpg
-  tags: nature poland opole trees bw
+  tags: nature poland opole trees bw landscape
   aspect: landscape
   desc: Trees 2, Bolko Island, Opole
 - filename: 2021-04-04_15-39-08.jpg
@@ -503,7 +503,7 @@
   aspect: square
   desc: Sunrise in Białków 2
 - filename: 2021-04-20_04-56-50.jpg
-  tags: bialkow nature poland trees
+  tags: bialkow nature poland trees landscape
   aspect: landscape
   desc: Sunrise in Białków
 - filename: 2021-04-20_05-08-21.jpg
@@ -511,11 +511,11 @@
   aspect: square
   desc: Sunrise in Białków 3
 - filename: 2021-05-01_14-13-48.jpg
-  tags: nature poland opole trees bw
+  tags: nature poland opole trees bw landscape
   aspect: landscape
   desc: Trees 4, Bolko Island, Opole
 - filename: 2021-05-01_14-44-04.jpg
-  tags: nature poland opole trees bw
+  tags: nature poland opole trees bw landscape
   aspect: landscape
   desc: Trees 5, Bolko Island, Opole
 - filename: 2021-07-13_11-39-56.jpg
@@ -531,7 +531,7 @@
   aspect: square
   desc: Almost Dürers magic square
 - filename: 2021-07-13_14-05-32_b.jpg
-  tags: architecture barcelona spain
+  tags: architecture barcelona spain landscape
   aspect: landscape
   desc: Judas Kiss
 - filename: 2021-07-13_17-54-20.jpg
@@ -543,7 +543,7 @@
   aspect: square
   desc: A quiet corner in Barri Gòtic
 - filename: 2021-07-14_11-12-11.jpg
-  tags: barcelona nature spain
+  tags: barcelona nature spain landscape
   aspect: landscape
   desc: Beautiful view from Park Güell
 - filename: 2021-07-14_11-44-00.jpg
@@ -551,43 +551,43 @@
   aspect: square
   desc: Just a Palm tree
 - filename: 2021-07-14_11-47-25.jpg
-  tags: barcelona nature spain
+  tags: barcelona nature spain landscape
   aspect: landscape
   desc: 2 trees 1 bird
 - filename: 2021-07-14_19-50-13.jpg
-  tags: barcelona spain
+  tags: barcelona spain landscape
   aspect: landscape
   desc: Mirador del Tibidabo
 - filename: 2021-07-15_13-10-48.jpg
-  tags: barcelona spain
+  tags: barcelona spain landscape
   aspect: landscape
   desc: Ways of transport
 - filename: 2021-07-15_13-17-49.jpg
-  tags: barcelona spain
+  tags: barcelona spain landscape
   aspect: landscape
   desc: Nature over the Port
 - filename: 2021-07-15_14-18-57.jpg
-  tags: barcelona nature spain
+  tags: barcelona nature spain landscape
   aspect: landscape
   desc: One, two, three - Palm Tree!
 - filename: 2021-07-15_14-23-20.jpg
-  tags: barcelona architecture spain
+  tags: barcelona architecture spain landscape
   aspect: landscape
   desc: Castell de Montjuïc
 - filename: 2021-07-15_16-02-05.jpg
-  tags: architecture barcelona spain
+  tags: architecture barcelona spain landscape
   aspect: landscape
   desc: Palau Nacional
 - filename: 2021-07-15_20-04-33.jpg
-  tags: architecture barcelona spain
+  tags: architecture barcelona spain landscape
   aspect: landscape
   desc: Parc de la Ciutadella
 - filename: 2021-07-15_20-08-20.jpg
-  tags: barcelona nature spain
+  tags: barcelona nature spain landscape
   aspect: landscape
   desc: Tropical Ciutadella
 - filename: 2021-07-15_20-28-40.jpg
-  tags: barcelona spain
+  tags: barcelona spain landscape
   aspect: landscape
   desc: Busy Barcelona near Arc de Triomf
 - filename: 2021-07-15_20-56-07.jpg
@@ -595,7 +595,7 @@
   aspect: square
   desc: Sunlit Palm Tree
 - filename: 2021-07-16_14-13-55.jpg
-  tags: barcelona bw spain
+  tags: barcelona bw spain landscape
   aspect: landscape
   desc: Busy waters
 - filename: 2022-03-23_03-38-50.jpg
@@ -607,11 +607,11 @@
   aspect: landscape
   desc: Białków Large Telescope (BLT)
 - filename: 2022-05-10_18-53-50.jpg
-  tags: architecture ireland
+  tags: architecture ireland landscape
   aspect: landscape
   desc: Slieve Russel Hotel
 - filename: 2022-05-10_19-08-01.jpg
-  tags: ireland nature
+  tags: ireland nature landscape
   aspect: landscape
   desc: Farmland in Ireland
 - filename: 2022-05-10_19-52-51.jpg
@@ -619,91 +619,91 @@
   aspect: square
   desc: Masonic Hall
 - filename: 2022-05-10_20-03-08.jpg
-  tags: architecture ireland
+  tags: architecture ireland landscape
   aspect: landscape
   desc: Tomregan Church of Ireland
 - filename: 2022-05-10_20-04-05.jpg
-  tags: ireland
+  tags: ireland landscape
   aspect: landscape
   desc: Not too fast
 - filename: 2022-05-10_20-04-53.jpg
-  tags: ireland nature
+  tags: ireland nature landscape
   aspect: landscape
   desc: Door to...?
 - filename: 2022-05-11_15-09-35.jpg
-  tags: ireland nature
+  tags: ireland nature landscape
   aspect: landscape
   desc: Bundoran Beach with cliffs
 - filename: 2022-05-11_15-18-54.jpg
-  tags: ireland nature
+  tags: ireland nature landscape
   aspect: landscape
   desc: Cliffs in the water
 - filename: 2022-05-11_15-26-05.jpg
-  tags: ireland nature
+  tags: ireland nature landscape
   aspect: landscape
   desc: Polish cross in Ireland
 - filename: 2022-05-11_15-34-05.jpg
-  tags: ireland
+  tags: ireland landscape
   aspect: landscape
   desc: Golfing mood
 - filename: 2022-05-11_15-40-52.jpg
-  tags: ireland nature
+  tags: ireland nature landscape
   aspect: landscape
   desc: <i>Waves</i> on the water
 - filename: 2022-05-11_15-42-11.jpg
-  tags: ireland nature
+  tags: ireland nature landscape
   aspect: landscape
   desc: The Fairy Bridges in Bundoran
 - filename: 2022-05-11_15-50-18.jpg
-  tags: ireland nature
+  tags: ireland nature landscape
   aspect: landscape
   desc: Waves crashing
 - filename: 2022-05-11_15-55-56.jpg
-  tags: ireland nature
+  tags: ireland nature landscape
   aspect: landscape
   desc: Vegetation on the beach
 - filename: 2022-05-11_15-57-38.jpg
-  tags: ireland nature
+  tags: ireland nature landscape
   aspect: landscape
   desc: Cliff, beach and ocean
 - filename: 2022-05-11_16-04-25.jpg
-  tags: ireland nature
+  tags: ireland nature landscape
   aspect: landscape
   desc: Idyllic view
 - filename: 2022-05-11_16-12-27.jpg
-  tags: ireland nature
+  tags: ireland nature landscape
   aspect: landscape
   desc: Horseriding on the beach
 - filename: 2022-05-11_16-30-08.jpg
-  tags: ireland nature
+  tags: ireland nature landscape
   aspect: landscape
   desc: Take a seat
 - filename: 2022-05-11_18-39-39.jpg
-  tags: ireland nature
+  tags: ireland nature landscape
   aspect: landscape
   desc: Is there a pot of gold?
 - filename: 2022-08-03_12-44-36.jpg
-  tags: architecture busan korea
+  tags: architecture busan korea landscape
   aspect: landscape
   desc: View on Haeundae Beach from Dongbaek Island
 - filename: 2022-08-03_12-58-47.jpg
-  tags: architecture busan korea
+  tags: architecture busan korea landscape
   aspect: landscape
   desc: View on Gwangan Bridge from Dongbaek Island
 - filename: 2022-08-04_10-31-39.jpg
-  tags: architecture busan korea
+  tags: architecture busan korea landscape
   aspect: landscape
   desc: Haedong Yonggungsa Temple
 - filename: 2022-08-04_10-43-31.jpg
-  tags: busan korea
+  tags: busan korea landscape
   aspect: landscape
   desc: Chill Buddha
 - filename: 2022-08-04_10-51-18.jpg
-  tags: architecture busan korea
+  tags: architecture busan korea landscape
   aspect: landscape
   desc: Haedong
 - filename: 2022-08-04_10-53-42.jpg
-  tags: busan korea
+  tags: busan korea landscape
   aspect: landscape
   desc: Colorful Buddhas in Haedong Yonggungsa Temple
 - filename: 2022-08-04_11-07-12.jpg
@@ -711,107 +711,107 @@
   aspect: square
   desc: Haedong Yonggungsa Temple - rock
 - filename: 2022-08-06_07-01-18.jpg
-  tags: busan korea
+  tags: busan korea landscape
   aspect: landscape
   desc: View from Gamcheon Culture Village
 - filename: 2022-08-06_09-42-39.jpg
-  tags: busan korea bw
+  tags: busan korea bw landscape
   aspect: landscape
   desc: Jagalchi Market, Busan
 - filename: 2022-08-07_07-23-16.jpg
-  tags: busan korea
+  tags: busan korea landscape
   aspect: landscape
   desc: Geumjeongsanseong Fortress
 - filename: 2022-08-07_09-20-17.jpg
-  tags: busan korea
+  tags: busan korea landscape
   aspect: landscape
   desc: Bamboo on the trail from Geumjeongsanseong Fortress
 - filename: 2022-08-09_15-57-08.jpg
-  tags: busan korea
+  tags: busan korea landscape
   aspect: landscape
   desc: View on fireworks on Gwangalli Beach
 - filename: 2022-08-09_16-04-25.jpg
-  tags: busan korea
+  tags: busan korea landscape
   aspect: landscape
   desc: Gwangalli Beach
 - filename: 2022-08-12_10-21-19.jpg
-  tags: daegu korea
+  tags: daegu korea landscape
   aspect: landscape
   desc: Korean red pine trees in Donghwasa Temple
 - filename: 2022-08-12_11-04-22.jpg
-  tags: daegu korea
+  tags: daegu korea landscape
   aspect: landscape
   desc: Walk around Donghwasa Temple
 - filename: 2022-08-12_11-04-51.jpg
-  tags: daegu korea
+  tags: daegu korea landscape
   aspect: landscape
   desc: Walk around Donghwasa Temple
 - filename: 2022-08-12_11-19-11.jpg
-  tags: daegu korea
+  tags: daegu korea landscape
   aspect: landscape
   desc: Walk around Donghwasa Temple
 - filename: 2022-08-12_11-47-01.jpg
-  tags: daegu korea
+  tags: daegu korea landscape
   aspect: landscape
   desc: Thirty Metre Tall Statue of Buddha at Donghwasa Temple
 - filename: 2022-08-13_00-01-58.jpg
-  tags: architecture daegu korea
+  tags: architecture daegu korea landscape
   aspect: landscape
   desc: Donghwasa Temple
 - filename: 2022-08-13_00-03-57.jpg
-  tags: bw daegu korea
+  tags: bw daegu korea landscape
   aspect: landscape
   desc: Donghwasa Temple - prayers
 - filename: 2022-08-14_10-49-39.jpg
-  tags: busan korea
+  tags: busan korea landscape
   aspect: landscape
   desc: Dadaepo Beach
 - filename: 2022-08-14_10-55-08.jpg
-  tags: busan korea
+  tags: busan korea landscape
   aspect: landscape
   desc: Dadaepo Beach
 - filename: 2022-08-14_11-46-53.jpg
-  tags: busan korea
+  tags: busan korea landscape
   aspect: landscape
   desc: Dadaepo Beach - Morundae walk
 - filename: 2022-08-15_04-20-02.jpg
-  tags: gyeongju korea
+  tags: gyeongju korea landscape
   aspect: landscape
   desc: Among Gyeongju tombs
 - filename: 2022-08-15_06-24-30.jpg
-  tags: architecture gyeongju korea
+  tags: architecture gyeongju korea landscape
   aspect: landscape
   desc: Cheomseongdae (첨성대) observatory
 - filename: 2022-08-15_06-29-00.jpg
-  tags: architecture gyeongju korea
+  tags: architecture gyeongju korea landscape
   aspect: landscape
   desc: 첨성대 from the front
 - filename: 2022-08-18_07-41-08.jpg
-  tags: architecture korea seoul
+  tags: architecture korea seoul landscape
   aspect: landscape
   desc: Seoul - Gyeongbokgung (경복궁)
 - filename: 2022-08-18_07-53-59.jpg
-  tags: architecture bw korea seoul
+  tags: architecture bw korea seoul landscape
   aspect: landscape
   desc: 경복궁 - ballroom
 - filename: 2022-08-18_07-58-47.jpg
-  tags: architecture korea seoul
+  tags: architecture korea seoul landscape
   aspect: landscape
   desc: Inside 경복궁
 - filename: 2022-08-18_08-10-37.jpg
-  tags: architecture korea seoul
+  tags: architecture korea seoul landscape
   aspect: landscape
   desc: Korean architecture
 - filename: 2022-08-18_10-09-23.jpg
-  tags: architecture bw korea seoul
+  tags: architecture bw korea seoul landscape
   aspect: landscape
   desc: Simplistic Seoul architecture
 - filename: 2022-08-19_03-05-57.jpg
-  tags: architecture dubai uae
+  tags: architecture dubai uae landscape
   aspect: landscape
   desc: Burj Khalifa, palm tree and Moon
 - filename: 2022-08-19_03-18-44.jpg
-  tags: architecture dubai uae
+  tags: architecture dubai uae landscape
   aspect: landscape
   desc: Dubai at sunrise
 - filename: 2022-08-19_03-32-18.jpg
@@ -819,27 +819,27 @@
   aspect: portrait
   desc: Burj Khalifa - panorama
 - filename: 2022-08-19_04-47-33.jpg
-  tags: architecture dubai uae
+  tags: architecture dubai uae landscape
   aspect: landscape
   desc: Marina in Dubai
 - filename: 2022-08-19_04-50-40.jpg
-  tags: architecture dubai uae
+  tags: architecture dubai uae landscape
   aspect: landscape
   desc: Dubai architecture
 - filename: 2022-08-19_04-55-23.jpg
-  tags: architecture dubai uae
+  tags: architecture dubai uae landscape
   aspect: landscape
   desc: Tall buildings in Dubai
 - filename: 2022-11-11_12-00-35.jpg
-  tags: nature switzerland
+  tags: nature switzerland landscape
   aspect: landscape
   desc: Swiss Alps
 - filename: 2022-11-11_14-29-52.jpg
-  tags: bw switzerland
+  tags: bw switzerland landscape
   aspect: landscape
   desc: Lac supérieur de Fully
 - filename: 2022-11-11_17-19-10.jpg
-  tags: nature switzerland
+  tags: nature switzerland landscape
   aspect: landscape
   desc: Sunset at Cabane du Fenestral (2453 m AMSL)
 - filename: 2022-11-12_15-14-37.jpg
@@ -847,15 +847,15 @@
   aspect: landscape
   desc: Little Bridge near Chillon Castle
 - filename: 2022-11-13_16-16-29.jpg
-  tags: annecy architecture france
+  tags: annecy architecture france landscape
   aspect: landscape
   desc: Annecy, France
 - filename: 2022-11-14_16-09-04.jpg
-  tags: architecture switzerland
+  tags: architecture switzerland landscape
   aspect: landscape
   desc: View of Bern
 - filename: 2022-11-14_16-50-02.jpg
-  tags: architecture switzerland
+  tags: architecture switzerland landscape
   aspect: landscape
   desc: Samson Fountain, Bern
 - filename: 2023-10-13_11-37-36.jpg
@@ -1111,13 +1111,17 @@
   aspect: landscape
   desc: Bay in Taltal
 - filename: 2024-09-07_22-44-58.jpg
-  tags: landscape architecture chile santiago
+  tags: landscape architecture chile santiago portrait
   aspect: portrait
   desc: Santa Lucia Hill, Santiago 1
 - filename: 2024-09-07_22-52-57.jpg
   tags: landscape architecture chile santiago
   aspect: landscape
   desc: Santa Lucia Hill, Santiago 2
+- filename: 2024-09-07_22-59-16.jpg
+  tags: landscape architecture chile santiago
+  aspect: landscape
+  desc: View on Sky Costanera from Santa Lucia Hill, Santiago
 - filename: 2024-09-07_23-01-54.jpg
   tags: landscape nature chile santiago
   aspect: landscape
