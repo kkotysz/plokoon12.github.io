@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>Gallery</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" type="text/css" href="../assets/css/shuffle.css">
@@ -45,8 +46,11 @@
   --accent: #ffe600;
   --accent-soft: #fff3a2;
   --timeline-top-offset: 12px;
+  --timeline-fade-color: rgba(24, 24, 24, 0.94);
   --panel-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --panel-fade-ease: cubic-bezier(0.33, 1, 0.68, 1);
+  --gallery-tile-size: 195px;
+  --gallery-gutter: 3px;
 }
 
 body.gallery-page {
@@ -192,6 +196,45 @@ body.gallery-page {
   transform: translateX(-50%) scale(1);
 }
 
+.back-to-top-fab {
+  position: fixed;
+  right: max(12px, calc(10px + env(safe-area-inset-right)));
+  bottom: max(12px, calc(12px + env(safe-area-inset-bottom)));
+  z-index: 160;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: linear-gradient(165deg, rgba(255, 230, 0, 0.95), rgba(255, 230, 0, 0.78));
+  color: #111;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.34);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(10px) scale(0.94);
+  transition: opacity 180ms ease, transform 180ms ease, box-shadow 140ms ease;
+}
+
+.back-to-top-fab:hover {
+  box-shadow: 0 0 0 2px rgba(255, 230, 0, 0.34), 0 14px 28px rgba(0, 0, 0, 0.38);
+}
+
+.back-to-top-fab:active {
+  transform: translateY(2px) scale(0.96);
+}
+
+.back-to-top-fab.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
 .filter-panel {
   position: sticky;
   top: 12px;
@@ -220,7 +263,7 @@ body.gallery-page {
 
 .filter-toolbar {
   display: grid;
-  grid-template-columns: minmax(220px, 1fr) minmax(170px, 220px) auto;
+  grid-template-columns: minmax(220px, 1fr) minmax(320px, 1.35fr);
   gap: 0.6rem;
   align-items: center;
 }
@@ -247,10 +290,16 @@ body.gallery-page {
 }
 
 .sort-control {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(98px, 148px);
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.24rem;
   text-align: left;
+  min-width: 0;
+}
+
+.sort-control.is-timeline-active {
+  grid-template-columns: auto minmax(98px, 148px) minmax(0, 1fr);
 }
 
 .sort-label {
@@ -265,15 +314,17 @@ body.gallery-page {
 }
 
 .sort-select {
-  flex: 1;
+  width: 100%;
+  min-width: 0;
+  max-width: 148px;
   min-height: 40px;
-  padding: 0.5rem 0.75rem;
+  padding: 0.42rem 0.56rem;
   border: 1px solid var(--line-soft);
   border-radius: 10px;
   background: rgba(10, 10, 10, 0.7);
   color: var(--ink);
   font-family: inherit;
-  font-size: 0.86rem;
+  font-size: 0.76rem;
   cursor: pointer;
 }
 
@@ -283,20 +334,29 @@ body.gallery-page {
   box-shadow: 0 0 0 3px rgba(255, 230, 0, 0.2);
 }
 
-.clear-button {
-  min-height: 40px;
-  padding: 0.45rem 0.85rem;
-  border-radius: 999px;
-  border: 1px solid var(--line-soft);
-  background: rgba(10, 10, 10, 0.7);
-  color: var(--ink);
-  font-family: inherit;
-  font-weight: 600;
-  cursor: pointer;
-}
+@media (min-width: 641px) {
+  .sort-control:not(.is-timeline-active) {
+    grid-template-columns: auto auto;
+    justify-content: start;
+    justify-items: start;
+  }
 
-.clear-button:hover {
-  border-color: var(--accent);
+  .sort-control:not(.is-timeline-active) .sort-select {
+    width: auto;
+    min-width: 98px;
+    max-width: 148px;
+  }
+
+  .sort-control.is-timeline-active {
+    grid-template-columns: auto auto minmax(0, 1fr);
+  }
+
+  .sort-control.is-timeline-active .sort-select {
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    justify-self: start;
+  }
 }
 
 .filter-row {
@@ -398,10 +458,7 @@ body.gallery-page {
 
 #category-tags .button:hover,
 #category-tags .button:active,
-#category-tags .button.is-checked,
-#filters .filter-group:first-child .button:hover,
-#filters .filter-group:first-child .button:active,
-#filters .filter-group:first-child .button.is-checked {
+#category-tags .button.is-checked {
   color: #111;
   text-shadow: none;
   background: linear-gradient(165deg, rgba(255, 230, 0, 0.95), rgba(255, 230, 0, 0.82));
@@ -422,6 +479,26 @@ body.gallery-page {
   color: #f8fbff;
   border-color: var(--accent);
   box-shadow: 0 0 0 2px rgba(255, 230, 0, 0.68), 0 0 10px rgba(255, 230, 0, 0.5);
+}
+
+#country-tags .button[data-filter="*"] {
+  width: auto;
+  min-width: 4.3em;
+  padding-left: 0.66rem;
+  padding-right: 0.66rem;
+  background-image: none;
+  background-color: rgba(10, 10, 10, 0.7);
+  color: var(--ink);
+  text-shadow: none;
+}
+
+#country-tags .button[data-filter="*"]:hover,
+#country-tags .button[data-filter="*"]:active,
+#country-tags .button[data-filter="*"].is-checked {
+  color: #111;
+  text-shadow: none;
+  background: linear-gradient(165deg, rgba(255, 230, 0, 0.95), rgba(255, 230, 0, 0.82));
+  box-shadow: 0 0 0 2px rgba(255, 230, 0, 0.34);
 }
 
 #country-tags .button[data-filter=".chile"] {
@@ -484,10 +561,12 @@ body.gallery-page {
 }
 
 .gallery-content.is-sort-active {
-  grid-template-columns: minmax(0, 1fr) clamp(98px, 20vw, 160px);
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .grid-wrap {
+  position: relative;
+  z-index: 1;
   border-radius: 16px;
   padding: 10px;
   border: 1px solid var(--line);
@@ -496,14 +575,12 @@ body.gallery-page {
 }
 
 .timeline-panel {
-  position: sticky;
-  top: var(--timeline-top-offset);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--bg-panel);
-  box-shadow: 0 18px 30px rgba(5, 11, 21, 0.35);
-  backdrop-filter: blur(9px);
-  padding: 0.68rem;
+  grid-column: 3;
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  --timeline-fade-size: 18px;
+  padding: 0;
   text-align: left;
 }
 
@@ -511,21 +588,59 @@ body.gallery-page {
   display: none;
 }
 
+.timeline-panel::before,
+.timeline-panel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--timeline-fade-size);
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.timeline-panel::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--timeline-fade-color) 0%, rgba(24, 24, 24, 0) 100%);
+}
+
+.timeline-panel::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--timeline-fade-color) 0%, rgba(24, 24, 24, 0) 100%);
+}
+
+.timeline-panel.is-scrollable.can-scroll-left::before {
+  opacity: 1;
+}
+
+.timeline-panel.is-scrollable.can-scroll-right::after {
+  opacity: 1;
+}
+
 .timeline-title {
-  margin: 0 0 0.5rem;
-  color: var(--accent-soft);
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  display: none;
 }
 
 .timeline-months {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 0.32rem;
-  max-height: min(72vh, 700px);
-  overflow-y: auto;
-  padding-right: 0.18rem;
+  max-height: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding-inline: 0.08rem;
+  padding-bottom: 0.08rem;
+  -webkit-overflow-scrolling: touch;
+  --timeline-first-peek: 0px;
+  --timeline-last-peek: 0px;
+}
+
+.timeline-months::-webkit-scrollbar {
+  display: none;
 }
 
 .timeline-months.is-empty {
@@ -535,10 +650,12 @@ body.gallery-page {
 }
 
 .timeline-month {
-  width: 100%;
+  width: auto;
+  min-width: 82px;
+  flex: 0 0 auto;
   border: 1px solid var(--line-soft);
   border-radius: 10px;
-  padding: 0.4rem 0.48rem;
+  padding: 0.34rem 0.45rem;
   background: rgba(10, 10, 10, 0.58);
   color: var(--ink);
   display: flex;
@@ -549,8 +666,30 @@ body.gallery-page {
   transition: border-color 140ms ease, transform 100ms ease, box-shadow 140ms ease;
 }
 
+.timeline-month:first-child {
+  margin-left: 0;
+}
+
+.timeline-month:last-child {
+  margin-right: 0;
+}
+
+.timeline-panel.is-scrollable.can-scroll-left .timeline-month:first-child {
+  margin-left: calc(-1 * var(--timeline-first-peek));
+}
+
+.timeline-panel.is-scrollable.can-scroll-right .timeline-month:last-child {
+  margin-right: calc(-1 * var(--timeline-last-peek));
+}
+
 .timeline-month:hover {
   border-color: var(--accent);
+}
+
+@media (hover: none) {
+  .timeline-month:hover {
+    border-color: var(--line-soft);
+  }
 }
 
 .timeline-month:active {
@@ -563,7 +702,7 @@ body.gallery-page {
 }
 
 .timeline-label {
-  font-size: 0.8rem;
+  font-size: 0.74rem;
   letter-spacing: 0.02em;
 }
 
@@ -573,7 +712,7 @@ body.gallery-page {
   border-radius: 999px;
   background: rgba(255, 230, 0, 0.16);
   color: var(--accent-soft);
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   text-align: center;
 }
 
@@ -592,17 +731,25 @@ body.gallery-page {
   transition: transform 280ms ease, filter 280ms ease;
 }
 
+.grid-item.grid-item--w2,
+img.grid-item--w2 {
+  width: var(--gallery-tile-size);
+}
+
+.grid-item.grid-item--h2,
+img.grid-item--h2 {
+  height: var(--gallery-tile-size);
+}
+
+.grid-item.grid-item--hportrait,
+img.grid-item--hportrait {
+  height: calc(var(--gallery-tile-size) * 1.5);
+}
+
 /* Panoramas are capped to 2 columns to avoid breaking masonry flow. */
 .grid-item.grid-item--wpano,
 img.grid-item--wpano {
-  width: 393px;
-}
-
-@media (max-width: 1080px) {
-  .grid-item.grid-item--wpano,
-  img.grid-item--wpano {
-    width: 195px;
-  }
+  width: calc((var(--gallery-tile-size) * 2) + var(--gallery-gutter));
 }
 
 .item:hover .grid-item img {
@@ -811,26 +958,94 @@ img.grid-item--wpano {
   }
 
   .filter-toolbar {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "search sort"
+      "timeline timeline";
+    column-gap: 0.38rem;
+    row-gap: 0.32rem;
+    align-items: center;
+  }
+
+  .filter-input {
+    grid-area: search;
+    min-width: 0;
   }
 
   .sort-control {
-    display: grid;
-    gap: 0.2rem;
-    text-align: center;
+    display: contents;
+  }
+
+  .sort-label {
+    display: none;
   }
 
   .sort-select {
+    grid-area: sort;
+    justify-self: end;
+    max-width: 82px;
+    min-width: 72px;
+    min-height: 36px;
+    padding: 0.28rem 0.36rem;
+    border-radius: 8px;
+    font-size: 0.68rem;
+  }
+
+  .timeline-panel {
+    grid-area: timeline;
+    width: 100%;
+    min-width: 0;
+    --timeline-fade-size: 12px;
+  }
+
+  .filter-group--countries {
     width: 100%;
   }
 
-  .clear-button {
-    width: 100%;
+  .button-group {
+    display: grid;
+  }
+
+  .filter-group--categories {
+    display: none;
+  }
+
+  .filter-hint {
+    display: none;
   }
 
   #filters .button {
     min-height: 36px;
     font-size: 0.72rem;
+  }
+
+  .timeline-months {
+    gap: 0.24rem;
+  }
+
+  .timeline-month {
+    min-width: 54px;
+    padding: 0.28rem 0.3rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.1rem;
+  }
+
+  .timeline-label {
+    font-size: 0.63rem;
+    line-height: 1.02;
+    letter-spacing: 0.05em;
+  }
+
+  .timeline-count {
+    min-width: 0;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.58rem;
+    line-height: 1;
   }
 
   .page-header {
@@ -845,8 +1060,10 @@ img.grid-item--wpano {
     font-size: 0.87rem;
   }
 
-  .gallery-content.is-sort-active {
-    grid-template-columns: minmax(0, 1fr) 104px;
+  .back-to-top-fab {
+    width: 50px;
+    height: 50px;
+    font-size: 1.06rem;
   }
 }
 
@@ -880,24 +1097,24 @@ img.grid-item--wpano {
         <label class="sort-label" for="gallery-sort">Sort</label>
         <select id="gallery-sort" class="sort-select">
           <option value="random" selected>Random</option>
-          <option value="date-desc">Date: newest first</option>
-          <option value="date-asc">Date: oldest first</option>
+          <option value="date-desc">Newest</option>
+          <option value="date-asc">Oldest</option>
         </select>
+        <aside class="timeline-panel is-hidden" aria-label="Timeline navigation">
+          <h2 class="timeline-title">Month / Year</h2>
+          <div id="timeline-months" class="timeline-months" role="navigation" aria-label="Jump to month"></div>
+        </aside>
       </div>
-      <button id="clear-filters" class="clear-button" type="button">Clear Filters</button>
     </div>
     <div class="filter-row">
       <span id="filter-meta" class="filter-meta"></span>
       <span class="filter-hint">Try <code>#astrophoto</code> or any phrase from description.</span>
     </div>
     <div id="filters" class="button-group">
-      <div class="filter-group">
-        <button class="button is-checked" data-filter="*">#all</button>
-      </div>
-      <div class="filter-group">
+      <div class="filter-group filter-group--countries">
         <span id="country-tags"></span>
       </div>
-      <div class="filter-group">
+      <div class="filter-group filter-group--categories">
         <span id="category-tags"></span>
       </div>
     </div>
@@ -957,15 +1174,14 @@ img.grid-item--wpano {
         {% endfor %}
       </div>
     </div>
-    <aside class="timeline-panel is-hidden" aria-label="Timeline navigation">
-      <h2 class="timeline-title">Month / Year</h2>
-      <div id="timeline-months" class="timeline-months" role="navigation" aria-label="Jump to month"></div>
-    </aside>
   </div>
 </main>
 
+<button id="scroll-top-fab" class="back-to-top-fab" type="button" aria-label="Powrot na gore strony">
+  <i class="fa-solid fa-arrow-up"></i>
+</button>
 
-<script src="../assets/js/shuffle.js?v=20260309-fill2"></script>
+<script src="../assets/js/shuffle.js?v=20260310-timeline-center-peek"></script>
 
 
 </body>

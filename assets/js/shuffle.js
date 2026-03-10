@@ -3,6 +3,76 @@
 var $gridElement = $('.grid');
 prepareDateMetadata($gridElement.find('.item'));
 var ZOOM_STEP = 0.2;
+var DESKTOP_TILE_SIZE = 195;
+var MOBILE_LAYOUT_BREAKPOINT = 640;
+var GRID_GUTTER = 3;
+var $grid = null;
+
+function getViewportWidth() {
+  return window.innerWidth || document.documentElement.clientWidth || 0;
+}
+
+function isMobileLayout() {
+  return getViewportWidth() <= MOBILE_LAYOUT_BREAKPOINT;
+}
+
+function getGridContainerWidth() {
+  var $gridWrap = $gridElement.closest('.grid-wrap');
+  if ($gridWrap.length) {
+    var wrapContentWidth = Math.floor($gridWrap.width());
+    if (wrapContentWidth > 0) {
+      return wrapContentWidth;
+    }
+  }
+
+  var $galleryContent = $gridElement.closest('.gallery-content');
+  if ($galleryContent.length) {
+    var galleryWidth = Math.floor($galleryContent.width());
+    if (galleryWidth > 0) {
+      return galleryWidth;
+    }
+  }
+
+  if ($gridElement.length) {
+    var gridWidth = Math.floor($gridElement.width());
+    if (gridWidth > 0) {
+      return gridWidth;
+    }
+  }
+
+  return getViewportWidth();
+}
+
+function getResponsiveTileSize() {
+  if (getViewportWidth() > MOBILE_LAYOUT_BREAKPOINT) {
+    return DESKTOP_TILE_SIZE;
+  }
+
+  var containerWidth = getGridContainerWidth();
+  var tileSize = Math.floor((containerWidth - GRID_GUTTER) / 2);
+  return Math.max(120, Math.min(DESKTOP_TILE_SIZE, tileSize));
+}
+
+function applyResponsiveGridSize(shouldRelayout) {
+  var tileSize = getResponsiveTileSize();
+  document.documentElement.style.setProperty('--gallery-tile-size', tileSize + 'px');
+
+  if (!$grid || !$grid.data('isotope')) {
+    return;
+  }
+
+  $grid.isotope('option', {
+    masonry: {
+      columnWidth: tileSize,
+      isFitWidth: true,
+      gutter: GRID_GUTTER
+    }
+  });
+
+  if (shouldRelayout) {
+    $grid.isotope('layout');
+  }
+}
 
 var plugin = lightGallery(document.getElementById('lightgallery'), {
   plugins: [lgZoom],
@@ -23,15 +93,18 @@ var plugin = lightGallery(document.getElementById('lightgallery'), {
   scale: ZOOM_STEP
 });
 
+var initialTileSize = getResponsiveTileSize();
+document.documentElement.style.setProperty('--gallery-tile-size', initialTileSize + 'px');
+
 // init Isotope
-var $grid = $gridElement.isotope({
+$grid = $gridElement.isotope({
   itemSelector: '.item',
   // layoutMode: '',
   // isfitWidth: true,
   masonry: {
-    columnWidth: 195,
+    columnWidth: initialTileSize,
     isFitWidth: true,
-    gutter: 3,
+    gutter: GRID_GUTTER,
     // horizontalOrder: true,
     },
   getSortData: {
@@ -57,11 +130,12 @@ var currentFilter = '*';
 var currentQuery = '';
 var $meta = $('#filter-meta');
 var $searchInput = $('#gallery-search');
-var $clearButton = $('#clear-filters');
+var $scrollTopFab = $('#scroll-top-fab');
 var $suggestions = $('#gallery-search-suggestions');
 var $countryTags = $('#country-tags');
 var $categoryTags = $('#category-tags');
 var $sortSelect = $('#gallery-sort');
+var $sortControl = $('.sort-control');
 var $timelineMonths = $('#timeline-months');
 var $galleryContent = $('.gallery-content');
 var $timelinePanel = $('.timeline-panel');
@@ -84,6 +158,7 @@ try {
 } catch (error) {
   monthLabelFormatter = null;
 }
+var ROMAN_MONTHS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
 
 var COUNTRY_TAGS = [
   'chile', 'france', 'greece', 'ireland', 'italy', 'korea',
@@ -150,6 +225,13 @@ var fillModeSyncBound = false;
 
 function isFiniteNumber(value) {
   return typeof value === 'number' && isFinite(value);
+}
+
+function canUseHoverState() {
+  if (!window.matchMedia) {
+    return false;
+  }
+  return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 }
 
 function firstValue(value) {
@@ -222,7 +304,17 @@ function formatMonthLabel(monthKey) {
   if (!match) {
     return monthKey;
   }
-  var parsedDate = new Date(Number(match[1]), Number(match[2]) - 1, 1);
+  var year = Number(match[1]);
+  var monthIndex = Number(match[2]) - 1;
+  if (monthIndex < 0 || monthIndex > 11) {
+    return monthKey;
+  }
+
+  if (isMobileLayout()) {
+    return ROMAN_MONTHS[monthIndex] + ' ' + pad2(year % 100);
+  }
+
+  var parsedDate = new Date(year, monthIndex, 1);
   if (monthLabelFormatter) {
     return monthLabelFormatter.format(parsedDate);
   }
@@ -1106,9 +1198,34 @@ function reseedRandomRanks() {
   $grid.isotope('updateSortData', $items);
 }
 
+function relayoutGridAfterSortUiToggle() {
+  if (!$grid || !$grid.data('isotope')) {
+    return;
+  }
+
+  var relayout = function() {
+    applyResponsiveGridSize(false);
+    $grid.isotope('layout');
+    updateTimelineScrollCues();
+  };
+
+  if (window.requestAnimationFrame) {
+    window.requestAnimationFrame(function() {
+      relayout();
+      // A second pass catches width changes after CSS grid columns settle.
+      setTimeout(relayout, 80);
+    });
+    return;
+  }
+
+  setTimeout(relayout, 16);
+  setTimeout(relayout, 96);
+}
+
 function updateSortUI() {
   updateTimelineTopOffset();
   var showTimeline = isDateSortActive();
+  $sortControl.toggleClass('is-timeline-active', showTimeline);
   $galleryContent.toggleClass('is-sort-active', showTimeline);
   $timelinePanel.toggleClass('is-hidden', !showTimeline);
 
@@ -1118,11 +1235,19 @@ function updateSortUI() {
     monthTargets = {};
     timelineMonthSequence = [];
     $timelineMonths.empty().removeClass('is-empty');
+    $timelinePanel.removeClass('is-scrollable can-scroll-left can-scroll-right');
   }
+
+  updateTimelineScrollCues();
+  relayoutGridAfterSortUiToggle();
 }
 
 function updateTimelineTopOffset() {
-  if (!$timelinePanel.length || !$filterPanel.length) {
+  if (!$timelinePanel.length) {
+    return;
+  }
+
+  if (!$filterPanel.length) {
     return;
   }
 
@@ -1139,8 +1264,16 @@ function updateTimelineTopOffset() {
   document.documentElement.style.setProperty('--timeline-top-offset', Math.round(offset) + 'px');
 }
 
+function updateScrollTopFabVisibility() {
+  if (!$scrollTopFab.length) {
+    return;
+  }
+  $scrollTopFab.toggleClass('is-visible', filterPanelCompact);
+}
+
 function updateFilterPanelCompactState(force) {
   if (!$filterPanel.length) {
+    updateScrollTopFabVisibility();
     return;
   }
 
@@ -1150,7 +1283,8 @@ function updateFilterPanelCompactState(force) {
 
   var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
   var shouldCompact;
-  if (filterPanelHovered) {
+  var hoverActive = filterPanelHovered && canUseHoverState();
+  if (hoverActive) {
     shouldCompact = false;
   } else if (filterPanelCompact) {
     shouldCompact = scrollY > FILTER_PANEL_COMPACT_EXIT_Y;
@@ -1166,6 +1300,7 @@ function updateFilterPanelCompactState(force) {
   filterPanelCompact = shouldCompact;
   $filterPanel.toggleClass('is-compact', shouldCompact);
   updateTimelineTopOffset();
+  updateScrollTopFabVisibility();
 
   if (changed) {
     filterPanelToggleLockUntil = Date.now() + FILTER_PANEL_TOGGLE_LOCK_MS;
@@ -1226,6 +1361,8 @@ function updateTimeline() {
     return;
   }
   if (!isDateSortActive()) {
+    updateTimelineEdgePeek();
+    updateTimelineScrollCues();
     return;
   }
 
@@ -1261,6 +1398,8 @@ function updateTimeline() {
     activeMonthKey = '';
     timelineMonthSequence = [];
     $timelineMonths.addClass('is-empty').text('No dated photos in current view');
+    updateTimelineEdgePeek();
+    updateTimelineScrollCues();
     return;
   }
 
@@ -1281,7 +1420,51 @@ function updateTimeline() {
     $timelineMonths.append($button);
   }
 
+  updateTimelineEdgePeek();
   syncActiveMonthWithViewport(true);
+  updateTimelineScrollCues();
+}
+
+function updateTimelineEdgePeek() {
+  if (!$timelineMonths.length) {
+    return;
+  }
+
+  var container = $timelineMonths.get(0);
+  if (!container) {
+    return;
+  }
+
+  var firstButton = container.querySelector('.timeline-month:first-child');
+  var lastButton = container.querySelector('.timeline-month:last-child');
+  var firstPeek = firstButton ? Math.round(firstButton.getBoundingClientRect().width / 2) : 0;
+  var lastPeek = lastButton ? Math.round(lastButton.getBoundingClientRect().width / 2) : 0;
+
+  container.style.setProperty('--timeline-first-peek', firstPeek + 'px');
+  container.style.setProperty('--timeline-last-peek', lastPeek + 'px');
+}
+
+function updateTimelineScrollCues() {
+  if (!$timelinePanel.length || !$timelineMonths.length || !isDateSortActive() || $timelinePanel.hasClass('is-hidden')) {
+    $timelinePanel.removeClass('is-scrollable can-scroll-left can-scroll-right');
+    return;
+  }
+
+  var container = $timelineMonths.get(0);
+  if (!container) {
+    $timelinePanel.removeClass('is-scrollable can-scroll-left can-scroll-right');
+    return;
+  }
+
+  var maxScrollLeft = Math.max(0, container.scrollWidth - container.clientWidth);
+  var scrollLeft = Math.max(0, container.scrollLeft);
+  var isScrollable = maxScrollLeft > 2;
+  var canScrollLeft = isScrollable && scrollLeft > 1;
+  var canScrollRight = isScrollable && scrollLeft < (maxScrollLeft - 1);
+
+  $timelinePanel.toggleClass('is-scrollable', isScrollable);
+  $timelinePanel.toggleClass('can-scroll-left', canScrollLeft);
+  $timelinePanel.toggleClass('can-scroll-right', canScrollRight);
 }
 
 function scrollToMonth(monthKey) {
@@ -1311,46 +1494,63 @@ function ensureTimelineButtonVisible($button, smooth) {
     return;
   }
 
-  var margin = 8;
   var containerRect = container.getBoundingClientRect();
   var buttonRect = button.getBoundingClientRect();
+  var maxScrollLeft = Math.max(0, container.scrollWidth - container.clientWidth);
+  var buttonCenter = (buttonRect.left - containerRect.left) + container.scrollLeft + (buttonRect.width / 2);
+  var nextLeft = buttonCenter - (container.clientWidth / 2);
+  nextLeft = Math.max(0, Math.min(maxScrollLeft, Math.round(nextLeft)));
 
-  var nextTop = container.scrollTop;
-  if (buttonRect.top < containerRect.top + margin) {
-    nextTop += buttonRect.top - (containerRect.top + margin);
-  } else if (buttonRect.bottom > containerRect.bottom - margin) {
-    nextTop += buttonRect.bottom - (containerRect.bottom - margin);
-  }
-
-  var nextLeft = container.scrollLeft;
-  if (buttonRect.left < containerRect.left + margin) {
-    nextLeft += buttonRect.left - (containerRect.left + margin);
-  } else if (buttonRect.right > containerRect.right - margin) {
-    nextLeft += buttonRect.right - (containerRect.right - margin);
-  }
-
-  nextTop = Math.max(0, Math.round(nextTop));
-  nextLeft = Math.max(0, Math.round(nextLeft));
-  if (nextTop === container.scrollTop && nextLeft === container.scrollLeft) {
+  if (nextLeft === container.scrollLeft) {
     return;
   }
 
   if (typeof container.scrollTo === 'function') {
     container.scrollTo({
-      top: nextTop,
       left: nextLeft,
       behavior: smooth ? 'smooth' : 'auto'
     });
     return;
   }
 
-  container.scrollTop = nextTop;
   container.scrollLeft = nextLeft;
 }
 
-function setTimelineActiveMonth(monthKey, smoothTimelineScroll) {
+function isTimelineButtonCentered(monthKey) {
+  if (!monthKey || !$timelineMonths.length) {
+    return true;
+  }
+
+  var container = $timelineMonths.get(0);
+  if (!container) {
+    return true;
+  }
+
+  var $button = $timelineMonths.find('.timeline-month').filter(function() {
+    return String($(this).attr('data-month') || '') === monthKey;
+  });
+  if (!$button.length) {
+    return true;
+  }
+
+  var containerRect = container.getBoundingClientRect();
+  var buttonRect = $button.get(0).getBoundingClientRect();
+  var containerCenter = container.clientWidth / 2;
+  var buttonCenter = (buttonRect.left - containerRect.left) + (buttonRect.width / 2);
+  return Math.abs(containerCenter - buttonCenter) <= 3;
+}
+
+function setTimelineActiveMonth(monthKey, options) {
   if (!monthKey || !$timelineMonths.length) {
     return;
+  }
+
+  var config = {};
+  if (typeof options === 'boolean') {
+    config.smoothTimelineScroll = options;
+    config.ensureVisible = true;
+  } else {
+    config = options || {};
   }
 
   activeMonthKey = monthKey;
@@ -1360,7 +1560,12 @@ function setTimelineActiveMonth(monthKey, smoothTimelineScroll) {
     return String($(this).attr('data-month') || '') === monthKey;
   });
   $activeButton.addClass('is-active');
-  ensureTimelineButtonVisible($activeButton, !!smoothTimelineScroll);
+
+  if (config.ensureVisible !== false) {
+    ensureTimelineButtonVisible($activeButton, !!config.smoothTimelineScroll);
+  }
+
+  updateTimelineScrollCues();
 }
 
 function getTimelineReferenceY() {
@@ -1448,11 +1653,15 @@ function syncActiveMonthWithViewport(force) {
   if (!visibleMonth) {
     return;
   }
-  if (!force && visibleMonth === activeMonthKey) {
+  if (!force && visibleMonth === activeMonthKey && isTimelineButtonCentered(visibleMonth)) {
     return;
   }
 
-  setTimelineActiveMonth(visibleMonth, false);
+  var shouldSmoothTimelineScroll = !force && !isMobileLayout();
+  setTimelineActiveMonth(visibleMonth, {
+    smoothTimelineScroll: shouldSmoothTimelineScroll,
+    ensureVisible: true
+  });
 }
 
 function clearMonthPreview() {
@@ -1525,8 +1734,19 @@ function getAllTags() {
   return tagCounts;
 }
 
-function renderButtonGroup($container, tags, tagCounts, labelMap) {
+function renderButtonGroup($container, tags, tagCounts, labelMap, options) {
+  var config = options || {};
   $container.empty();
+  if (config.includeAll) {
+    var $allButton = $('<button>', {
+      'class': 'button' + (currentFilter === '*' ? ' is-checked' : ''),
+      'data-filter': '*',
+      text: '#all',
+      title: '#all'
+    });
+    $container.append($allButton);
+  }
+
   for (var i = 0; i < tags.length; i++) {
     var tag = tags[i];
     if (!tagCounts[tag]) {
@@ -1544,7 +1764,7 @@ function renderButtonGroup($container, tags, tagCounts, labelMap) {
 }
 
 function buildPresetButtons(tagCounts) {
-  renderButtonGroup($countryTags, COUNTRY_TAGS, tagCounts, COUNTRY_CODES);
+  renderButtonGroup($countryTags, COUNTRY_TAGS, tagCounts, COUNTRY_CODES, { includeAll: true });
   renderButtonGroup($categoryTags, CATEGORY_TAGS, tagCounts);
 }
 
@@ -1593,22 +1813,46 @@ function debounce(fn, delay) {
 
 var debouncedTimelineOffsetUpdate = debounce(function() {
   updateFilterPanelCompactState(true);
+  applyResponsiveGridSize(false);
   $grid.isotope('layout');
+  updateTimelineEdgePeek();
+  if (isDateSortActive()) {
+    updateTimeline();
+  } else {
+    updateTimelineScrollCues();
+  }
   syncActiveMonthWithViewport(true);
+  updateTimelineScrollCues();
 }, 120);
 $(window).on('resize', debouncedTimelineOffsetUpdate);
 $(window).on('load', function() {
+  applyResponsiveGridSize(true);
   updateFilterPanelCompactState(true);
+  updateTimelineEdgePeek();
   syncActiveMonthWithViewport(true);
+  updateTimelineScrollCues();
 });
 if ($filterPanel.length) {
   $filterPanel.on('mouseenter', function() {
+    if (!canUseHoverState()) {
+      return;
+    }
     filterPanelHovered = true;
     updateFilterPanelCompactState(true);
   });
   $filterPanel.on('mouseleave', function() {
+    if (!canUseHoverState()) {
+      return;
+    }
     filterPanelHovered = false;
     updateFilterPanelCompactState(true);
+  });
+  $filterPanel.on('touchstart pointerdown', function() {
+    // Touch interactions should never keep the panel pinned open.
+    if (canUseHoverState()) {
+      return;
+    }
+    filterPanelHovered = false;
   });
 }
 var filterPanelScrollScheduled = false;
@@ -1636,6 +1880,7 @@ $grid.on('arrangeComplete', function() {
   updateMeta();
   updateTimeline();
   syncActiveMonthWithViewport(true);
+  updateTimelineScrollCues();
 });
 
 $('#filters').on('click', 'button', function() {
@@ -1644,9 +1889,7 @@ $('#filters').on('click', 'button', function() {
   $('#filters').find('.is-checked').removeClass('is-checked');
   $(this).addClass('is-checked');
   if (nextFilter === '*') {
-    resetSortToRandom();
-    updateSortUI();
-    applyFilters(true);
+    applyFilters(false);
     return;
   }
   applyFilters(false);
@@ -1684,15 +1927,11 @@ $searchInput.on('keydown', function(event) {
   }
 });
 
-$clearButton.on('click', function() {
-  $searchInput.val('');
-  currentQuery = '';
-  currentFilter = '*';
-  resetSortToRandom();
-  updateSortUI();
-  $('#filters').find('.is-checked').removeClass('is-checked');
-  $('#filters').find('button[data-filter="*"]').addClass('is-checked');
-  applyFilters(true);
+$scrollTopFab.on('click', function() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
 });
 
 $timelineMonths.on('click', '.timeline-month', function() {
@@ -1700,22 +1939,38 @@ $timelineMonths.on('click', '.timeline-month', function() {
   if (!monthKey || !monthTargets[monthKey]) {
     return;
   }
-  setTimelineActiveMonth(monthKey, true);
+  setTimelineActiveMonth(monthKey, {
+    smoothTimelineScroll: false,
+    ensureVisible: false
+  });
+  clearMonthPreview();
   scrollToMonth(monthKey);
 });
 
 $timelineMonths.on('mouseenter focusin', '.timeline-month', function() {
+  if (!canUseHoverState()) {
+    return;
+  }
   var monthKey = String($(this).attr('data-month') || '');
   previewMonth(monthKey);
 });
 
 $timelineMonths.on('mouseleave focusout', '.timeline-month', function() {
+  if (!canUseHoverState()) {
+    return;
+  }
   clearMonthPreview();
 });
 
 $timelineMonths.on('mouseleave', function() {
+  if (!canUseHoverState()) {
+    return;
+  }
   clearMonthPreview();
 });
+
+var debouncedTimelineCueUpdate = debounce(updateTimelineScrollCues, 40);
+$timelineMonths.on('scroll', debouncedTimelineCueUpdate);
 
 var tagCounts = getAllTags();
 buildPresetButtons(tagCounts);
