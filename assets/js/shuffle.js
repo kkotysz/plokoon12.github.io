@@ -86,7 +86,7 @@
     country: "*",
     category: "*",
     sort: "random",
-    theme: "aurora",
+    theme: "classic",
     exifVisible: true
   };
 
@@ -105,6 +105,10 @@
   var lastScrollY = 0;
   var deckToggleLockUntil = 0;
   var DECK_TOGGLE_LOCK_MS = 260;
+  var secretThemeCombo = {
+    lastKey: "",
+    lastAt: 0
+  };
 
   var $body = $(document.body);
   var $controlDeck = $(".control-deck");
@@ -203,8 +207,8 @@
   }
 
   function normalizeTheme(value) {
-    var valid = ["aurora", "classic"];
-    return valid.indexOf(value) >= 0 ? value : "aurora";
+    var valid = ["aurora", "classic", "midnight", "ember", "jade", "rainbow"];
+    return valid.indexOf(value) >= 0 ? value : "classic";
   }
 
   function isKnownCountry(value) {
@@ -284,7 +288,7 @@
     if (state.sort !== "random") {
       params.set("sort", state.sort);
     }
-    if (state.theme !== "aurora") {
+    if (state.theme !== "classic") {
       params.set("theme", state.theme);
     }
     if (!state.exifVisible) {
@@ -551,6 +555,10 @@
     });
 
     $select.find("option").each(function() {
+      var isSecretOption = this.hasAttribute("data-secret-option");
+      if (isSecretOption) {
+        return;
+      }
       var optionValue = String(this.value || "");
       var optionLabel = String($(this).text() || "").trim();
       var isSelected = this.selected;
@@ -2275,7 +2283,7 @@
     });
 
     $themeSelect.on("change", function() {
-      setTheme(String($(this).val() || "aurora"));
+      setTheme(String($(this).val() || "classic"));
     });
 
     $countryTags.on("click", ".chip", function() {
@@ -2441,20 +2449,38 @@
         return;
       }
 
-      if (key.toLowerCase() === "r") {
+      var noModifierKeys = !event.metaKey && !event.ctrlKey && !event.altKey;
+      var keyLower = key.toLowerCase();
+
+      if (noModifierKeys && (keyLower === "n" || keyLower === "p")) {
+        var now = Date.now();
+        var comboWithinWindow = (now - secretThemeCombo.lastAt) <= 1100;
+        var oppositeKey = keyLower === "n" ? "p" : "n";
+        if (comboWithinWindow && secretThemeCombo.lastKey === oppositeKey) {
+          event.preventDefault();
+          setTheme("rainbow");
+          secretThemeCombo.lastKey = "";
+          secretThemeCombo.lastAt = 0;
+          return;
+        }
+        secretThemeCombo.lastKey = keyLower;
+        secretThemeCombo.lastAt = now;
+      }
+
+      if (keyLower === "r" && !event.shiftKey && noModifierKeys) {
         state.sort = "random";
         $sortSelect.val("random");
         syncCustomSelectFromNative($sortSelect);
         applyFilters({ reshuffleRandom: true });
       }
 
-      if (key.toLowerCase() === "f") {
+      if (keyLower === "f") {
         if (isLightboxOpen()) {
           toggleFullscreen();
         }
       }
 
-      if (key.toLowerCase() === "x") {
+      if (keyLower === "x") {
         toggleExifVisibility();
       }
     });
@@ -2472,7 +2498,7 @@
 
     prepareItems();
 
-    state.theme = "aurora";
+    state.theme = "classic";
     var storedExifVisible = readStorageJson(STORAGE.exifVisible, true);
     state.exifVisible = storedExifVisible !== false;
 

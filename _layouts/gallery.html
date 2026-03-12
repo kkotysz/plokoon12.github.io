@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-thumbnail.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-  <link rel="stylesheet" href="/assets/css/shuffle.css?v=20260312-mobile-random-hide-panel-v2">
+  <link rel="stylesheet" href="/assets/css/shuffle.css?v=20260312-dropdown-trigger-border-fix-v25">
 
   <link rel="shortcut icon" type="image/png" href="/favicon.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -29,7 +29,7 @@
 
   {% include /analytics-providers/google-gtag.html %}
 </head>
-<body class="gallery-page" data-theme="aurora">
+<body class="gallery-page" data-theme="classic">
   <div class="ambient ambient--left" aria-hidden="true"></div>
   <div class="ambient ambient--right" aria-hidden="true"></div>
   <div class="ambient-grid" aria-hidden="true"></div>
@@ -57,8 +57,12 @@
         <label class="select-wrap" for="gallery-theme">
           <span>Theme</span>
           <select id="gallery-theme" class="deck-select">
-            <option value="aurora" selected>Aurora</option>
-            <option value="classic">Classic</option>
+            <option value="aurora">Aurora</option>
+            <option value="classic" selected>Classic</option>
+            <option value="midnight">Midnight</option>
+            <option value="ember">Ember</option>
+            <option value="jade">Jade</option>
+            <option value="rainbow" data-secret-option hidden>Rainbow</option>
           </select>
         </label>
       </div>
@@ -196,6 +200,6 @@
     </div>
   </dialog>
 
-  <script src="/assets/js/shuffle.js?v=20260312-random-forces-no-timeline-v1"></script>
+  <script src="/assets/js/shuffle.js?v=20260312-secret-theme-hidden-v9"></script>
 </body>
 </html>
