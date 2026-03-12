@@ -1,1188 +1,201 @@
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<title>Gallery</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" type="text/css" href="../assets/css/shuffle.css">
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-zoom.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-<link rel="shortcut icon" type="image/png" href="/favicon.png">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-
-<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
-<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
-<!-- lightGallery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"
-        integrity="sha512-dSI4QnNeaXiNEjX2N8bkb16B7aMu/8SI5/rE6NIa3Hr/HnWUO+EAZpizN2JQJrXuvU7z0HTgpBVk/sfGd0oW+w=="
-        crossorigin="anonymous" 
-        referrerpolicy="no-referrer">
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/plugins/zoom/lg-zoom.min.js" 
-        integrity="sha512-BfC/MaayF9sOZyn1bs1R1P8dEugU7v0j5Qu2FeWVfF/rhKUKZBD9kgNqRNinefIp9zAE7g2KhlwwhMpl5V1jMA=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer">
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/plugins/thumbnail/lg-thumbnail.min.js"
-        integrity="sha512-Jx+orEb1KJtJ6Ajfshhr7is0zqgUC7H9ylk76KMtB9Ea2WAf/Muyzpe9zvBAYQQQKdAbj+rNYEorsRQLsmRafA=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer">
-</script>
-
-
-
-<style>
-:root {
-  --bg-base: #1e1e1e;
-  --bg-soft: #121212;
-  --bg-panel: rgba(24, 24, 24, 0.9);
-  --line: rgba(255, 230, 0, 0.45);
-  --line-soft: rgba(255, 230, 0, 0.24);
-  --ink: #f2f2f2;
-  --muted: #bbbbbb;
-  --accent: #ffe600;
-  --accent-soft: #fff3a2;
-  --timeline-top-offset: 12px;
-  --timeline-fade-color: rgba(24, 24, 24, 0.94);
-  --panel-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --panel-fade-ease: cubic-bezier(0.33, 1, 0.68, 1);
-  --gallery-tile-size: 195px;
-  --gallery-gutter: 3px;
-}
-
-body.gallery-page {
-  margin: 0;
-  min-height: 100vh;
-  color: var(--ink);
-  font-family: "Space Grotesk", sans-serif;
-  text-align: center;
-  background:
-    radial-gradient(circle at 18% 0%, rgba(255, 230, 0, 0.09), transparent 42%),
-    radial-gradient(circle at 88% 18%, rgba(255, 230, 0, 0.06), transparent 38%),
-    linear-gradient(180deg, #1e1e1e 0%, #181818 42%, #101010 100%);
-  padding: 20px 14px 36px;
-}
-
-.gallery-shell {
-  max-width: 1320px;
-  margin: 0 auto;
-  overflow: visible;
-}
-
-.page-header {
-  position: relative;
-  margin: 0 auto 1rem;
-  max-width: 980px;
-  padding: 1.1rem 1rem 1rem;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background:
-    radial-gradient(circle at 82% 14%, rgba(255, 230, 0, 0.12), transparent 35%),
-    linear-gradient(160deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.22));
-  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.34);
-}
-
-.page-title {
-  margin: 0;
-  font-family: "Merriweather", serif;
-  font-size: clamp(1.55rem, 2.7vw, 2.35rem);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  line-height: 1.05;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
-}
-
-.page-subtitle {
-  margin: 0.55rem auto 0;
-  max-width: 700px;
-  color: var(--muted);
-  font-size: 0.95rem;
-  letter-spacing: 0.01em;
-}
-
-.page-kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.38rem;
-  margin-bottom: 0.42rem;
-  padding: 0.26rem 0.62rem;
-  border-radius: 999px;
-  border: 1px solid var(--line-soft);
-  background: rgba(0, 0, 0, 0.28);
-  color: var(--accent-soft);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.page-kicker::before {
-  content: "";
-  width: 0.42rem;
-  height: 0.42rem;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 10px rgba(255, 230, 0, 0.65);
-}
-
-.top-actions {
-  position: relative;
-  z-index: 120;
-  overflow: visible;
-  margin: 0 auto 1rem;
-  display: flex;
-  justify-content: center;
-  gap: 0.55rem;
-  flex-wrap: wrap;
-}
-
-.nav-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.42rem;
-  min-height: 40px;
-  padding: 0.42rem 0.9rem;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  color: var(--ink);
-  text-decoration: none;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  background: linear-gradient(165deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.15));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  transition: border-color 140ms ease, transform 120ms ease, box-shadow 160ms ease;
-}
-
-.nav-button:hover {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(255, 230, 0, 0.3);
-}
-
-.nav-button:active {
-  transform: translateY(1px) scale(0.98);
-}
-
-.button-container {
-  position: relative;
-  display: inline-flex;
-  z-index: 125;
-  overflow: visible;
-}
-
-.expand-image {
-  position: absolute;
-  top: calc(100% + 10px);
-  bottom: auto;
-  left: 50%;
-  transform: translateX(-50%) scale(0.9);
-  opacity: 0;
-  width: 170px;
-  height: 170px;
-  max-height: min(42vh, 200px);
-  object-fit: cover;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.38);
-  transition: transform 180ms ease, opacity 180ms ease;
-  pointer-events: none;
-  z-index: 130;
-}
-
-.button-container:hover .expand-image {
-  opacity: 1;
-  transform: translateX(-50%) scale(1);
-}
-
-.back-to-top-fab {
-  position: fixed;
-  right: max(12px, calc(10px + env(safe-area-inset-right)));
-  bottom: max(12px, calc(12px + env(safe-area-inset-bottom)));
-  z-index: 160;
-  width: 46px;
-  height: 46px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: linear-gradient(165deg, rgba(255, 230, 0, 0.95), rgba(255, 230, 0, 0.78));
-  color: #111;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  cursor: pointer;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.34);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(10px) scale(0.94);
-  transition: opacity 180ms ease, transform 180ms ease, box-shadow 140ms ease;
-}
-
-.back-to-top-fab:hover {
-  box-shadow: 0 0 0 2px rgba(255, 230, 0, 0.34), 0 14px 28px rgba(0, 0, 0, 0.38);
-}
-
-.back-to-top-fab:active {
-  transform: translateY(2px) scale(0.96);
-}
-
-.back-to-top-fab.is-visible {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
-}
-
-.filter-panel {
-  position: sticky;
-  top: 12px;
-  z-index: 20;
-  margin: 0 auto 1rem;
-  padding: 0.95rem;
-  border-radius: 14px;
-  border: 1px solid var(--line);
-  background: var(--bg-panel);
-  backdrop-filter: blur(9px);
-  display: grid;
-  gap: 0.75rem;
-  box-shadow: 0 18px 30px rgba(5, 11, 21, 0.35);
-  transition:
-    padding 340ms var(--panel-ease),
-    gap 340ms var(--panel-ease),
-    box-shadow 420ms var(--panel-ease);
-}
-
-.filter-panel.is-compact {
-  gap: 0.32rem;
-  padding-top: 0.64rem;
-  padding-bottom: 0.64rem;
-  box-shadow: 0 10px 20px rgba(5, 11, 21, 0.3);
-}
-
-.filter-toolbar {
-  display: grid;
-  grid-template-columns: minmax(220px, 1fr) minmax(320px, 1.35fr);
-  gap: 0.6rem;
-  align-items: center;
-}
-
-.filter-input {
-  min-height: 40px;
-  padding: 0.52rem 0.8rem;
-  border: 1px solid var(--line-soft);
-  border-radius: 10px;
-  background: rgba(10, 10, 10, 0.7);
-  color: var(--ink);
-  font-family: inherit;
-  font-size: 0.93rem;
-}
-
-.filter-input::placeholder {
-  color: #9c9c9c;
-}
-
-.filter-input:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(255, 230, 0, 0.2);
-}
-
-.sort-control {
-  display: grid;
-  grid-template-columns: auto minmax(98px, 148px);
-  align-items: center;
-  gap: 0.24rem;
-  text-align: left;
-  min-width: 0;
-}
-
-.sort-control.is-timeline-active {
-  grid-template-columns: auto minmax(98px, 148px) minmax(0, 1fr);
-}
-
-.sort-label {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.66rem;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.sort-select {
-  width: 100%;
-  min-width: 0;
-  max-width: 148px;
-  min-height: 40px;
-  padding: 0.42rem 0.56rem;
-  border: 1px solid var(--line-soft);
-  border-radius: 10px;
-  background: rgba(10, 10, 10, 0.7);
-  color: var(--ink);
-  font-family: inherit;
-  font-size: 0.76rem;
-  cursor: pointer;
-}
-
-.sort-select:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(255, 230, 0, 0.2);
-}
-
-@media (min-width: 641px) {
-  .sort-control:not(.is-timeline-active) {
-    grid-template-columns: auto auto;
-    justify-content: start;
-    justify-items: start;
-  }
-
-  .sort-control:not(.is-timeline-active) .sort-select {
-    width: auto;
-    min-width: 98px;
-    max-width: 148px;
-  }
-
-  .sort-control.is-timeline-active {
-    grid-template-columns: auto auto minmax(0, 1fr);
-  }
-
-  .sort-control.is-timeline-active .sort-select {
-    width: auto;
-    min-width: 0;
-    max-width: none;
-    justify-self: start;
-  }
-}
-
-.filter-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-  max-height: 90px;
-  opacity: 1;
-  transform: translateY(0);
-  overflow: hidden;
-  transition:
-    max-height 360ms var(--panel-ease),
-    opacity 300ms var(--panel-fade-ease),
-    transform 340ms var(--panel-ease),
-    margin 340ms var(--panel-ease);
-}
-
-.filter-meta {
-  color: #d8d8d8;
-  font-size: 0.86rem;
-  letter-spacing: 0.02em;
-}
-
-.filter-hint {
-  color: var(--muted);
-  font-size: 0.84rem;
-}
-
-.button-group {
-  display: grid;
-  gap: 0.58rem;
-  justify-items: center;
-  max-height: 420px;
-  opacity: 1;
-  transform: translateY(0);
-  overflow: hidden;
-  transition:
-    max-height 420ms var(--panel-ease),
-    opacity 300ms var(--panel-fade-ease),
-    transform 340ms var(--panel-ease),
-    margin 340ms var(--panel-ease);
-}
-
-.filter-panel.is-compact .filter-row,
-.filter-panel.is-compact .button-group {
-  max-height: 0;
-  opacity: 0;
-  transform: translateY(-6px);
-  margin: 0;
-  pointer-events: none;
-}
-
-.filter-group {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.45rem;
-}
-
-#country-tags,
-#category-tags {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.45rem;
-}
-
-#filters .button {
-  margin: 0;
-  min-height: 38px;
-  padding: 0.34rem 0.92rem;
-  border-radius: 999px;
-  border: 1px solid var(--line-soft);
-  color: var(--ink);
-  font-family: inherit;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.18));
-  cursor: pointer;
-  transition: transform 100ms ease, filter 130ms ease, border-color 130ms ease, box-shadow 130ms ease;
-}
-
-#filters .button:hover {
-  border-color: var(--accent);
-  filter: brightness(1.12);
-}
-
-#filters .button:active {
-  transform: translateY(1px) scale(0.97);
-}
-
-#filters .button.is-checked {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(255, 230, 0, 0.34);
-}
-
-#category-tags .button:hover,
-#category-tags .button:active,
-#category-tags .button.is-checked {
-  color: #111;
-  text-shadow: none;
-  background: linear-gradient(165deg, rgba(255, 230, 0, 0.95), rgba(255, 230, 0, 0.82));
-}
-
-#country-tags .button {
-  width: 4.3em;
-  padding-left: 0;
-  padding-right: 0;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  color: #f8fbff;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.72);
-}
-
-#country-tags .button.is-checked {
-  color: #f8fbff;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(255, 230, 0, 0.68), 0 0 10px rgba(255, 230, 0, 0.5);
-}
-
-#country-tags .button[data-filter="*"] {
-  width: auto;
-  min-width: 4.3em;
-  padding-left: 0.66rem;
-  padding-right: 0.66rem;
-  background-image: none;
-  background-color: rgba(10, 10, 10, 0.7);
-  color: var(--ink);
-  text-shadow: none;
-}
-
-#country-tags .button[data-filter="*"]:hover,
-#country-tags .button[data-filter="*"]:active,
-#country-tags .button[data-filter="*"].is-checked {
-  color: #111;
-  text-shadow: none;
-  background: linear-gradient(165deg, rgba(255, 230, 0, 0.95), rgba(255, 230, 0, 0.82));
-  box-shadow: 0 0 0 2px rgba(255, 230, 0, 0.34);
-}
-
-#country-tags .button[data-filter=".chile"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/cl.png");
-}
-
-#country-tags .button[data-filter=".france"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/fr.png");
-}
-
-#country-tags .button[data-filter=".greece"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/gr.png");
-}
-
-#country-tags .button[data-filter=".ireland"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/ie.png");
-}
-
-#country-tags .button[data-filter=".italy"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/it.png");
-}
-
-#country-tags .button[data-filter=".korea"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/kr.png");
-}
-
-#country-tags .button[data-filter=".malta"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/mt.png");
-}
-
-#country-tags .button[data-filter=".norway"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/no.png");
-}
-
-#country-tags .button[data-filter=".poland"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/pl.png");
-}
-
-#country-tags .button[data-filter=".spain"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/es.png");
-}
-
-#country-tags .button[data-filter=".switzerland"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/ch.png");
-}
-
-#country-tags .button[data-filter=".uae"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/ae.png");
-}
-
-#country-tags .button[data-filter=".usa"] {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("https://flagcdn.com/w160/us.png");
-}
-
-.gallery-content {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 0.7rem;
-  align-items: start;
-}
-
-.gallery-content.is-sort-active {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.grid-wrap {
-  position: relative;
-  z-index: 1;
-  border-radius: 16px;
-  padding: 10px;
-  border: 1px solid var(--line);
-  background: rgba(20, 20, 20, 0.7);
-  box-shadow: 0 22px 34px rgba(0, 0, 0, 0.5);
-}
-
-.timeline-panel {
-  grid-column: 3;
-  position: relative;
-  isolation: isolate;
-  min-width: 0;
-  --timeline-fade-size: 18px;
-  padding: 0;
-  text-align: left;
-}
-
-.timeline-panel.is-hidden {
-  display: none;
-}
-
-.timeline-panel::before,
-.timeline-panel::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: var(--timeline-fade-size);
-  z-index: 2;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 180ms ease;
-}
-
-.timeline-panel::before {
-  left: 0;
-  background: linear-gradient(90deg, var(--timeline-fade-color) 0%, rgba(24, 24, 24, 0) 100%);
-}
-
-.timeline-panel::after {
-  right: 0;
-  background: linear-gradient(270deg, var(--timeline-fade-color) 0%, rgba(24, 24, 24, 0) 100%);
-}
-
-.timeline-panel.is-scrollable.can-scroll-left::before {
-  opacity: 1;
-}
-
-.timeline-panel.is-scrollable.can-scroll-right::after {
-  opacity: 1;
-}
-
-.timeline-title {
-  display: none;
-}
-
-.timeline-months {
-  display: flex;
-  flex-direction: row;
-  gap: 0.32rem;
-  max-height: none;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  padding-inline: 0.08rem;
-  padding-bottom: 0.08rem;
-  -webkit-overflow-scrolling: touch;
-  --timeline-first-peek: 0px;
-  --timeline-last-peek: 0px;
-}
-
-.timeline-months::-webkit-scrollbar {
-  display: none;
-}
-
-.timeline-months.is-empty {
-  color: var(--muted);
-  font-size: 0.8rem;
-  line-height: 1.25;
-}
-
-.timeline-month {
-  width: auto;
-  min-width: 82px;
-  flex: 0 0 auto;
-  border: 1px solid var(--line-soft);
-  border-radius: 10px;
-  padding: 0.34rem 0.45rem;
-  background: rgba(10, 10, 10, 0.58);
-  color: var(--ink);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.35rem;
-  cursor: pointer;
-  transition: border-color 140ms ease, transform 100ms ease, box-shadow 140ms ease;
-}
-
-.timeline-month:first-child {
-  margin-left: 0;
-}
-
-.timeline-month:last-child {
-  margin-right: 0;
-}
-
-.timeline-panel.is-scrollable.can-scroll-left .timeline-month:first-child {
-  margin-left: calc(-1 * var(--timeline-first-peek));
-}
-
-.timeline-panel.is-scrollable.can-scroll-right .timeline-month:last-child {
-  margin-right: calc(-1 * var(--timeline-last-peek));
-}
-
-.timeline-month:hover {
-  border-color: var(--accent);
-}
-
-@media (hover: none) {
-  .timeline-month:hover {
-    border-color: var(--line-soft);
-  }
-}
-
-.timeline-month:active {
-  transform: translateY(1px) scale(0.99);
-}
-
-.timeline-month.is-active {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(255, 230, 0, 0.34);
-}
-
-.timeline-label {
-  font-size: 0.74rem;
-  letter-spacing: 0.02em;
-}
-
-.timeline-count {
-  min-width: 1.45rem;
-  padding: 0.1rem 0.34rem;
-  border-radius: 999px;
-  background: rgba(255, 230, 0, 0.16);
-  color: var(--accent-soft);
-  font-size: 0.64rem;
-  text-align: center;
-}
-
-.grid-item {
-  overflow: hidden;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: #1b1b1b;
-  transition: opacity 180ms ease, border-color 180ms ease, box-shadow 180ms ease, filter 180ms ease;
-}
-
-.grid-item img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  transition: transform 280ms ease, filter 280ms ease;
-}
-
-.grid-item.grid-item--w2,
-img.grid-item--w2 {
-  width: var(--gallery-tile-size);
-}
-
-.grid-item.grid-item--h2,
-img.grid-item--h2 {
-  height: var(--gallery-tile-size);
-}
-
-.grid-item.grid-item--hportrait,
-img.grid-item--hportrait {
-  height: calc(var(--gallery-tile-size) * 1.5);
-}
-
-/* Panoramas are capped to 2 columns to avoid breaking masonry flow. */
-.grid-item.grid-item--wpano,
-img.grid-item--wpano {
-  width: calc((var(--gallery-tile-size) * 2) + var(--gallery-gutter));
-}
-
-.item:hover .grid-item img {
-  transform: scale(1.045);
-  filter: brightness(0.8);
-}
-
-.grid.month-hover-active .item .grid-item {
-  opacity: 0.36;
-  filter: grayscale(0.28);
-}
-
-.grid.month-hover-active .item.is-month-hover-target .grid-item {
-  opacity: 1;
-  filter: none;
-  border-color: rgba(255, 230, 0, 0.72);
-  box-shadow: 0 0 0 2px rgba(255, 230, 0, 0.26), 0 0 18px rgba(255, 230, 0, 0.2);
-}
-
-.hover {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 280ms ease;
-  background: linear-gradient(175deg, rgba(18, 18, 18, 0.08), rgba(10, 10, 10, 0.85));
-}
-
-.grid-item:hover .hover {
-  opacity: 1;
-  cursor: pointer;
-}
-
-.tile-caption {
-  position: relative;
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 0.7rem;
-  gap: 0.36rem;
-  color: #eff5ff;
-  text-align: left;
-}
-
-.tile-title {
-  font-size: 0.94rem;
-  line-height: 1.2;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.75);
-}
-
-.tile-tags {
-  color: var(--accent-soft);
-  font-size: 0.69rem;
-  line-height: 1.2;
-  opacity: 0.92;
-}
-
-.lg-sub-html {
-  max-width: min(92vw, 760px);
-  margin: 0 auto;
-}
-
-.lg-toolbar [id^="lg-zoom-in-"],
-.lg-toolbar [id^="lg-zoom-out-"] {
-  display: none !important;
-}
-
-.lg-toolbar .lg-icon.lg-custom-zoom-in,
-.lg-toolbar .lg-icon.lg-custom-zoom-out,
-.lg-toolbar .lg-icon.lg-actual-size,
-.lg-toolbar .lg-icon.lg-custom-fill {
-  color: #f7f7f7 !important;
-  opacity: 1 !important;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.48);
-  margin-top: 6px;
-}
-
-.lg-toolbar .lg-icon.lg-custom-zoom-in::before,
-.lg-toolbar .lg-icon.lg-custom-zoom-out::before,
-.lg-toolbar .lg-icon.lg-actual-size::before,
-.lg-toolbar .lg-icon.lg-custom-fill::before,
-.lg-toolbar .lg-icon.lg-custom-zoom-in::after,
-.lg-toolbar .lg-icon.lg-custom-zoom-out::after,
-.lg-toolbar .lg-icon.lg-actual-size::after,
-.lg-toolbar .lg-icon.lg-custom-fill::after {
-  content: "" !important;
-}
-
-.lg-toolbar .lg-icon.lg-zoom-label {
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  font-family: "Space Grotesk", sans-serif !important;
-  font-weight: 700;
-  font-size: 1rem;
-  line-height: 1;
-  letter-spacing: 0.02em;
-}
-
-.lg-toolbar .lg-icon.lg-zoom-label--actual {
-  font-size: 0.78rem;
-}
-
-.lg-toolbar .lg-icon.lg-custom-zoom-in:hover,
-.lg-toolbar .lg-icon.lg-custom-zoom-out:hover,
-.lg-toolbar .lg-icon.lg-actual-size:hover,
-.lg-toolbar .lg-icon.lg-custom-fill:hover {
-  background: rgba(255, 230, 0, 0.22);
-}
-
-.lg-toolbar .lg-icon.lg-custom-fill {
-  font-size: 0.74rem;
-  letter-spacing: 0.03em;
-}
-
-.lg-toolbar .lg-icon.lg-custom-fill.is-active {
-  background: rgba(255, 230, 0, 0.35);
-  color: #1f1f1f !important;
-}
-
-.lg-outer.lg-photo-fill-mode .lg-current,
-.lg-outer.lg-photo-fill-mode .lg-current .lg-img-wrap {
-  width: 100vw !important;
-  width: 100dvw !important;
-  height: 100vh !important;
-  height: 100dvh !important;
-  max-width: none !important;
-  max-height: none !important;
-}
-
-.lg-outer.lg-photo-fill-mode .lg-current .lg-img-wrap {
-  inset: 0 !important;
-  transform: none !important;
-  background: #000 !important;
-}
-
-.lg-outer.lg-photo-fill-mode .lg-current .lg-image,
-.lg-outer.lg-photo-fill-mode .lg-current .lg-object {
-  width: 100% !important;
-  height: 100% !important;
-  max-width: none !important;
-  max-height: none !important;
-  object-fit: contain !important;
-  margin: 0 !important;
-  transform: none !important;
-}
-
-.lg-outer.lg-photo-fill-mode .lg-exif-panel {
-  display: none !important;
-}
-
-.lg-exif-panel {
-  margin: 0.68rem auto 0;
-  padding: 0.58rem 0.72rem;
-  border: 1px solid var(--line-soft);
-  border-radius: 10px;
-  background: rgba(8, 8, 8, 0.74);
-  text-align: left;
-  font-family: "Space Grotesk", sans-serif;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-
-.lg-exif-panel.is-loading,
-.lg-exif-panel.is-empty {
-  text-align: center;
-  color: #cecece;
-  font-size: 0.77rem;
-}
-
-.lg-exif-row {
-  display: grid;
-  grid-template-columns: minmax(68px, auto) 1fr;
-  gap: 0.52rem;
-  align-items: baseline;
-  font-size: 0.8rem;
-  line-height: 1.25;
-}
-
-.lg-exif-row + .lg-exif-row {
-  margin-top: 0.2rem;
-}
-
-.lg-exif-key {
-  color: var(--accent-soft);
-  text-transform: uppercase;
-  font-size: 0.66rem;
-  letter-spacing: 0.08em;
-  font-weight: 700;
-}
-
-.lg-exif-value {
-  color: #f0f0f0;
-  word-break: break-word;
-}
-
-@media (max-width: 840px) {
-  .filter-panel {
-    top: 8px;
-  }
-}
-
-@media (max-width: 640px) {
-  body.gallery-page {
-    padding: 14px 8px 24px;
-  }
-
-  .filter-toolbar {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      "search sort"
-      "timeline timeline";
-    column-gap: 0.38rem;
-    row-gap: 0.32rem;
-    align-items: center;
-  }
-
-  .filter-input {
-    grid-area: search;
-    min-width: 0;
-  }
-
-  .sort-control {
-    display: contents;
-  }
-
-  .sort-label {
-    display: none;
-  }
-
-  .sort-select {
-    grid-area: sort;
-    justify-self: end;
-    max-width: 82px;
-    min-width: 72px;
-    min-height: 36px;
-    padding: 0.28rem 0.36rem;
-    border-radius: 8px;
-    font-size: 0.68rem;
-  }
-
-  .timeline-panel {
-    grid-area: timeline;
-    width: 100%;
-    min-width: 0;
-    --timeline-fade-size: 12px;
-  }
-
-  .filter-group--countries {
-    width: 100%;
-  }
-
-  .button-group {
-    display: grid;
-  }
-
-  .filter-group--categories {
-    display: none;
-  }
-
-  .filter-hint {
-    display: none;
-  }
-
-  #filters .button {
-    min-height: 36px;
-    font-size: 0.72rem;
-  }
-
-  .timeline-months {
-    gap: 0.24rem;
-  }
-
-  .timeline-month {
-    min-width: 54px;
-    padding: 0.28rem 0.3rem;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.1rem;
-  }
-
-  .timeline-label {
-    font-size: 0.63rem;
-    line-height: 1.02;
-    letter-spacing: 0.05em;
-  }
-
-  .timeline-count {
-    min-width: 0;
-    padding: 0;
-    border-radius: 0;
-    background: transparent;
-    color: var(--muted);
-    font-size: 0.58rem;
-    line-height: 1;
-  }
-
-  .page-header {
-    padding: 0.9rem 0.75rem 0.82rem;
-  }
-
-  .page-title {
-    font-size: clamp(1.35rem, 7vw, 1.8rem);
-  }
-
-  .page-subtitle {
-    font-size: 0.87rem;
-  }
-
-  .back-to-top-fab {
-    width: 50px;
-    height: 50px;
-    font-size: 1.06rem;
-  }
-}
-
-</style>
-
- {% include /analytics-providers/google-gtag.html %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gallery</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-zoom.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-thumbnail.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <link rel="stylesheet" href="/assets/css/shuffle.css?v=20260312-mobile-random-hide-panel-v2">
+
+  <link rel="shortcut icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+  <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/plugins/zoom/lg-zoom.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/plugins/thumbnail/lg-thumbnail.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exifr/dist/lite.umd.js" crossorigin="anonymous"></script>
+
+  {% include /analytics-providers/google-gtag.html %}
 </head>
-<body class="gallery-page">
-<main class="gallery-shell">
-  <!-- <header class="page-header">
-    <span class="page-kicker">Curated Collection</span>
-    <h1 class="page-title">Photo Gallery</h1>
-    <p class="page-subtitle">Filter by country or theme and browse the story in full-screen.</p>
-  </header> -->
+<body class="gallery-page" data-theme="aurora">
+  <div class="ambient ambient--left" aria-hidden="true"></div>
+  <div class="ambient ambient--right" aria-hidden="true"></div>
+  <div class="ambient-grid" aria-hidden="true"></div>
 
-  <div class="top-actions">
-    <a class="nav-button" href="/"><i class="fa-solid fa-house"></i><span>Home</span></a>
-    <div class="button-container">
-      <a class="nav-button" href="https://www.instagram.com/kkotysz">
-        <i class="fab fa-fw fa-instagram"></i><span>Instagram</span>
-        <img src="../assets/images/insta_qr.png" alt="Instagram QR" class="expand-image">
-      </a>
-    </div>
-  </div>
+  <main class="gallery-shell">
+    <section class="control-deck" aria-label="Gallery controls">
+      <div class="deck-row deck-row--main">
+        <label class="search-wrap" for="gallery-search">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <input id="gallery-search" class="deck-input" type="search" placeholder="Search tags, places, scenes..." autocomplete="off" spellcheck="false">
+          <button id="clear-search" class="icon-button" type="button" aria-label="Clear search">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </label>
 
-  <section class="filter-panel">
-    <div class="filter-toolbar">
-      <input id="gallery-search" class="filter-input" type="search" placeholder="Search by hashtag or photo description..." list="gallery-search-suggestions">
-      <datalist id="gallery-search-suggestions"></datalist>
-      <div class="sort-control">
-        <label class="sort-label" for="gallery-sort">Sort</label>
-        <select id="gallery-sort" class="sort-select">
-          <option value="random" selected>Random</option>
-          <option value="date-desc">Newest</option>
-          <option value="date-asc">Oldest</option>
-        </select>
-        <aside class="timeline-panel is-hidden" aria-label="Timeline navigation">
-          <h2 class="timeline-title">Month / Year</h2>
-          <div id="timeline-months" class="timeline-months" role="navigation" aria-label="Jump to month"></div>
-        </aside>
-      </div>
-    </div>
-    <div class="filter-row">
-      <span id="filter-meta" class="filter-meta"></span>
-      <span class="filter-hint">Try <code>#astrophoto</code> or any phrase from description.</span>
-    </div>
-    <div id="filters" class="button-group">
-      <div class="filter-group filter-group--countries">
-        <span id="country-tags"></span>
-      </div>
-      <div class="filter-group filter-group--categories">
-        <span id="category-tags"></span>
-      </div>
-    </div>
-  </section>
+        <label class="select-wrap" for="gallery-sort">
+          <span>Sort</span>
+          <select id="gallery-sort" class="deck-select">
+            <option value="random" selected>Random</option>
+            <option value="date-desc">Newest</option>
+            <option value="date-asc">Oldest</option>
+          </select>
+        </label>
 
-  <div class="gallery-content">
-    <div class="grid-wrap">
-      <div class="grid" id="lightgallery">
+        <label class="select-wrap" for="gallery-theme">
+          <span>Theme</span>
+          <select id="gallery-theme" class="deck-select">
+            <option value="aurora" selected>Aurora</option>
+            <option value="classic">Classic</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="deck-row deck-row--actions">
+        <button id="surprise-me" class="pill-button" type="button">
+          <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+          <span>Surprise me</span>
+        </button>
+
+        <button id="shuffle-visible" class="pill-button" type="button">
+          <i class="fa-solid fa-shuffle" aria-hidden="true"></i>
+          <span>Reshuffle</span>
+        </button>
+
+        <button id="reset-all" class="pill-button" type="button">
+          <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+          <span>Reset</span>
+        </button>
+
+        <button id="show-shortcuts" class="pill-button" type="button">
+          <i class="fa-solid fa-keyboard" aria-hidden="true"></i>
+          <span>Shortcuts</span>
+        </button>
+
+        <a class="pill-link" href="/">
+          <i class="fa-solid fa-house" aria-hidden="true"></i>
+          <span>Home</span>
+        </a>
+
+        <a class="pill-link pill-link--instagram" href="https://www.instagram.com/kkotysz" target="_blank" rel="noopener noreferrer">
+          <i class="fab fa-instagram" aria-hidden="true"></i>
+          <span>Instagram</span>
+          <img src="/assets/images/insta_qr.png" alt="Instagram QR" class="insta-preview">
+        </a>
+
+        <div class="gallery-count-pill" role="status" aria-live="polite" aria-atomic="true">
+          <span id="gallery-counts">Visible 0 / 0 photos</span>
+        </div>
+      </div>
+
+      <div id="date-timeline-wrap" class="timeline-section" hidden>
+        <p class="chip-title">Timeline</p>
+        <div id="date-timeline" class="timeline-group" role="list"></div>
+      </div>
+
+      <div class="chip-section">
+        <p class="chip-title">Countries</p>
+        <div id="country-tags" class="chip-group" role="list"></div>
+      </div>
+
+      <div class="chip-section">
+        <p class="chip-title">Genres</p>
+        <div id="category-tags" class="chip-group" role="list"></div>
+      </div>
+
+    </section>
+
+    <section class="gallery-stage">
+      <div id="lightgallery" class="grid">
         {% for photo in site.data.gallery %}
           {% assign tags_list = photo.tags | split: " " %}
           {% capture clean_tags %}
             {% for tag in tags_list %}
-              {% assign clean_tag = tag | strip %}
+              {% assign clean_tag = tag | strip | downcase %}
               {% if clean_tag != "" %}
-                {{ clean_tag }} 
+                {{ clean_tag }}
               {% endif %}
             {% endfor %}
           {% endcapture %}
-          <a href="../assets/photos/{{ photo.filename }}"
-            data-sub-html="<h2 style='font-family: Merriweather, serif;'>{{ photo.desc }}</h2>"
-            data-tags="{{ clean_tags | strip }}"
+          {% assign tags_attr = clean_tags | strip | replace: "  ", " " %}
+          {% assign desc_text = photo.desc | default: "Untitled" %}
+
+          <div
+            class="item item--{{ photo.aspect }} {{ tags_attr }}"
+            data-id="{{ photo.filename }}"
             data-sort="{{ photo.filename }}"
-            data-search="{{ photo.desc | strip_html | downcase }} {{ clean_tags | downcase | strip }}"
-            class="item {{ clean_tags | strip }}">
-            {% if photo.aspect == 'landscape' %}
-              <div class="grid-item grid-item--w2">
-                <img class="grid-item--w2" src="../assets/photos/thumb_{{ photo.filename }}"
-                  height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_landscape.jpg'" />
-            {% elsif photo.aspect == 'portrait' %}
-              <div class="grid-item grid-item--w2 grid-item--hportrait">
-                <img class="grid-item--w2 grid-item--hportrait" src="../assets/photos/thumb_{{ photo.filename }}"
-                  height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_portrait.jpg'">
-            {% elsif photo.aspect == 'square' %}
-              <div class="grid-item grid-item--w2 grid-item--h2">
-                <img class="grid-item--w2 grid-item--h2" src="../assets/photos/thumb_{{ photo.filename }}"
-                  height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_square.jpg'">
-            {% elsif photo.aspect == 'panorama' %}
-              <div class="grid-item grid-item--wpano">
-                <img class="grid-item--wpano" src="../assets/photos/thumb_{{ photo.filename }}"
-                  height="100%" onerror="this.onerror=null; this.src='../assets/images/notfound_pano.jpg'">
-            {% endif %}
-                <div class="hover">
-                  <div class="tile-caption">
-                    <b class="tile-title">{{ photo.desc }}</b>
-                    <div class="tile-tags">
-                      {% for tag in tags_list %}
-                        {% assign clean_tag = tag | strip %}
-                        {% if clean_tag != "" %}
-                          #{{ clean_tag }}
-                        {% endif %}
-                      {% endfor %}
-                    </div>
-                  </div>
+            data-tags="{{ tags_attr }}"
+            data-search="{{ desc_text | strip_html | downcase }} {{ tags_attr }}"
+            data-desc="{{ desc_text | escape }}"
+            data-aspect="{{ photo.aspect }}">
+
+            <a
+              href="/assets/photos/{{ photo.filename }}"
+              class="tile-link"
+              data-sub-html="<h3 class='lg-title'>{{ desc_text | escape }}</h3><p class='lg-tags'>{% for tag in tags_list %}{% assign clean_tag = tag | strip %}{% if clean_tag != '' %}#{{ clean_tag | escape }} {% endif %}{% endfor %}</p>">
+              <article class="tile">
+                {% if photo.aspect == 'landscape' %}
+                  <img src="/assets/photos/thumb_{{ photo.filename }}" alt="{{ desc_text | escape }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/assets/images/notfound_landscape.jpg';">
+                {% elsif photo.aspect == 'portrait' %}
+                  <img src="/assets/photos/thumb_{{ photo.filename }}" alt="{{ desc_text | escape }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/assets/images/notfound_portrait.jpg';">
+                {% elsif photo.aspect == 'square' %}
+                  <img src="/assets/photos/thumb_{{ photo.filename }}" alt="{{ desc_text | escape }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/assets/images/notfound_square.jpg';">
+                {% elsif photo.aspect == 'panorama' %}
+                  <img src="/assets/photos/thumb_{{ photo.filename }}" alt="{{ desc_text | escape }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/assets/images/notfound_pano.jpg';">
+                {% else %}
+                  <img src="/assets/photos/thumb_{{ photo.filename }}" alt="{{ desc_text | escape }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/assets/images/notfound_landscape.jpg';">
+                {% endif %}
+
+                <div class="tile-overlay">
+                  <h2 class="tile-title">{{ desc_text }}</h2>
+                  <p class="tile-tags">
+                    {% for tag in tags_list %}
+                      {% assign clean_tag = tag | strip %}
+                      {% if clean_tag != "" %}
+                        #{{ clean_tag }}
+                      {% endif %}
+                    {% endfor %}
+                  </p>
                 </div>
-              </div>
-          </a>
+              </article>
+            </a>
+          </div>
         {% endfor %}
       </div>
+    </section>
+  </main>
+
+  <button id="scroll-progress" class="scroll-progress" type="button" aria-label="Back to top">
+    <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+  </button>
+
+  <dialog id="shortcut-dialog" class="shortcut-dialog">
+    <div class="shortcut-content">
+      <h2>Keyboard shortcuts</h2>
+      <ul>
+        <li><kbd>/</kbd> focus search</li>
+        <li><kbd>r</kbd> reshuffle visible photos</li>
+        <li><kbd>f</kbd> fullscreen (lightbox)</li>
+        <li><kbd>x</kbd> show/hide EXIF</li>
+        <li><kbd>?</kbd> open this help</li>
+        <li><kbd>Esc</kbd> exit fullscreen / close help / clear search</li>
+      </ul>
+      <button id="close-shortcuts" class="pill-button" type="button">Close</button>
     </div>
-  </div>
-</main>
+  </dialog>
 
-<button id="scroll-top-fab" class="back-to-top-fab" type="button" aria-label="Powrot na gore strony">
-  <i class="fa-solid fa-arrow-up"></i>
-</button>
-
-<script src="../assets/js/shuffle.js?v=20260310-timeline-center-peek"></script>
-
-
+  <script src="/assets/js/shuffle.js?v=20260312-random-forces-no-timeline-v1"></script>
 </body>
 </html>

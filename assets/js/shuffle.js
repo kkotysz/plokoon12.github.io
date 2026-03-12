@@ -1,1982 +1,2518 @@
-// external js: isotope.pkgd.js
+(function($) {
+  "use strict";
 
-var $gridElement = $('.grid');
-prepareDateMetadata($gridElement.find('.item'));
-var ZOOM_STEP = 0.2;
-var DESKTOP_TILE_SIZE = 195;
-var MOBILE_LAYOUT_BREAKPOINT = 640;
-var GRID_GUTTER = 3;
-var $grid = null;
-
-function getViewportWidth() {
-  return window.innerWidth || document.documentElement.clientWidth || 0;
-}
-
-function isMobileLayout() {
-  return getViewportWidth() <= MOBILE_LAYOUT_BREAKPOINT;
-}
-
-function getGridContainerWidth() {
-  var $gridWrap = $gridElement.closest('.grid-wrap');
-  if ($gridWrap.length) {
-    var wrapContentWidth = Math.floor($gridWrap.width());
-    if (wrapContentWidth > 0) {
-      return wrapContentWidth;
-    }
-  }
-
-  var $galleryContent = $gridElement.closest('.gallery-content');
-  if ($galleryContent.length) {
-    var galleryWidth = Math.floor($galleryContent.width());
-    if (galleryWidth > 0) {
-      return galleryWidth;
-    }
-  }
-
-  if ($gridElement.length) {
-    var gridWidth = Math.floor($gridElement.width());
-    if (gridWidth > 0) {
-      return gridWidth;
-    }
-  }
-
-  return getViewportWidth();
-}
-
-function getResponsiveTileSize() {
-  if (getViewportWidth() > MOBILE_LAYOUT_BREAKPOINT) {
-    return DESKTOP_TILE_SIZE;
-  }
-
-  var containerWidth = getGridContainerWidth();
-  var tileSize = Math.floor((containerWidth - GRID_GUTTER) / 2);
-  return Math.max(120, Math.min(DESKTOP_TILE_SIZE, tileSize));
-}
-
-function applyResponsiveGridSize(shouldRelayout) {
-  var tileSize = getResponsiveTileSize();
-  document.documentElement.style.setProperty('--gallery-tile-size', tileSize + 'px');
-
-  if (!$grid || !$grid.data('isotope')) {
+  if (!$ || !document.getElementById("lightgallery")) {
     return;
   }
 
-  $grid.isotope('option', {
-    masonry: {
-      columnWidth: tileSize,
-      isFitWidth: true,
-      gutter: GRID_GUTTER
-    }
-  });
+  var GRID_GUTTER = 10;
+  var MOBILE_BREAKPOINT = 760;
+  var SMALL_MOBILE_BREAKPOINT = 520;
 
-  if (shouldRelayout) {
-    $grid.isotope('layout');
+  var STORAGE = {
+    exifVisible: "gallery:exif-visible:v1"
+  };
+
+  var EXIF_TYPE_SIZES = {
+    1: 1,
+    2: 1,
+    3: 2,
+    4: 4,
+    5: 8,
+    7: 1,
+    9: 4,
+    10: 8
+  };
+
+  var EXIF_TAGS = {
+    IMAGE_WIDTH: 0x0100,
+    IMAGE_HEIGHT: 0x0101,
+    MAKE: 0x010F,
+    MODEL: 0x0110,
+    DATETIME: 0x0132,
+    EXIF_POINTER: 0x8769,
+    DATETIME_ORIGINAL: 0x9003,
+    EXPOSURE_TIME: 0x829A,
+    FNUMBER: 0x829D,
+    ISO: 0x8827,
+    FOCAL_LENGTH: 0x920A,
+    PIXEL_X_DIMENSION: 0xA002,
+    PIXEL_Y_DIMENSION: 0xA003,
+    FOCAL_LENGTH_35: 0xA405,
+    LENS_MODEL: 0xA434
+  };
+
+  var COUNTRY_TAGS = [
+    "chile", "france", "greece", "ireland", "italy", "korea",
+    "malta", "norway", "poland", "spain", "switzerland", "uae", "usa"
+  ];
+
+  var COUNTRY_LABELS = {
+    chile: "CHL",
+    france: "FRA",
+    greece: "GRC",
+    ireland: "IRL",
+    italy: "ITA",
+    korea: "KOR",
+    malta: "MLT",
+    norway: "NOR",
+    poland: "POL",
+    spain: "ESP",
+    switzerland: "CHE",
+    uae: "UAE",
+    usa: "USA"
+  };
+
+  var CATEGORY_TAGS = [
+    "astrophoto", "nature", "architecture", "bw",
+    "landscape", "portrait", "square", "panorama"
+  ];
+
+  var CATEGORY_LABELS = {
+    astrophoto: "Astro",
+    nature: "Nature",
+    architecture: "Architecture",
+    bw: "B&W",
+    landscape: "Landscape",
+    portrait: "Portrait",
+    square: "Square",
+    panorama: "Panorama"
+  };
+
+  var ROMAN_MONTHS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+
+  var state = {
+    query: "",
+    country: "*",
+    category: "*",
+    sort: "random",
+    theme: "aurora",
+    exifVisible: true
+  };
+
+  var galleryPlugin = null;
+  var lastVisibleSignature = "";
+  var resizeTimeout = null;
+  var iso = null;
+  var exifCache = {};
+  var exifRequestToken = 0;
+  var timelineEntries = [];
+  var activeTimelineKey = "";
+  var timelinePreviewKey = "";
+  var timelineLabelFormatter = null;
+  var timelineScrollRaf = null;
+  var deckHidden = false;
+  var lastScrollY = 0;
+  var deckToggleLockUntil = 0;
+  var DECK_TOGGLE_LOCK_MS = 260;
+
+  var $body = $(document.body);
+  var $controlDeck = $(".control-deck");
+  var $grid = $("#lightgallery");
+  var $stage = $(".gallery-stage");
+  var $search = $("#gallery-search");
+  var $clearSearch = $("#clear-search");
+  var $sortSelect = $("#gallery-sort");
+  var $themeSelect = $("#gallery-theme");
+  var $galleryCounts = $("#gallery-counts");
+  var $countryTags = $("#country-tags");
+  var $categoryTags = $("#category-tags");
+  var $timelineWrap = $("#date-timeline-wrap");
+  var $timeline = $("#date-timeline");
+  var $deckMainRow = $controlDeck.find(".deck-row--main").first();
+  var $surpriseMe = $("#surprise-me");
+  var $shuffleVisible = $("#shuffle-visible");
+  var $resetAll = $("#reset-all");
+  var $scrollProgress = $("#scroll-progress");
+  var $shortcutDialog = $("#shortcut-dialog");
+  var $showShortcuts = $("#show-shortcuts");
+  var $closeShortcuts = $("#close-shortcuts");
+
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
   }
-}
 
-var plugin = lightGallery(document.getElementById('lightgallery'), {
-  plugins: [lgZoom],
-  speed: 300,
-  selector: '.item:not(.isotope-hidden):not([style*="display: none"])',
-  actualSize: true,
-  actualSizeIcons: {
-    zoomIn: 'lg-actual-size',
-    zoomOut: 'lg-actual-size'
-  },
-  zoomPluginStrings: {
-    zoomIn: 'Zoom in (+)',
-    zoomOut: 'Zoom out (-)',
-    viewActualSize: '1:1'
-  },
-  showZoomInOutIcons: true,
-  enableZoomAfter: 0,
-  scale: ZOOM_STEP
-});
-
-var initialTileSize = getResponsiveTileSize();
-document.documentElement.style.setProperty('--gallery-tile-size', initialTileSize + 'px');
-
-// init Isotope
-$grid = $gridElement.isotope({
-  itemSelector: '.item',
-  // layoutMode: '',
-  // isfitWidth: true,
-  masonry: {
-    columnWidth: initialTileSize,
-    isFitWidth: true,
-    gutter: GRID_GUTTER,
-    // horizontalOrder: true,
-    },
-  getSortData: {
-    sortdate: function(itemElem) {
-      return getItemTimestamp(itemElem);
-    },
-    randomrank: function(itemElem) {
-      return getItemRandomRank(itemElem);
+  function isReloadNavigation() {
+    if (window.performance && typeof window.performance.getEntriesByType === "function") {
+      var entries = window.performance.getEntriesByType("navigation");
+      if (entries && entries.length && entries[0] && entries[0].type) {
+        return entries[0].type === "reload";
+      }
     }
-  },
-  sortBy: 'randomrank',
-  sortAscending: {
-    sortdate: false,
-    randomrank: true
-  }
-});
 
-$grid.imagesLoaded().progress( function() {
-  $grid.isotope('layout');
-});
+    if (window.performance && window.performance.navigation) {
+      return window.performance.navigation.type === 1;
+    }
 
-var currentFilter = '*';
-var currentQuery = '';
-var $meta = $('#filter-meta');
-var $searchInput = $('#gallery-search');
-var $scrollTopFab = $('#scroll-top-fab');
-var $suggestions = $('#gallery-search-suggestions');
-var $countryTags = $('#country-tags');
-var $categoryTags = $('#category-tags');
-var $sortSelect = $('#gallery-sort');
-var $sortControl = $('.sort-control');
-var $timelineMonths = $('#timeline-months');
-var $galleryContent = $('.gallery-content');
-var $timelinePanel = $('.timeline-panel');
-var $filterPanel = $('.filter-panel');
-var filterPanelCompact = false;
-var filterPanelHovered = false;
-var filterPanelOffsetTimer = null;
-var filterPanelToggleLockUntil = 0;
-var FILTER_PANEL_COMPACT_ENTER_Y = 170;
-var FILTER_PANEL_COMPACT_EXIT_Y = 16;
-var FILTER_PANEL_TOGGLE_LOCK_MS = 320;
-var sortValue = String($sortSelect.val() || '').toLowerCase();
-var currentSort = (sortValue === 'date-asc' || sortValue === 'date-desc') ? sortValue : 'random';
-var activeMonthKey = '';
-var monthTargets = {};
-var timelineMonthSequence = [];
-var monthLabelFormatter = null;
-try {
-  monthLabelFormatter = new Intl.DateTimeFormat(undefined, { month: 'short', year: 'numeric' });
-} catch (error) {
-  monthLabelFormatter = null;
-}
-var ROMAN_MONTHS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
-
-var COUNTRY_TAGS = [
-  'chile', 'france', 'greece', 'ireland', 'italy', 'korea',
-  'malta', 'norway', 'poland', 'spain', 'switzerland', 'uae', 'usa'
-];
-var COUNTRY_CODES = {
-  chile: 'CHI',
-  france: 'FRA',
-  greece: 'GRE',
-  ireland: 'IRL',
-  italy: 'ITA',
-  korea: 'KOR',
-  malta: 'MLT',
-  norway: 'NOR',
-  poland: 'POL',
-  spain: 'SPA',
-  switzerland: 'SWI',
-  uae: 'UAE',
-  usa: 'USA'
-};
-
-var CATEGORY_TAGS = [
-  'astrophoto', 'nature', 'architecture', 'bw', 'landscape', 'portrait', 'square', 'panorama'
-];
-var lastGalleryKey = '';
-var EXIF_TYPE_SIZES = {
-  1: 1,
-  2: 1,
-  3: 2,
-  4: 4,
-  5: 8,
-  7: 1,
-  9: 4,
-  10: 8
-};
-var EXIF_TAGS = {
-  IMAGE_WIDTH: 0x0100,
-  IMAGE_HEIGHT: 0x0101,
-  MAKE: 0x010F,
-  MODEL: 0x0110,
-  DATETIME: 0x0132,
-  EXIF_POINTER: 0x8769,
-  DATETIME_ORIGINAL: 0x9003,
-  EXPOSURE_TIME: 0x829A,
-  FNUMBER: 0x829D,
-  ISO: 0x8827,
-  FOCAL_LENGTH: 0x920A,
-  PIXEL_X_DIMENSION: 0xA002,
-  PIXEL_Y_DIMENSION: 0xA003,
-  FOCAL_LENGTH_35: 0xA405,
-  LENS_MODEL: 0xA434
-};
-var exifCache = {};
-var exifRequestToken = 0;
-var wheelZoomCooldownUntil = 0;
-var WHEEL_ZOOM_COOLDOWN_MS = 45;
-var WHEEL_ZOOM_STEP_THRESHOLD = 80;
-var WHEEL_ZOOM_MAX_STEPS = 8;
-var WHEEL_ZOOM_BASE_STEPS = 1;
-var ZOOM_BUTTON_IN_STEPS = 1;
-var ZOOM_BUTTON_OUT_STEPS = 1;
-var fillModeEnabled = false;
-var fillModeSyncBound = false;
-
-function isFiniteNumber(value) {
-  return typeof value === 'number' && isFinite(value);
-}
-
-function canUseHoverState() {
-  if (!window.matchMedia) {
     return false;
   }
-  return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-}
 
-function firstValue(value) {
-  return Array.isArray(value) ? value[0] : value;
-}
-
-function pad2(value) {
-  return value < 10 ? ('0' + value) : String(value);
-}
-
-function parseDateFromFilename(value) {
-  var match = String(value || '').match(/(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})/);
-  if (!match) {
-    return null;
-  }
-
-  var year = Number(match[1]);
-  var month = Number(match[2]);
-  var day = Number(match[3]);
-  var hour = Number(match[4]);
-  var minute = Number(match[5]);
-  var second = Number(match[6]);
-  var parsed = new Date(year, month - 1, day, hour, minute, second);
-  if (!isFiniteNumber(parsed.getTime())) {
-    return null;
-  }
-  if (parsed.getFullYear() !== year || parsed.getMonth() !== month - 1 ||
-      parsed.getDate() !== day || parsed.getHours() !== hour ||
-      parsed.getMinutes() !== minute || parsed.getSeconds() !== second) {
-    return null;
-  }
-  return parsed;
-}
-
-function monthKeyFromDate(date) {
-  return date.getFullYear() + '-' + pad2(date.getMonth() + 1);
-}
-
-function prepareDateMetadata($items) {
-  $items.each(function() {
-    var source = this.getAttribute('data-sort') || '';
-    var parsedDate = parseDateFromFilename(source);
-    this.setAttribute('data-random-rank', String(Math.random()));
-    if (!parsedDate) {
-      this.setAttribute('data-date-ts', '0');
-      this.setAttribute('data-month-key', '');
+  function enforceTopOnReload() {
+    if (!isReloadNavigation()) {
       return;
     }
-    this.setAttribute('data-date-ts', String(parsedDate.getTime()));
-    this.setAttribute('data-month-key', monthKeyFromDate(parsedDate));
-  });
-}
-
-function getItemTimestamp(itemElement) {
-  var value = Number(itemElement.getAttribute('data-date-ts'));
-  return isFiniteNumber(value) ? value : 0;
-}
-
-function getItemMonthKey(itemElement) {
-  return String(itemElement.getAttribute('data-month-key') || '');
-}
-
-function getItemRandomRank(itemElement) {
-  var value = Number(itemElement.getAttribute('data-random-rank'));
-  return isFiniteNumber(value) ? value : 0;
-}
-
-function formatMonthLabel(monthKey) {
-  var match = monthKey.match(/^(\d{4})-(\d{2})$/);
-  if (!match) {
-    return monthKey;
-  }
-  var year = Number(match[1]);
-  var monthIndex = Number(match[2]) - 1;
-  if (monthIndex < 0 || monthIndex > 11) {
-    return monthKey;
-  }
-
-  if (isMobileLayout()) {
-    return ROMAN_MONTHS[monthIndex] + ' ' + pad2(year % 100);
-  }
-
-  var parsedDate = new Date(year, monthIndex, 1);
-  if (monthLabelFormatter) {
-    return monthLabelFormatter.format(parsedDate);
-  }
-  return match[2] + '/' + match[1];
-}
-
-function readAsciiString(view, offset, length) {
-  var chars = [];
-  var maxOffset = Math.min(view.byteLength, offset + length);
-  for (var i = offset; i < maxOffset; i++) {
-    var code = view.getUint8(i);
-    if (code === 0) {
-      break;
+    if (window.location.hash) {
+      return;
     }
-    chars.push(String.fromCharCode(code));
-  }
-  return chars.join('').trim();
-}
 
-function readIfdValue(view, entryOffset, type, count, littleEndian, tiffStart) {
-  var typeSize = EXIF_TYPE_SIZES[type];
-  if (!typeSize || !count) {
-    return null;
-  }
+    try {
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "manual";
+      }
+    } catch (error) {}
 
-  var valueOffset = entryOffset + 8;
-  var totalSize = typeSize * count;
-  var dataOffset;
+    var snapToTop = function() {
+      window.scrollTo(0, 0);
+    };
 
-  if (totalSize <= 4) {
-    dataOffset = valueOffset;
-  } else {
-    if (valueOffset + 4 > view.byteLength) {
-      return null;
+    snapToTop();
+    if (typeof window.requestAnimationFrame === "function") {
+      window.requestAnimationFrame(snapToTop);
     }
-    dataOffset = tiffStart + view.getUint32(valueOffset, littleEndian);
+    window.setTimeout(snapToTop, 60);
+    window.addEventListener("load", snapToTop, { once: true });
   }
 
-  if (dataOffset < 0 || dataOffset + totalSize > view.byteLength) {
-    return null;
+  function isFiniteNumber(value) {
+    return typeof value === "number" && isFinite(value);
   }
 
-  if (type === 2) {
-    return readAsciiString(view, dataOffset, count);
-  }
-
-  function readSingleValue(index) {
-    var offset = dataOffset + (index * typeSize);
-    if (offset + typeSize > view.byteLength) {
+  function parseDateFromFilename(value) {
+    var match = String(value || "").match(/(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})/);
+    if (!match) {
       return null;
     }
 
-    if (type === 1 || type === 7) {
-      return view.getUint8(offset);
+    var year = Number(match[1]);
+    var month = Number(match[2]);
+    var day = Number(match[3]);
+    var hour = Number(match[4]);
+    var minute = Number(match[5]);
+    var second = Number(match[6]);
+
+    var parsed = new Date(year, month - 1, day, hour, minute, second);
+    if (!isFiniteNumber(parsed.getTime())) {
+      return null;
     }
-    if (type === 3) {
-      return view.getUint16(offset, littleEndian);
+    return parsed;
+  }
+
+  function normalizeSort(value) {
+    var valid = ["random", "date-desc", "date-asc"];
+    return valid.indexOf(value) >= 0 ? value : "random";
+  }
+
+  function normalizeTheme(value) {
+    var valid = ["aurora", "classic"];
+    return valid.indexOf(value) >= 0 ? value : "aurora";
+  }
+
+  function isKnownCountry(value) {
+    return COUNTRY_TAGS.indexOf(value) >= 0;
+  }
+
+  function isKnownCategory(value) {
+    return CATEGORY_TAGS.indexOf(value) >= 0;
+  }
+
+  function toBoolFlag(value) {
+    var normalized = String(value || "").toLowerCase();
+    return normalized === "1" || normalized === "true" || normalized === "yes" || normalized === "on";
+  }
+
+  function readStorageJson(key, fallbackValue) {
+    try {
+      var raw = localStorage.getItem(key);
+      if (!raw) {
+        return fallbackValue;
+      }
+      return JSON.parse(raw);
+    } catch (error) {
+      return fallbackValue;
     }
-    if (type === 4) {
-      return view.getUint32(offset, littleEndian);
+  }
+
+  function writeStorageJson(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {}
+  }
+
+  function applyStateFromUrl() {
+    var params = new URLSearchParams(window.location.search || "");
+    var queryValue = params.get("q");
+    var countryValue = String(params.get("country") || "").toLowerCase();
+    var categoryValue = String(params.get("category") || "").toLowerCase();
+    var sortValue = String(params.get("sort") || "").toLowerCase();
+    var themeValue = String(params.get("theme") || "").toLowerCase();
+    var exifValue = params.get("exif");
+
+    if (queryValue !== null) {
+      state.query = String(queryValue).trim().toLowerCase();
     }
-    if (type === 5) {
-      var num = view.getUint32(offset, littleEndian);
-      var den = view.getUint32(offset + 4, littleEndian);
-      return {
-        numerator: num,
-        denominator: den,
-        value: den ? (num / den) : null
-      };
+    if (isKnownCountry(countryValue)) {
+      state.country = countryValue;
     }
-    if (type === 9) {
-      return view.getInt32(offset, littleEndian);
+    if (isKnownCategory(categoryValue)) {
+      state.category = categoryValue;
     }
-    if (type === 10) {
-      var signedNum = view.getInt32(offset, littleEndian);
-      var signedDen = view.getInt32(offset + 4, littleEndian);
-      return {
-        numerator: signedNum,
-        denominator: signedDen,
-        value: signedDen ? (signedNum / signedDen) : null
-      };
+    if (sortValue) {
+      state.sort = normalizeSort(sortValue);
     }
-
-    return null;
-  }
-
-  if (count === 1) {
-    return readSingleValue(0);
-  }
-
-  var values = [];
-  for (var i = 0; i < count; i++) {
-    values.push(readSingleValue(i));
-  }
-  return values;
-}
-
-function readIfdEntries(view, ifdOffset, tiffStart, littleEndian) {
-  if (!isFiniteNumber(ifdOffset) || ifdOffset < 0 || ifdOffset + 2 > view.byteLength) {
-    return null;
-  }
-
-  var entries = {};
-  var count = view.getUint16(ifdOffset, littleEndian);
-  for (var i = 0; i < count; i++) {
-    var entryOffset = ifdOffset + 2 + (i * 12);
-    if (entryOffset + 12 > view.byteLength) {
-      break;
-    }
-
-    var tag = view.getUint16(entryOffset, littleEndian);
-    var type = view.getUint16(entryOffset + 2, littleEndian);
-    var valueCount = view.getUint32(entryOffset + 4, littleEndian);
-    entries[tag] = readIfdValue(view, entryOffset, type, valueCount, littleEndian, tiffStart);
-  }
-
-  return entries;
-}
-
-function valueAsNumber(value) {
-  var normalized = firstValue(value);
-  if (isFiniteNumber(normalized)) {
-    return normalized;
-  }
-  if (normalized && typeof normalized === 'object' && isFiniteNumber(normalized.value)) {
-    return normalized.value;
-  }
-  var parsed = Number(normalized);
-  return isFinite(parsed) ? parsed : null;
-}
-
-function valueAsString(value) {
-  var normalized = firstValue(value);
-  if (typeof normalized === 'string') {
-    return normalized.trim();
-  }
-  if (isFiniteNumber(normalized)) {
-    return String(normalized);
-  }
-  return '';
-}
-
-function formatExifDate(value) {
-  if (!value) {
-    return '';
-  }
-  var match = String(value).match(/^(\d{4}):(\d{2}):(\d{2})\s(\d{2}):(\d{2})(?::\d{2})?$/);
-  if (!match) {
-    return value;
-  }
-  return match[1] + '-' + match[2] + '-' + match[3] + ' ' + match[4] + ':' + match[5];
-}
-
-function formatExposure(value) {
-  var normalized = firstValue(value);
-  if (!normalized) {
-    return '';
-  }
-
-  if (normalized && typeof normalized === 'object' && isFiniteNumber(normalized.numerator) && isFiniteNumber(normalized.denominator) && normalized.denominator !== 0) {
-    if (normalized.numerator >= normalized.denominator) {
-      var seconds = normalized.numerator / normalized.denominator;
-      return seconds.toFixed(seconds >= 10 ? 0 : 1) + ' s';
-    }
-    if (normalized.numerator === 1) {
-      return '1/' + normalized.denominator + ' s';
-    }
-    return normalized.numerator + '/' + normalized.denominator + ' s';
-  }
-
-  var numberValue = valueAsNumber(normalized);
-  if (!numberValue || !isFiniteNumber(numberValue)) {
-    return '';
-  }
-  if (numberValue >= 1) {
-    return numberValue.toFixed(numberValue >= 10 ? 0 : 1) + ' s';
-  }
-  return '1/' + Math.round(1 / numberValue) + ' s';
-}
-
-function formatAperture(value) {
-  var aperture = valueAsNumber(value);
-  if (!aperture || !isFiniteNumber(aperture)) {
-    return '';
-  }
-  return 'f/' + aperture.toFixed(1).replace(/\.0$/, '');
-}
-
-function formatFocalLength(value, eq35) {
-  var focal = valueAsNumber(value);
-  if (!focal || !isFiniteNumber(focal)) {
-    return '';
-  }
-  var label = focal.toFixed(1).replace(/\.0$/, '') + ' mm';
-  var eq = valueAsNumber(eq35);
-  if (eq && isFiniteNumber(eq)) {
-    label += ' (' + Math.round(eq) + ' mm eq.)';
-  }
-  return label;
-}
-
-function parseExifFromJpeg(arrayBuffer) {
-  var view = new DataView(arrayBuffer);
-  if (view.byteLength < 4 || view.getUint16(0, false) !== 0xFFD8) {
-    return null;
-  }
-
-  var offset = 2;
-  while (offset + 4 <= view.byteLength) {
-    if (view.getUint8(offset) !== 0xFF) {
-      offset += 1;
-      continue;
+    if (themeValue) {
+      state.theme = normalizeTheme(themeValue);
     }
 
-    var marker = view.getUint8(offset + 1);
-    if (marker === 0xD9 || marker === 0xDA) {
-      break;
+    if (exifValue !== null) {
+      var normalized = String(exifValue || "").toLowerCase();
+      state.exifVisible = !(normalized === "0" || normalized === "false" || normalized === "no" || normalized === "off" || normalized === "hide");
+    }
+  }
+
+  function updateUrlFromState() {
+    var params = new URLSearchParams();
+
+    if (state.query) {
+      params.set("q", state.query);
+    }
+    if (state.country !== "*") {
+      params.set("country", state.country);
+    }
+    if (state.category !== "*") {
+      params.set("category", state.category);
+    }
+    if (state.sort !== "random") {
+      params.set("sort", state.sort);
+    }
+    if (state.theme !== "aurora") {
+      params.set("theme", state.theme);
+    }
+    if (!state.exifVisible) {
+      params.set("exif", "0");
     }
 
-    var segmentLength = view.getUint16(offset + 2, false);
-    if (segmentLength < 2) {
-      break;
+    var basePath = window.location.pathname;
+    var nextQuery = params.toString();
+    var nextUrl = basePath + (nextQuery ? ("?" + nextQuery) : "") + window.location.hash;
+    var currentUrl = window.location.pathname + window.location.search + window.location.hash;
+
+    if (nextUrl === currentUrl) {
+      return;
     }
 
-    var segmentStart = offset + 4;
-    if (marker === 0xE1 && segmentStart + 6 <= view.byteLength &&
-      view.getUint8(segmentStart) === 0x45 && view.getUint8(segmentStart + 1) === 0x78 &&
-      view.getUint8(segmentStart + 2) === 0x69 && view.getUint8(segmentStart + 3) === 0x66) {
-      var tiffStart = segmentStart + 6;
-      if (tiffStart + 8 > view.byteLength) {
-        return null;
+    try {
+      window.history.replaceState({}, "", nextUrl);
+    } catch (error) {}
+  }
+
+  function getTileSize() {
+    var stageWidth = Math.floor($stage.innerWidth() || window.innerWidth || 0);
+    var usableWidth = Math.max(180, stageWidth - 18);
+
+    if (window.innerWidth <= MOBILE_BREAKPOINT) {
+      return clamp(Math.floor((usableWidth - GRID_GUTTER) / 2), 110, 240);
+    }
+
+    var target = 228;
+    var columns = Math.max(3, Math.round(usableWidth / target));
+    return clamp(Math.floor((usableWidth - ((columns - 1) * GRID_GUTTER)) / columns), 170, 280);
+  }
+
+  function applyTileSize() {
+    var tileSize = getTileSize();
+    document.documentElement.style.setProperty("--tile-size", tileSize + "px");
+  }
+
+  function prepareItems() {
+    $grid.find(".item").each(function() {
+      var source = this.getAttribute("data-sort") || "";
+      var parsed = parseDateFromFilename(source);
+      this.setAttribute("data-random-rank", String(Math.random()));
+      this.setAttribute("data-date-ts", parsed ? String(parsed.getTime()) : "0");
+      this.setAttribute("data-month-key", parsed ? getMonthKeyFromDate(parsed) : "");
+    });
+  }
+
+  function reseedRandomRanks() {
+    $grid.find(".item").each(function() {
+      this.setAttribute("data-random-rank", String(Math.random()));
+    });
+
+    if (iso) {
+      $grid.isotope("updateSortData", $grid.find(".item"));
+    }
+  }
+
+  function getAllTagCounts() {
+    var counts = {};
+
+    $grid.find(".item").each(function() {
+      var tags = String(this.getAttribute("data-tags") || "").split(/\s+/);
+      for (var i = 0; i < tags.length; i++) {
+        var tag = tags[i].trim().toLowerCase();
+        if (!tag) {
+          continue;
+        }
+        counts[tag] = (counts[tag] || 0) + 1;
+      }
+    });
+
+    return counts;
+  }
+
+  function renderChips($container, tags, labels, groupName, counts) {
+    $container.empty();
+    var isCountryGroup = groupName === "country";
+
+    var allLabel = isCountryGroup ? "All countries" : "All genres";
+    $container.append(
+      $("<button>", {
+        "class": "chip",
+        type: "button",
+        "data-group": groupName,
+        "data-tag": "*",
+        text: allLabel,
+        "aria-pressed": "true"
+      })
+    );
+
+    for (var i = 0; i < tags.length; i++) {
+      var tag = tags[i];
+      if (!counts[tag]) {
+        continue;
       }
 
-      var byteOrder = view.getUint16(tiffStart, false);
-      var littleEndian;
-      if (byteOrder === 0x4949) {
-        littleEndian = true;
-      } else if (byteOrder === 0x4D4D) {
-        littleEndian = false;
+      var label = labels[tag] || (tag.charAt(0).toUpperCase() + tag.slice(1));
+      if (isCountryGroup) {
+        var countryCode = String(label || "").trim().toUpperCase();
+        var countryCount = Number(counts[tag] || 0);
+        var countryAria = countryCode + " (" + countryCount + ")";
+
+        $container.append(
+          $("<button>", {
+            "class": "chip chip--country chip--flag-" + tag,
+            type: "button",
+            "data-group": groupName,
+            "data-tag": tag,
+            text: countryCode,
+            title: countryAria,
+            "aria-label": countryAria,
+            "aria-pressed": "false"
+          })
+        );
+        continue;
+      }
+
+      var chipLabel = label + " (" + counts[tag] + ")";
+
+      $container.append(
+        $("<button>", {
+          "class": "chip",
+          type: "button",
+          "data-group": groupName,
+          "data-tag": tag,
+          text: chipLabel,
+          "aria-pressed": "false"
+        })
+      );
+    }
+  }
+
+  function updateChipUi() {
+    $countryTags.find(".chip").each(function() {
+      var tag = String(this.getAttribute("data-tag") || "*");
+      var isActive = tag === state.country;
+      this.classList.toggle("is-active", isActive);
+      this.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+
+    $categoryTags.find(".chip").each(function() {
+      var tag = String(this.getAttribute("data-tag") || "*");
+      var isActive = tag === state.category;
+      this.classList.toggle("is-active", isActive);
+      this.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+  }
+
+  function getCustomSelectOptionLabel($select, value) {
+    if (!$select || !$select.length) {
+      return "";
+    }
+
+    var normalizedValue = String(value || "");
+    var label = "";
+    $select.find("option").each(function() {
+      if (String(this.value || "") === normalizedValue) {
+        label = String($(this).text() || "").trim();
+      }
+    });
+
+    if (!label) {
+      label = String($select.find("option:selected").text() || "").trim();
+    }
+    return label;
+  }
+
+  function getCustomSelectWrapper($select) {
+    if (!$select || !$select.length) {
+      return $();
+    }
+    return $select.closest(".select-wrap").children(".custom-select").first();
+  }
+
+  function setCustomSelectOpen($custom, open) {
+    if (!$custom || !$custom.length) {
+      return;
+    }
+
+    var isOpen = !!open;
+    $custom.toggleClass("is-open", isOpen);
+    $custom.children(".custom-select-trigger").attr("aria-expanded", isOpen ? "true" : "false");
+  }
+
+  function closeAllCustomSelects(exceptElement) {
+    var closedAny = false;
+    $(".custom-select.is-open").each(function() {
+      if (exceptElement && this === exceptElement) {
+        return;
+      }
+      setCustomSelectOpen($(this), false);
+      closedAny = true;
+    });
+    return closedAny;
+  }
+
+  function syncCustomSelectFromNative($select) {
+    var $custom = getCustomSelectWrapper($select);
+    if (!$custom.length) {
+      return;
+    }
+
+    var currentValue = String($select.val() || "");
+    var currentLabel = getCustomSelectOptionLabel($select, currentValue);
+
+    $custom.attr("data-value", currentValue);
+    $custom.find(".custom-select-value").text(currentLabel || currentValue);
+    $custom.find(".custom-select-option").each(function() {
+      var isActive = String(this.getAttribute("data-value") || "") === currentValue;
+      this.classList.toggle("is-active", isActive);
+      this.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+  }
+
+  function initCustomSelect($select) {
+    if (!$select || !$select.length) {
+      return;
+    }
+
+    var $wrap = $select.closest(".select-wrap");
+    if (!$wrap.length) {
+      return;
+    }
+
+    $select.off(".customSelect");
+    $wrap.children(".custom-select").remove();
+
+    var selectId = String($select.attr("id") || "");
+    var menuId = (selectId ? (selectId + "-menu") : ("custom-select-menu-" + Math.random().toString(36).slice(2)));
+    var selectedLabel = getCustomSelectOptionLabel($select, $select.val());
+
+    $wrap.addClass("has-custom-select");
+    $select.addClass("is-native-hidden");
+    $select.attr("tabindex", "-1");
+    $select.attr("aria-hidden", "true");
+
+    var $custom = $("<div>", {
+      "class": "custom-select",
+      "data-select-id": selectId
+    });
+
+    var $trigger = $("<button>", {
+      "class": "custom-select-trigger",
+      type: "button",
+      "aria-haspopup": "listbox",
+      "aria-expanded": "false",
+      "aria-controls": menuId
+    });
+
+    $trigger.append($("<span>", {
+      "class": "custom-select-value",
+      text: selectedLabel
+    }));
+    $trigger.append($("<i>", {
+      "class": "fa-solid fa-chevron-down custom-select-caret",
+      "aria-hidden": "true"
+    }));
+
+    var $menu = $("<div>", {
+      "class": "custom-select-menu",
+      id: menuId,
+      role: "listbox"
+    });
+
+    $select.find("option").each(function() {
+      var optionValue = String(this.value || "");
+      var optionLabel = String($(this).text() || "").trim();
+      var isSelected = this.selected;
+      $menu.append($("<button>", {
+        "class": "custom-select-option" + (isSelected ? " is-active" : ""),
+        type: "button",
+        role: "option",
+        "data-value": optionValue,
+        "aria-selected": isSelected ? "true" : "false",
+        text: optionLabel
+      }));
+    });
+
+    $custom.append($trigger, $menu);
+    $wrap.append($custom);
+
+    $select.on("change.customSelect", function() {
+      syncCustomSelectFromNative($select);
+    });
+
+    $trigger.on("click", function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      var willOpen = !$custom.hasClass("is-open");
+      closeAllCustomSelects($custom.get(0));
+      setCustomSelectOpen($custom, willOpen);
+
+      if (willOpen) {
+        var $active = $menu.children(".custom-select-option.is-active").first();
+        if ($active.length) {
+          $active.trigger("focus");
+        }
+      }
+    });
+
+    $menu.on("click", ".custom-select-option", function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      var nextValue = String(this.getAttribute("data-value") || "");
+      var prevValue = String($select.val() || "");
+      $select.val(nextValue);
+      syncCustomSelectFromNative($select);
+      setCustomSelectOpen($custom, false);
+      $trigger.trigger("focus");
+
+      if (nextValue !== prevValue) {
+        $select.trigger("change");
+      }
+    });
+
+    $custom.on("keydown", ".custom-select-trigger, .custom-select-option", function(event) {
+      var key = String(event.key || "");
+      var $options = $menu.children(".custom-select-option");
+      if (!$options.length) {
+        return;
+      }
+
+      if (key === "Escape") {
+        event.preventDefault();
+        setCustomSelectOpen($custom, false);
+        $trigger.trigger("focus");
+        return;
+      }
+
+      if (key === "Enter" || key === " ") {
+        if ($(event.currentTarget).hasClass("custom-select-trigger")) {
+          event.preventDefault();
+          var shouldOpen = !$custom.hasClass("is-open");
+          closeAllCustomSelects($custom.get(0));
+          setCustomSelectOpen($custom, shouldOpen);
+          if (shouldOpen) {
+            $options.filter(".is-active").first().trigger("focus");
+          }
+          return;
+        }
+      }
+
+      if (key === "ArrowDown" || key === "ArrowUp") {
+        event.preventDefault();
+        if (!$custom.hasClass("is-open")) {
+          closeAllCustomSelects($custom.get(0));
+          setCustomSelectOpen($custom, true);
+          $options.filter(".is-active").first().trigger("focus");
+          return;
+        }
+
+        var activeElement = document.activeElement;
+        var currentIndex = $options.index(activeElement);
+        if (currentIndex < 0) {
+          currentIndex = $options.index($options.filter(".is-active").first());
+        }
+        if (currentIndex < 0) {
+          currentIndex = 0;
+        }
+
+        var delta = key === "ArrowDown" ? 1 : -1;
+        var nextIndex = clamp(currentIndex + delta, 0, $options.length - 1);
+        $options.eq(nextIndex).trigger("focus");
+        return;
+      }
+
+      if (key === "Home" || key === "End") {
+        if (!$custom.hasClass("is-open")) {
+          return;
+        }
+        event.preventDefault();
+        var edgeIndex = key === "Home" ? 0 : ($options.length - 1);
+        $options.eq(edgeIndex).trigger("focus");
+      }
+    });
+
+    syncCustomSelectFromNative($select);
+  }
+
+  function initCustomSelects() {
+    initCustomSelect($sortSelect);
+    initCustomSelect($themeSelect);
+  }
+
+  function getSortOptions() {
+    if (state.sort === "date-asc") {
+      return {
+        sortBy: "date",
+        sortAscending: {
+          date: true
+        }
+      };
+    }
+
+    if (state.sort === "date-desc") {
+      return {
+        sortBy: "date",
+        sortAscending: {
+          date: false
+        }
+      };
+    }
+
+    return {
+      sortBy: "random",
+      sortAscending: {
+        random: true
+      }
+    };
+  }
+
+  function isDateSort() {
+    return state.sort === "date-asc" || state.sort === "date-desc";
+  }
+
+  function syncSortModeUi() {
+    $body.attr("data-sort-mode", isDateSort() ? "date" : "random");
+  }
+
+  function getArrangedVisibleElements() {
+    if (iso && Array.isArray(iso.filteredItems) && iso.filteredItems.length) {
+      var sorted = [];
+      for (var i = 0; i < iso.filteredItems.length; i++) {
+        var element = iso.filteredItems[i] && iso.filteredItems[i].element;
+        if (!element || element.classList.contains("isotope-hidden") || element.style.display === "none") {
+          continue;
+        }
+        sorted.push(element);
+      }
+      return sorted;
+    }
+
+    return getVisibleItems().toArray();
+  }
+
+  function getMonthKeyFromDate(date) {
+    var year = date.getFullYear();
+    var month = String(date.getMonth() + 1).padStart(2, "0");
+    return year + "-" + month;
+  }
+
+  function getItemMonthKey(item) {
+    return String(item && item.getAttribute("data-month-key") || "");
+  }
+
+  function getMonthLabel(date) {
+    if (window.innerWidth <= MOBILE_BREAKPOINT) {
+      var romanMonth = ROMAN_MONTHS[date.getMonth()] || String(date.getMonth() + 1);
+      var shortYear = String(date.getFullYear()).slice(-2);
+      return romanMonth + " " + shortYear;
+    }
+
+    if (!timelineLabelFormatter && typeof Intl !== "undefined" && Intl.DateTimeFormat) {
+      var locale = document.documentElement.lang || navigator.language || "en-US";
+      try {
+        timelineLabelFormatter = new Intl.DateTimeFormat(locale, {
+          month: "short",
+          year: "numeric"
+        });
+      } catch (error) {
+        timelineLabelFormatter = null;
+      }
+    }
+
+    if (timelineLabelFormatter) {
+      return timelineLabelFormatter.format(date);
+    }
+
+    var fallbackMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return fallbackMonths[date.getMonth()] + " " + date.getFullYear();
+  }
+
+  function getTimelineStickyOffset() {
+    if (window.innerWidth <= MOBILE_BREAKPOINT) {
+      var timelineHeight = 0;
+      if ($timelineWrap.length && !$timelineWrap.prop("hidden")) {
+        timelineHeight = Math.round($timelineWrap.outerHeight() || 0);
+      }
+      if (timelineHeight > 0) {
+        return Math.max(74, timelineHeight + 10);
+      }
+      return 92;
+    }
+
+    var deckHeight = Math.round($controlDeck.outerHeight() || 0);
+    var extraOffset = 20;
+    if (deckHeight > 0) {
+      return Math.max(92, deckHeight + extraOffset);
+    }
+    return 92;
+  }
+
+  function getTimelineScrollMarker() {
+    return getTimelineStickyOffset();
+  }
+
+  function centerTimelineChip(chipElement, behavior) {
+    if (!chipElement || !$timeline.length) {
+      return;
+    }
+
+    var timelineEl = $timeline.get(0);
+    if (!timelineEl) {
+      return;
+    }
+
+    var targetLeft = Math.round(
+      chipElement.offsetLeft + (chipElement.offsetWidth / 2) - (timelineEl.clientWidth / 2)
+    );
+    var maxScrollLeft = Math.max(0, timelineEl.scrollWidth - timelineEl.clientWidth);
+    targetLeft = clamp(targetLeft, 0, maxScrollLeft);
+
+    if (Math.abs(timelineEl.scrollLeft - targetLeft) < 2) {
+      return;
+    }
+
+    if (typeof timelineEl.scrollTo === "function") {
+      timelineEl.scrollTo({
+        left: targetLeft,
+        behavior: behavior || "smooth"
+      });
+      return;
+    }
+
+    timelineEl.scrollLeft = targetLeft;
+  }
+
+  function setTimelineActive(monthKey, options) {
+    if (!monthKey || !$timeline.length) {
+      return;
+    }
+
+    var config = options || {};
+    if (!config.force && monthKey === activeTimelineKey) {
+      return;
+    }
+
+    activeTimelineKey = monthKey;
+
+    $timeline.find(".timeline-chip").each(function() {
+      var chipKey = String(this.getAttribute("data-month-key") || "");
+      var isActive = chipKey === monthKey;
+      this.classList.toggle("is-active", isActive);
+      this.setAttribute("aria-pressed", isActive ? "true" : "false");
+
+      if (isActive && config.scrollIntoView !== false) {
+        centerTimelineChip(this, config.scrollBehavior || "smooth");
+      }
+    });
+  }
+
+  function syncTimelineActiveFromScroll() {
+    timelineScrollRaf = null;
+
+    if (!$timelineWrap.length || $timelineWrap.prop("hidden") || !timelineEntries.length) {
+      return;
+    }
+
+    var marker = getTimelineScrollMarker();
+    var bestAbove = null;
+    var bestBelow = null;
+
+    for (var i = 0; i < timelineEntries.length; i++) {
+      var entry = timelineEntries[i];
+      if (!entry.item || !entry.item.isConnected) {
+        continue;
+      }
+
+      var top = entry.item.getBoundingClientRect().top;
+      if (top <= marker) {
+        if (!bestAbove || top > bestAbove.top) {
+          bestAbove = { key: entry.key, top: top };
+        }
+      } else if (!bestBelow || top < bestBelow.top) {
+        bestBelow = { key: entry.key, top: top };
+      }
+    }
+
+    var nextKey = bestAbove ? bestAbove.key : (bestBelow ? bestBelow.key : "");
+    if (nextKey) {
+      setTimelineActive(nextKey, { scrollIntoView: true });
+    }
+  }
+
+  function queueTimelineActiveSync() {
+    if (timelineScrollRaf !== null) {
+      return;
+    }
+
+    var run = function() {
+      syncTimelineActiveFromScroll();
+    };
+
+    if (typeof window.requestAnimationFrame === "function") {
+      timelineScrollRaf = window.requestAnimationFrame(run);
+      return;
+    }
+
+    timelineScrollRaf = window.setTimeout(run, 0);
+  }
+
+  function scrollToTimelineMonth(monthKey) {
+    if (!monthKey || !timelineEntries.length) {
+      return;
+    }
+
+    var target = null;
+    for (var i = 0; i < timelineEntries.length; i++) {
+      if (timelineEntries[i].key === monthKey) {
+        target = timelineEntries[i];
+        break;
+      }
+    }
+
+    if (!target || !target.item) {
+      return;
+    }
+
+    var offset = getTimelineStickyOffset();
+    var top = (window.pageYOffset || document.documentElement.scrollTop || 0) + target.item.getBoundingClientRect().top;
+
+    window.scrollTo({
+      top: Math.max(0, Math.round(top - offset)),
+      behavior: "smooth"
+    });
+
+    setTimelineActive(monthKey, { force: true, scrollIntoView: true });
+  }
+
+  function renderTimeline() {
+    if (!$timelineWrap.length || !$timeline.length) {
+      return;
+    }
+
+    timelineEntries = [];
+    activeTimelineKey = "";
+    $timeline.empty();
+
+    if (!isDateSort()) {
+      clearTimelinePreview();
+      $timelineWrap.prop("hidden", true);
+      setDeckHidden(deckHidden);
+      return;
+    }
+
+    var elements = getArrangedVisibleElements();
+    if (!elements.length) {
+      clearTimelinePreview();
+      $timelineWrap.prop("hidden", true);
+      setDeckHidden(deckHidden);
+      return;
+    }
+
+    var monthSeen = {};
+    for (var i = 0; i < elements.length; i++) {
+      var ts = Number(elements[i].getAttribute("data-date-ts"));
+      if (!isFiniteNumber(ts) || ts <= 0) {
+        continue;
+      }
+
+      var date = new Date(ts);
+      if (!isFiniteNumber(date.getTime())) {
+        continue;
+      }
+
+      var key = getMonthKeyFromDate(date);
+      if (monthSeen[key]) {
+        continue;
+      }
+      monthSeen[key] = true;
+
+      timelineEntries.push({
+        key: key,
+        label: getMonthLabel(date),
+        item: elements[i]
+      });
+    }
+
+    if (!timelineEntries.length) {
+      clearTimelinePreview();
+      $timelineWrap.prop("hidden", true);
+      setDeckHidden(deckHidden);
+      return;
+    }
+
+    for (var j = 0; j < timelineEntries.length; j++) {
+      var entry = timelineEntries[j];
+      $timeline.append($("<button>", {
+        "class": "timeline-chip",
+        type: "button",
+        "data-month-key": entry.key,
+        text: entry.label,
+        "aria-pressed": "false"
+      }));
+    }
+
+    $timelineWrap.prop("hidden", false);
+    clearTimelinePreview();
+    setDeckHidden(deckHidden);
+    queueTimelineActiveSync();
+  }
+
+  function setDeckHidden(hidden) {
+    var hadCondensedClass = $controlDeck.hasClass("is-condensed");
+
+    if (!$controlDeck.length) {
+      return;
+    }
+
+    deckHidden = !!hidden;
+    $controlDeck.toggleClass("is-condensed", deckHidden);
+    if (!deckHidden) {
+      $controlDeck.removeClass("is-condensed-expanded");
+    }
+
+    var hasCondensedClass = $controlDeck.hasClass("is-condensed");
+    if (hadCondensedClass !== hasCondensedClass && window.innerWidth > MOBILE_BREAKPOINT) {
+      deckToggleLockUntil = Date.now() + DECK_TOGGLE_LOCK_MS;
+    }
+  }
+
+  function setDeckCondensedExpanded(expanded) {
+    if (!$controlDeck.length || !deckHidden) {
+      $controlDeck.removeClass("is-condensed-expanded");
+      return;
+    }
+
+    $controlDeck.toggleClass("is-condensed-expanded", !!expanded);
+  }
+
+  function updateDeckVisibilityOnScroll() {
+    if (!$controlDeck.length) {
+      return;
+    }
+
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+    var delta = scrollTop - lastScrollY;
+    var isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
+    var nearTop = scrollTop < (isMobile ? 20 : 90);
+    var now = Date.now();
+    var hideDelta = 8;
+
+    if (!isMobile && now < deckToggleLockUntil) {
+      lastScrollY = scrollTop;
+      return;
+    }
+
+    if (isMobile) {
+      if (nearTop) {
+        setDeckHidden(false);
+        lastScrollY = scrollTop;
+        return;
+      }
+
+      if (!deckHidden) {
+        setDeckHidden(true);
+      }
+
+      if (delta < -hideDelta) {
+        setDeckCondensedExpanded(true);
+      } else if (delta > hideDelta) {
+        setDeckCondensedExpanded(false);
+      }
+
+      lastScrollY = scrollTop;
+      return;
+    }
+
+    if (nearTop) {
+      setDeckHidden(false);
+      lastScrollY = scrollTop;
+      return;
+    }
+
+    if (!deckHidden && scrollTop > 220) {
+      setDeckHidden(true);
+    }
+
+    lastScrollY = scrollTop;
+  }
+
+  function getItemTags(item) {
+    return String(item.getAttribute("data-tags") || "").split(/\s+/).filter(Boolean);
+  }
+
+  function itemMatches(item) {
+    var tags = getItemTags(item);
+    var query = state.query;
+
+    if (state.country !== "*" && tags.indexOf(state.country) < 0) {
+      return false;
+    }
+
+    if (state.category !== "*" && tags.indexOf(state.category) < 0) {
+      return false;
+    }
+
+    if (!query) {
+      return true;
+    }
+
+    var plainQuery = query.charAt(0) === "#" ? query.slice(1) : query;
+    if (!plainQuery) {
+      return true;
+    }
+
+    var searchText = String(item.getAttribute("data-search") || "");
+    return searchText.indexOf(plainQuery) >= 0;
+  }
+
+  function getVisibleItems() {
+    return $grid.find(".item").filter(function() {
+      return !this.classList.contains("isotope-hidden") && this.style.display !== "none";
+    });
+  }
+
+  function clearTimelinePreview() {
+    if (!$grid.length) {
+      return;
+    }
+    timelinePreviewKey = "";
+    $grid.removeClass("timeline-hover-active");
+    $grid.find(".item.is-timeline-hover-target").removeClass("is-timeline-hover-target");
+  }
+
+  function hideTimelineSection() {
+    timelineEntries = [];
+    activeTimelineKey = "";
+    clearTimelinePreview();
+    if ($timeline.length) {
+      $timeline.empty();
+    }
+    if ($timelineWrap.length) {
+      $timelineWrap.prop("hidden", true);
+    }
+    setDeckHidden(deckHidden);
+  }
+
+  function previewTimelineMonth(monthKey) {
+    var key = String(monthKey || "");
+    if (window.innerWidth <= MOBILE_BREAKPOINT) {
+      clearTimelinePreview();
+      return;
+    }
+
+    if (!key || !isDateSort()) {
+      clearTimelinePreview();
+      return;
+    }
+
+    if (timelinePreviewKey === key && $grid.hasClass("timeline-hover-active")) {
+      return;
+    }
+
+    clearTimelinePreview();
+
+    var $targets = getVisibleItems().filter(function() {
+      return getItemMonthKey(this) === key;
+    });
+
+    if (!$targets.length) {
+      return;
+    }
+
+    timelinePreviewKey = key;
+    $grid.addClass("timeline-hover-active");
+    $targets.addClass("is-timeline-hover-target");
+  }
+
+  function updateGalleryCounts() {
+    if (!$galleryCounts.length) {
+      return;
+    }
+
+    var total = $grid.find(".item").length;
+    var visible = getVisibleItems().length;
+    $galleryCounts.text("Visible " + visible + " / " + total + " photos");
+  }
+
+  function getVisibleSignature() {
+    return getVisibleItems().map(function() {
+      return this.getAttribute("data-id") || this.getAttribute("href") || "";
+    }).get().join("|");
+  }
+
+  function syncLightGallery() {
+    if (!galleryPlugin) {
+      return;
+    }
+
+    var signature = getVisibleSignature();
+    if (signature === lastVisibleSignature) {
+      return;
+    }
+
+    lastVisibleSignature = signature;
+    galleryPlugin.refresh();
+  }
+
+  function applyFilters(options) {
+    var config = options || {};
+    syncSortModeUi();
+    clearTimelinePreview();
+
+    if (!isDateSort()) {
+      hideTimelineSection();
+      if (window.innerWidth <= MOBILE_BREAKPOINT) {
+        setDeckHidden(false);
+      }
+    }
+
+    if (state.sort === "random" && config.reshuffleRandom) {
+      reseedRandomRanks();
+    }
+
+    var sortOptions = getSortOptions();
+
+    $grid.isotope({
+      filter: function() {
+        return itemMatches(this);
+      },
+      sortBy: sortOptions.sortBy,
+      sortAscending: sortOptions.sortAscending
+    });
+
+    updateGalleryCounts();
+    updateUrlFromState();
+  }
+
+  function initIsotope() {
+    applyTileSize();
+
+    iso = $grid.isotope({
+      itemSelector: ".item",
+      masonry: {
+        columnWidth: getTileSize(),
+        fitWidth: true,
+        gutter: GRID_GUTTER
+      },
+      getSortData: {
+        date: function(itemElem) {
+          var value = Number(itemElem.getAttribute("data-date-ts"));
+          return isFiniteNumber(value) ? value : 0;
+        },
+        random: function(itemElem) {
+          var value = Number(itemElem.getAttribute("data-random-rank"));
+          return isFiniteNumber(value) ? value : 0;
+        }
+      },
+      sortBy: "random",
+      sortAscending: {
+        random: true
+      }
+    }).data("isotope");
+
+    $grid.imagesLoaded().progress(function() {
+      $grid.isotope("layout");
+    });
+
+    $grid.on("arrangeComplete", function() {
+      syncLightGallery();
+      renderTimeline();
+      updateGalleryCounts();
+    });
+  }
+
+  function initLightbox() {
+    var root = document.getElementById("lightgallery");
+    if (!root || typeof lightGallery !== "function") {
+      return;
+    }
+
+    galleryPlugin = lightGallery(root, {
+      selector: ".item:not(.isotope-hidden):not([style*='display: none']) .tile-link",
+      plugins: [lgZoom, lgThumbnail],
+      speed: 380,
+      download: false,
+      hideBarsDelay: 2200,
+      actualSize: false,
+      showZoomInOutIcons: true,
+      mobileSettings: {
+        showCloseIcon: true,
+        download: false
+      }
+    });
+
+    root.addEventListener("lgAfterOpen", function(event) {
+      ensureLightboxFullscreenButton();
+      syncFullscreenButtonState();
+      queueExifUpdate(getLightboxIndex(event));
+    });
+
+    root.addEventListener("lgAfterSlide", function(event) {
+      ensureLightboxFullscreenButton();
+      syncFullscreenButtonState();
+      queueExifUpdate(getLightboxIndex(event));
+    });
+
+    root.addEventListener("lgBeforeClose", function() {
+      exifRequestToken += 1;
+      var fsElement = getFullscreenElement();
+      var lightboxRoot = getLightboxRootElement();
+      if (fsElement && lightboxRoot && (fsElement === lightboxRoot || lightboxRoot.contains(fsElement))) {
+        var exitResult = exitFullscreen();
+        if (exitResult && typeof exitResult.catch === "function") {
+          exitResult.catch(function() {});
+        }
+      }
+    });
+  }
+
+  function isLightboxOpen() {
+    if ($body.hasClass("lg-on")) {
+      return true;
+    }
+
+    return !!document.querySelector(".lg-outer.lg-visible, .lg-outer.lg-show, .lg-container .lg-current");
+  }
+
+  function getLightboxIndex(event) {
+    if (event && event.detail && isFiniteNumber(event.detail.index)) {
+      return event.detail.index;
+    }
+    if (galleryPlugin && isFiniteNumber(galleryPlugin.index)) {
+      return galleryPlugin.index;
+    }
+    return 0;
+  }
+
+  function getLightboxSource(index) {
+    if (!galleryPlugin || !Array.isArray(galleryPlugin.galleryItems) || !galleryPlugin.galleryItems.length) {
+      return "";
+    }
+
+    var safeIndex = clamp(Number(index) || 0, 0, galleryPlugin.galleryItems.length - 1);
+    var item = galleryPlugin.galleryItems[safeIndex] || {};
+    return item.src || item.href || "";
+  }
+
+  function getCurrentSubHtml() {
+    var $active = $(".lg-current .lg-sub-html");
+    if ($active.length) {
+      return $active.first();
+    }
+
+    var $visible = $(".lg-sub-html").filter(function() {
+      return this.offsetParent !== null;
+    });
+    if ($visible.length) {
+      return $visible.first();
+    }
+
+    var $fallback = $(".lg-sub-html");
+    return $fallback.length ? $fallback.last() : $();
+  }
+
+  function ensureExifPreview($panel) {
+    if (!$panel || !$panel.length) {
+      return $();
+    }
+
+    var $preview = $panel.children(".lg-exif-preview").first();
+    if (!$preview.length) {
+      $preview = $("<div>", { "class": "lg-exif-preview" });
+      $preview.append($("<p>", { "class": "lg-exif-preview-title" }));
+      $preview.append($("<p>", { "class": "lg-exif-preview-tags" }));
+
+      var $toggle = $panel.children(".lg-exif-toggle").first();
+      if ($toggle.length) {
+        $toggle.before($preview);
       } else {
-        return null;
+        $panel.prepend($preview);
       }
-
-      if (view.getUint16(tiffStart + 2, littleEndian) !== 42) {
-        return null;
+    } else {
+      if (!$preview.children(".lg-exif-preview-title").length) {
+        $preview.prepend($("<p>", { "class": "lg-exif-preview-title" }));
       }
-
-      var ifd0Offset = tiffStart + view.getUint32(tiffStart + 4, littleEndian);
-      var ifd0 = readIfdEntries(view, ifd0Offset, tiffStart, littleEndian) || {};
-      var exifPtr = valueAsNumber(ifd0[EXIF_TAGS.EXIF_POINTER]);
-      var exif = {};
-      if (isFiniteNumber(exifPtr)) {
-        exif = readIfdEntries(view, tiffStart + exifPtr, tiffStart, littleEndian) || {};
+      if (!$preview.children(".lg-exif-preview-tags").length) {
+        $preview.append($("<p>", { "class": "lg-exif-preview-tags" }));
       }
-      return { ifd0: ifd0, exif: exif };
     }
 
-    offset += 2 + segmentLength;
+    return $preview;
   }
 
-  return null;
-}
+  function syncCollapsedExifPreview($panel) {
+    var $preview = ensureExifPreview($panel);
+    if (!$preview.length) {
+      return;
+    }
 
-function buildExifSummary(parsedExif) {
-  if (!parsedExif) {
+    var $subHtml = $panel.parent(".lg-sub-html");
+    var titleText = "";
+    var tagsText = "";
+    if ($subHtml.length) {
+      titleText = String($subHtml.children(".lg-title").first().text() || "").trim();
+      tagsText = String($subHtml.children(".lg-tags").first().text() || "").trim();
+      $subHtml.toggleClass("lg-exif-collapsed", !state.exifVisible);
+    }
+
+    var $title = $preview.children(".lg-exif-preview-title").first();
+    var $tags = $preview.children(".lg-exif-preview-tags").first();
+
+    $title.text(titleText);
+    $tags.text(tagsText);
+    $title.toggleClass("is-empty", !titleText);
+    $tags.toggleClass("is-empty", !tagsText);
+
+    $preview.toggleClass("is-empty", !titleText && !tagsText);
+  }
+
+  function ensureExifPanel() {
+    var $subHtml = getCurrentSubHtml();
+    if (!$subHtml.length) {
+      return $();
+    }
+
+    var $panel = $subHtml.children(".lg-exif-panel");
+    if (!$panel.length) {
+      $panel = $("<div>", { "class": "lg-exif-panel" });
+      $panel.append(
+        $("<button>", {
+          "class": "lg-exif-toggle",
+          type: "button",
+          "aria-pressed": state.exifVisible ? "false" : "true",
+          "aria-label": state.exifVisible ? "Hide EXIF" : "Show EXIF",
+          html: "<i class='fa-solid fa-chevron-up' aria-hidden='true'></i>"
+        })
+      );
+      $panel.append(
+        $("<div>", {
+          "class": "lg-exif-body is-loading",
+          text: "EXIF loading..."
+        })
+      );
+      $subHtml.append($panel);
+    } else if (!$panel.children(".lg-exif-toggle").length || !$panel.children(".lg-exif-body").length) {
+      $panel.empty();
+      $panel.append(
+        $("<button>", {
+          "class": "lg-exif-toggle",
+          type: "button",
+          "aria-pressed": state.exifVisible ? "false" : "true",
+          "aria-label": state.exifVisible ? "Hide EXIF" : "Show EXIF",
+          html: "<i class='fa-solid fa-chevron-up' aria-hidden='true'></i>"
+        })
+      );
+      $panel.append($("<div>", { "class": "lg-exif-body" }));
+    }
+
+    ensureExifPreview($panel);
+    syncInlineExifToggleUi($panel);
+    return $panel;
+  }
+
+  function getExifBody($panel) {
+    return $panel.children(".lg-exif-body").first();
+  }
+
+  function syncInlineExifToggleUi($panel) {
+    if (!$panel || !$panel.length) {
+      return;
+    }
+
+    var isCollapsed = !state.exifVisible;
+    $panel.toggleClass("is-collapsed", isCollapsed);
+
+    var $toggle = $panel.children(".lg-exif-toggle").first();
+    if (!$toggle.length) {
+      return;
+    }
+
+    $toggle.attr("aria-pressed", isCollapsed ? "true" : "false");
+    $toggle.attr("aria-label", isCollapsed ? "Show EXIF" : "Hide EXIF");
+    $toggle.attr("title", isCollapsed ? "Show EXIF" : "Hide EXIF");
+    syncCollapsedExifPreview($panel);
+  }
+
+  function formatExifDate(value) {
+    if (!value) {
+      return "";
+    }
+
+    if (value instanceof Date && isFiniteNumber(value.getTime())) {
+      var year = value.getFullYear();
+      var month = String(value.getMonth() + 1).padStart(2, "0");
+      var day = String(value.getDate()).padStart(2, "0");
+      var hour = String(value.getHours()).padStart(2, "0");
+      var minute = String(value.getMinutes()).padStart(2, "0");
+      return year + "-" + month + "-" + day + " " + hour + ":" + minute;
+    }
+
+    var asText = String(value);
+    var match = asText.match(/^(\d{4}):(\d{2}):(\d{2})\s(\d{2}):(\d{2})/);
+    if (!match) {
+      return asText;
+    }
+
+    return match[1] + "-" + match[2] + "-" + match[3] + " " + match[4] + ":" + match[5];
+  }
+
+  function formatExposure(value) {
+    var exposure = Number(value);
+    if (!isFiniteNumber(exposure) || exposure <= 0) {
+      return "";
+    }
+
+    if (exposure >= 1) {
+      return exposure.toFixed(exposure >= 10 ? 0 : 1) + " s";
+    }
+
+    return "1/" + Math.round(1 / exposure) + " s";
+  }
+
+  function formatAperture(value) {
+    var aperture = Number(value);
+    if (!isFiniteNumber(aperture) || aperture <= 0) {
+      return "";
+    }
+    return "f/" + aperture.toFixed(1).replace(/\.0$/, "");
+  }
+
+  function formatFocalLength(value, value35) {
+    var focal = Number(value);
+    if (!isFiniteNumber(focal) || focal <= 0) {
+      return "";
+    }
+
+    var text = focal.toFixed(1).replace(/\.0$/, "") + " mm";
+    var eq = Number(value35);
+    if (isFiniteNumber(eq) && eq > 0) {
+      text += " (" + Math.round(eq) + " mm eq.)";
+    }
+    return text;
+  }
+
+  function firstExifValue(value) {
+    return Array.isArray(value) ? value[0] : value;
+  }
+
+  function exifValueAsNumber(value) {
+    var normalized = firstExifValue(value);
+    if (isFiniteNumber(normalized)) {
+      return normalized;
+    }
+    if (normalized && typeof normalized === "object" && isFiniteNumber(normalized.value)) {
+      return normalized.value;
+    }
+    var parsed = Number(normalized);
+    return isFinite(parsed) ? parsed : null;
+  }
+
+  function exifValueAsString(value) {
+    var normalized = firstExifValue(value);
+    if (typeof normalized === "string") {
+      return normalized.trim();
+    }
+    if (isFiniteNumber(normalized)) {
+      return String(normalized);
+    }
+    return "";
+  }
+
+  function readAsciiString(view, offset, length) {
+    var chars = [];
+    var maxOffset = Math.min(view.byteLength, offset + length);
+    for (var i = offset; i < maxOffset; i++) {
+      var code = view.getUint8(i);
+      if (code === 0) {
+        break;
+      }
+      chars.push(String.fromCharCode(code));
+    }
+    return chars.join("").trim();
+  }
+
+  function readIfdValue(view, entryOffset, type, count, littleEndian, tiffStart) {
+    var typeSize = EXIF_TYPE_SIZES[type];
+    if (!typeSize || !count) {
+      return null;
+    }
+
+    var valueOffset = entryOffset + 8;
+    var totalSize = typeSize * count;
+    var dataOffset;
+
+    if (totalSize <= 4) {
+      dataOffset = valueOffset;
+    } else {
+      if (valueOffset + 4 > view.byteLength) {
+        return null;
+      }
+      dataOffset = tiffStart + view.getUint32(valueOffset, littleEndian);
+    }
+
+    if (dataOffset < 0 || dataOffset + totalSize > view.byteLength) {
+      return null;
+    }
+
+    if (type === 2) {
+      return readAsciiString(view, dataOffset, count);
+    }
+
+    function readSingleValue(index) {
+      var offset = dataOffset + (index * typeSize);
+      if (offset + typeSize > view.byteLength) {
+        return null;
+      }
+
+      if (type === 1 || type === 7) {
+        return view.getUint8(offset);
+      }
+      if (type === 3) {
+        return view.getUint16(offset, littleEndian);
+      }
+      if (type === 4) {
+        return view.getUint32(offset, littleEndian);
+      }
+      if (type === 5) {
+        var numerator = view.getUint32(offset, littleEndian);
+        var denominator = view.getUint32(offset + 4, littleEndian);
+        return {
+          numerator: numerator,
+          denominator: denominator,
+          value: denominator ? (numerator / denominator) : null
+        };
+      }
+      if (type === 9) {
+        return view.getInt32(offset, littleEndian);
+      }
+      if (type === 10) {
+        var signedNumerator = view.getInt32(offset, littleEndian);
+        var signedDenominator = view.getInt32(offset + 4, littleEndian);
+        return {
+          numerator: signedNumerator,
+          denominator: signedDenominator,
+          value: signedDenominator ? (signedNumerator / signedDenominator) : null
+        };
+      }
+
+      return null;
+    }
+
+    if (count === 1) {
+      return readSingleValue(0);
+    }
+
+    var values = [];
+    for (var i = 0; i < count; i++) {
+      values.push(readSingleValue(i));
+    }
+    return values;
+  }
+
+  function readIfdEntries(view, ifdOffset, tiffStart, littleEndian) {
+    if (!isFiniteNumber(ifdOffset) || ifdOffset < 0 || ifdOffset + 2 > view.byteLength) {
+      return null;
+    }
+
+    var entries = {};
+    var count = view.getUint16(ifdOffset, littleEndian);
+
+    for (var i = 0; i < count; i++) {
+      var entryOffset = ifdOffset + 2 + (i * 12);
+      if (entryOffset + 12 > view.byteLength) {
+        break;
+      }
+
+      var tag = view.getUint16(entryOffset, littleEndian);
+      var type = view.getUint16(entryOffset + 2, littleEndian);
+      var valueCount = view.getUint32(entryOffset + 4, littleEndian);
+      entries[tag] = readIfdValue(view, entryOffset, type, valueCount, littleEndian, tiffStart);
+    }
+
+    return entries;
+  }
+
+  function parseExifFromJpeg(arrayBuffer) {
+    var view = new DataView(arrayBuffer);
+    if (view.byteLength < 4 || view.getUint16(0, false) !== 0xFFD8) {
+      return null;
+    }
+
+    var offset = 2;
+    while (offset + 4 <= view.byteLength) {
+      if (view.getUint8(offset) !== 0xFF) {
+        offset += 1;
+        continue;
+      }
+
+      var marker = view.getUint8(offset + 1);
+      if (marker === 0xD9 || marker === 0xDA) {
+        break;
+      }
+
+      var segmentLength = view.getUint16(offset + 2, false);
+      if (segmentLength < 2) {
+        break;
+      }
+
+      var segmentStart = offset + 4;
+      var isExifSegment = marker === 0xE1 &&
+        segmentStart + 6 <= view.byteLength &&
+        view.getUint8(segmentStart) === 0x45 &&
+        view.getUint8(segmentStart + 1) === 0x78 &&
+        view.getUint8(segmentStart + 2) === 0x69 &&
+        view.getUint8(segmentStart + 3) === 0x66;
+
+      if (isExifSegment) {
+        var tiffStart = segmentStart + 6;
+        if (tiffStart + 8 > view.byteLength) {
+          return null;
+        }
+
+        var byteOrder = view.getUint16(tiffStart, false);
+        var littleEndian;
+        if (byteOrder === 0x4949) {
+          littleEndian = true;
+        } else if (byteOrder === 0x4D4D) {
+          littleEndian = false;
+        } else {
+          return null;
+        }
+
+        if (view.getUint16(tiffStart + 2, littleEndian) !== 42) {
+          return null;
+        }
+
+        var ifd0Offset = tiffStart + view.getUint32(tiffStart + 4, littleEndian);
+        var ifd0 = readIfdEntries(view, ifd0Offset, tiffStart, littleEndian) || {};
+        var exifPointer = exifValueAsNumber(ifd0[EXIF_TAGS.EXIF_POINTER]);
+        var exifIfd = {};
+        if (isFiniteNumber(exifPointer)) {
+          exifIfd = readIfdEntries(view, tiffStart + exifPointer, tiffStart, littleEndian) || {};
+        }
+
+        return {
+          ifd0: ifd0,
+          exif: exifIfd
+        };
+      }
+
+      offset += 2 + segmentLength;
+    }
+
     return null;
   }
 
-  var ifd0 = parsedExif.ifd0 || {};
-  var exif = parsedExif.exif || {};
-  var rows = [];
+  function toFallbackExifObject(parsedExif) {
+    if (!parsedExif) {
+      return null;
+    }
 
-  var make = valueAsString(ifd0[EXIF_TAGS.MAKE]);
-  var model = valueAsString(ifd0[EXIF_TAGS.MODEL]);
-  var camera = (make + ' ' + model).trim();
-  if (camera) {
-    rows.push({ label: 'Camera', value: camera });
+    var ifd0 = parsedExif.ifd0 || {};
+    var exif = parsedExif.exif || {};
+    var pixelX = exifValueAsNumber(exif[EXIF_TAGS.PIXEL_X_DIMENSION]);
+    var pixelY = exifValueAsNumber(exif[EXIF_TAGS.PIXEL_Y_DIMENSION]);
+    var imageWidth = exifValueAsNumber(ifd0[EXIF_TAGS.IMAGE_WIDTH]);
+    var imageHeight = exifValueAsNumber(ifd0[EXIF_TAGS.IMAGE_HEIGHT]);
+
+    return {
+      Make: exifValueAsString(ifd0[EXIF_TAGS.MAKE]),
+      Model: exifValueAsString(ifd0[EXIF_TAGS.MODEL]),
+      ModifyDate: exifValueAsString(ifd0[EXIF_TAGS.DATETIME]),
+      DateTimeOriginal: exifValueAsString(exif[EXIF_TAGS.DATETIME_ORIGINAL]),
+      ExposureTime: exifValueAsNumber(exif[EXIF_TAGS.EXPOSURE_TIME]),
+      FNumber: exifValueAsNumber(exif[EXIF_TAGS.FNUMBER]),
+      ISO: exifValueAsNumber(exif[EXIF_TAGS.ISO]),
+      FocalLength: exifValueAsNumber(exif[EXIF_TAGS.FOCAL_LENGTH]),
+      FocalLengthIn35mmFormat: exifValueAsNumber(exif[EXIF_TAGS.FOCAL_LENGTH_35]),
+      LensModel: exifValueAsString(exif[EXIF_TAGS.LENS_MODEL]),
+      ImageWidth: imageWidth,
+      ImageHeight: imageHeight,
+      PixelXDimension: pixelX,
+      PixelYDimension: pixelY,
+      ExifImageWidth: pixelX || imageWidth,
+      ExifImageHeight: pixelY || imageHeight
+    };
   }
 
-  var lens = valueAsString(exif[EXIF_TAGS.LENS_MODEL]);
-  if (lens) {
-    rows.push({ label: 'Lens', value: lens });
+  function buildExifSummaryRows(exif) {
+    if (!exif || typeof exif !== "object") {
+      return [];
+    }
+
+    var rows = [];
+    var camera = [exif.Make, exif.Model].filter(Boolean).join(" ").trim();
+    if (camera) {
+      rows.push({ label: "Camera", value: camera });
+    }
+
+    if (exif.LensModel) {
+      rows.push({ label: "Lens", value: String(exif.LensModel) });
+    }
+
+    var dateValue = formatExifDate(exif.DateTimeOriginal || exif.CreateDate || exif.ModifyDate);
+    if (dateValue) {
+      rows.push({ label: "Date", value: dateValue });
+    }
+
+    var exposureValue = formatExposure(exif.ExposureTime);
+    if (exposureValue) {
+      rows.push({ label: "Shutter", value: exposureValue });
+    }
+
+    var apertureValue = formatAperture(exif.FNumber);
+    if (apertureValue) {
+      rows.push({ label: "Aperture", value: apertureValue });
+    }
+
+    var isoValue = Number(exif.ISO);
+    if (isFiniteNumber(isoValue) && isoValue > 0) {
+      rows.push({ label: "ISO", value: String(Math.round(isoValue)) });
+    }
+
+    var focalValue = formatFocalLength(exif.FocalLength, exif.FocalLengthIn35mmFormat);
+    if (focalValue) {
+      rows.push({ label: "Focal", value: focalValue });
+    }
+
+    var width = Number(exif.ExifImageWidth || exif.ImageWidth || exif.PixelXDimension);
+    var height = Number(exif.ExifImageHeight || exif.ImageHeight || exif.PixelYDimension);
+    if (isFiniteNumber(width) && width > 0 && isFiniteNumber(height) && height > 0) {
+      rows.push({ label: "Size", value: Math.round(width) + " x " + Math.round(height) + " px" });
+    }
+
+    return rows;
   }
 
-  var date = formatExifDate(valueAsString(exif[EXIF_TAGS.DATETIME_ORIGINAL]) || valueAsString(ifd0[EXIF_TAGS.DATETIME]));
-  if (date) {
-    rows.push({ label: 'Date', value: date });
+  function loadExifSummaryFromBinary(resolvedSource) {
+    return fetch(resolvedSource, { cache: "force-cache" })
+      .then(function(response) {
+        if (!response.ok) {
+          throw new Error("Image download failed");
+        }
+        return response.arrayBuffer();
+      })
+      .then(function(arrayBuffer) {
+        var parsedExif = parseExifFromJpeg(arrayBuffer);
+        var exif = toFallbackExifObject(parsedExif);
+        var rows = buildExifSummaryRows(exif);
+        if (!rows.length) {
+          return { error: "No EXIF data" };
+        }
+        return { rows: rows };
+      })
+      .catch(function() {
+        return { error: "EXIF unavailable for this image" };
+      });
   }
 
-  var shutter = formatExposure(exif[EXIF_TAGS.EXPOSURE_TIME]);
-  if (shutter) {
-    rows.push({ label: 'Shutter', value: shutter });
-  }
+  function loadExifSummary(source) {
+    if (!source) {
+      return Promise.resolve({ error: "No EXIF data" });
+    }
 
-  var aperture = formatAperture(exif[EXIF_TAGS.FNUMBER]);
-  if (aperture) {
-    rows.push({ label: 'Aperture', value: aperture });
-  }
+    var resolvedSource = source;
+    try {
+      resolvedSource = new URL(source, window.location.href).href;
+    } catch (error) {}
 
-  var iso = valueAsNumber(exif[EXIF_TAGS.ISO]);
-  if (iso && isFiniteNumber(iso)) {
-    rows.push({ label: 'ISO', value: String(Math.round(iso)) });
-  }
+    if (exifCache[resolvedSource]) {
+      return exifCache[resolvedSource];
+    }
 
-  var focal = formatFocalLength(exif[EXIF_TAGS.FOCAL_LENGTH], exif[EXIF_TAGS.FOCAL_LENGTH_35]);
-  if (focal) {
-    rows.push({ label: 'Focal', value: focal });
-  }
+    var exifrAvailable = !!(window.exifr && typeof window.exifr.parse === "function");
+    if (exifrAvailable) {
+      exifCache[resolvedSource] = window.exifr.parse(resolvedSource, {
+        pick: [
+          "Make",
+          "Model",
+          "LensModel",
+          "DateTimeOriginal",
+          "CreateDate",
+          "ModifyDate",
+          "ExposureTime",
+          "FNumber",
+          "ISO",
+          "FocalLength",
+          "FocalLengthIn35mmFormat",
+          "ExifImageWidth",
+          "ExifImageHeight",
+          "ImageWidth",
+          "ImageHeight",
+          "PixelXDimension",
+          "PixelYDimension"
+        ]
+      }).then(function(exif) {
+        var rows = buildExifSummaryRows(exif);
+        if (rows.length) {
+          return { rows: rows };
+        }
+        return loadExifSummaryFromBinary(resolvedSource);
+      }).catch(function() {
+        return loadExifSummaryFromBinary(resolvedSource);
+      });
 
-  var width = valueAsNumber(exif[EXIF_TAGS.PIXEL_X_DIMENSION]);
-  var height = valueAsNumber(exif[EXIF_TAGS.PIXEL_Y_DIMENSION]);
-  if (!width || !height) {
-    width = valueAsNumber(ifd0[EXIF_TAGS.IMAGE_WIDTH]);
-    height = valueAsNumber(ifd0[EXIF_TAGS.IMAGE_HEIGHT]);
-  }
-  if (width && height && isFiniteNumber(width) && isFiniteNumber(height)) {
-    rows.push({ label: 'Size', value: Math.round(width) + ' x ' + Math.round(height) + ' px' });
-  }
+      return exifCache[resolvedSource];
+    }
 
-  if (!rows.length) {
-    return null;
-  }
-  return { rows: rows };
-}
-
-function resolveSourceUrl(source) {
-  try {
-    return new URL(source, window.location.href).href;
-  } catch (error) {
-    return source;
-  }
-}
-
-function loadExifForSource(source) {
-  var resolvedSource = resolveSourceUrl(source);
-  if (!resolvedSource) {
-    return Promise.resolve(null);
-  }
-
-  if (exifCache[resolvedSource]) {
+    exifCache[resolvedSource] = loadExifSummaryFromBinary(resolvedSource);
     return exifCache[resolvedSource];
   }
 
-  exifCache[resolvedSource] = fetch(resolvedSource, { cache: 'force-cache' })
-    .then(function(response) {
-      if (!response.ok) {
-        throw new Error('Image download failed');
+  function renderExifSummary(summary) {
+    var $panel = ensureExifPanel();
+    if (!$panel.length) {
+      return;
+    }
+
+    var $body = getExifBody($panel);
+    syncInlineExifToggleUi($panel);
+
+    if (!state.exifVisible) {
+      $body.removeClass("is-loading is-empty").empty();
+      return;
+    }
+
+    if (!summary || !summary.rows || !summary.rows.length) {
+      var message = summary && summary.error ? summary.error : "No EXIF data";
+      $body.removeClass("is-loading").addClass("is-empty").text(message);
+      return;
+    }
+
+    $body.removeClass("is-loading is-empty").empty();
+    for (var i = 0; i < summary.rows.length; i++) {
+      var row = summary.rows[i];
+      var $row = $("<div>", { "class": "lg-exif-row" });
+      $row.append($("<span>", { "class": "lg-exif-key", text: row.label }));
+      $row.append($("<span>", { "class": "lg-exif-value", text: row.value }));
+      $body.append($row);
+    }
+  }
+
+  function updateExifPanelForIndex(index) {
+    var $panel = ensureExifPanel();
+    if (!$panel.length) {
+      return;
+    }
+
+    var $body = getExifBody($panel);
+    syncInlineExifToggleUi($panel);
+
+    if (!state.exifVisible) {
+      $body.removeClass("is-loading is-empty").empty();
+      return;
+    }
+
+    var source = getLightboxSource(index);
+    if (!source) {
+      renderExifSummary({ error: "No EXIF data" });
+      return;
+    }
+
+    $body.removeClass("is-empty").addClass("is-loading").text("EXIF loading...");
+    var requestToken = ++exifRequestToken;
+
+    loadExifSummary(source).then(function(summary) {
+      if (requestToken !== exifRequestToken) {
+        return;
       }
-      return response.arrayBuffer();
-    })
-    .then(function(arrayBuffer) {
-      return buildExifSummary(parseExifFromJpeg(arrayBuffer));
-    })
-    .catch(function() {
-      return { error: 'EXIF could not be loaded in browser' };
+      renderExifSummary(summary);
     });
-
-  return exifCache[resolvedSource];
-}
-
-function getCurrentSubHtml() {
-  var $current = $('.lg-current .lg-sub-html');
-  if ($current.length) {
-    return $current.first();
-  }
-  var $fallback = $('.lg-sub-html');
-  if ($fallback.length) {
-    return $fallback.last();
-  }
-  return $();
-}
-
-function ensureExifPanel() {
-  var $subHtml = getCurrentSubHtml();
-  if (!$subHtml.length) {
-    return $();
   }
 
-  var $panel = $subHtml.children('.lg-exif-panel');
-  if (!$panel.length) {
-    $panel = $('<div>', {
-      'class': 'lg-exif-panel is-loading',
-      text: 'EXIF loading...'
-    });
-    $subHtml.append($panel);
-  }
-  return $panel;
-}
-
-function getGalleryItemSource(index) {
-  var currentImage = document.querySelector('.lg-current .lg-image');
-  if (currentImage) {
-    var activeSource = currentImage.currentSrc || currentImage.src;
-    if (activeSource) {
-      return activeSource;
-    }
-  }
-
-  if (!plugin || !plugin.galleryItems || !plugin.galleryItems.length) {
-    return '';
-  }
-
-  var safeIndex = isFiniteNumber(index) ? index : plugin.index;
-  if (!isFiniteNumber(safeIndex) || safeIndex < 0) {
-    safeIndex = 0;
-  }
-  if (safeIndex >= plugin.galleryItems.length) {
-    safeIndex = plugin.galleryItems.length - 1;
-  }
-
-  var item = plugin.galleryItems[safeIndex] || {};
-  return item.src || item.href || '';
-}
-
-function renderExifSummary(summary) {
-  var $panel = ensureExifPanel();
-  if (!$panel.length) {
-    return;
-  }
-
-  if (!summary || !summary.rows || !summary.rows.length) {
-    if (summary && summary.error) {
-      $panel.removeClass('is-loading').addClass('is-empty').text(summary.error);
+  function queueExifUpdate(index) {
+    if (window.requestAnimationFrame) {
+      window.requestAnimationFrame(function() {
+        updateExifPanelForIndex(index);
+      });
       return;
     }
-    $panel.removeClass('is-loading').addClass('is-empty').text('No EXIF data');
-    return;
-  }
 
-  $panel.removeClass('is-loading is-empty').empty();
-  for (var i = 0; i < summary.rows.length; i++) {
-    var row = summary.rows[i];
-    var $row = $('<div>', { 'class': 'lg-exif-row' });
-    $row.append($('<span>', { 'class': 'lg-exif-key', text: row.label }));
-    $row.append($('<span>', { 'class': 'lg-exif-value', text: row.value }));
-    $panel.append($row);
-  }
-}
-
-function updateExifPanelForIndex(index) {
-  var source = getGalleryItemSource(index);
-  var $panel = ensureExifPanel();
-  if (!$panel.length) {
-    return;
-  }
-
-  if (!source) {
-    $panel.removeClass('is-loading').addClass('is-empty').text('No EXIF data');
-    return;
-  }
-
-  $panel.removeClass('is-empty').addClass('is-loading').text('EXIF loading...');
-  var requestToken = ++exifRequestToken;
-
-  loadExifForSource(source).then(function(summary) {
-    if (requestToken !== exifRequestToken) {
-      return;
-    }
-    renderExifSummary(summary);
-  });
-}
-
-function queueExifUpdate(index) {
-  if (window.requestAnimationFrame) {
-    window.requestAnimationFrame(function() {
+    window.setTimeout(function() {
       updateExifPanelForIndex(index);
-    });
-    return;
-  }
-  setTimeout(function() {
-    updateExifPanelForIndex(index);
-  }, 0);
-}
-
-function getLightGalleryIndex(event) {
-  if (event && event.detail && isFiniteNumber(event.detail.index)) {
-    return event.detail.index;
-  }
-  if (plugin && isFiniteNumber(plugin.index)) {
-    return plugin.index;
-  }
-  return 0;
-}
-
-function isLightboxOpen() {
-  return !!(document.body && document.body.classList.contains('lg-on'));
-}
-
-function canHandleWheelZoom(event) {
-  if (!event || !event.target || typeof event.target.closest !== 'function') {
-    return false;
-  }
-  return !!event.target.closest('.lg-current .lg-image, .lg-current .lg-object');
-}
-
-function getToolbarButton(action) {
-  if (!plugin || typeof plugin.getElementById !== 'function') {
-    return $();
+    }, 0);
   }
 
-  var key = '';
-  if (action === 'in') {
-    key = 'lg-zoom-in';
-  } else if (action === 'out') {
-    key = 'lg-zoom-out';
-  } else if (action === 'actual') {
-    key = 'lg-actual-size';
-  }
-  if (!key) {
-    return $();
+  function getFullscreenElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement || null;
   }
 
-  var buttonApi = plugin.getElementById(key);
-  if (!buttonApi || typeof buttonApi.get !== 'function') {
-    return $();
-  }
-  var buttonEl = buttonApi.get();
-  return buttonEl ? $(buttonEl) : $();
-}
-
-function applyZoomSteps(action, times) {
-  var $button = getToolbarButton(action);
-  if (!$button.length) {
-    return;
+  function getLightboxRootElement() {
+    return document.querySelector(".lg-outer.lg-visible") || document.querySelector(".lg-outer");
   }
 
-  var buttonEl = $button.get(0);
-  if (!buttonEl || typeof buttonEl.click !== 'function') {
-    return;
-  }
-
-  var repeats = Math.max(1, Math.min(WHEEL_ZOOM_MAX_STEPS, Number(times) || 1));
-  for (var i = 0; i < repeats; i++) {
-    buttonEl.click();
-  }
-}
-
-function getGalleryElement(idName) {
-  if (!plugin || typeof plugin.getElementById !== 'function') {
+  function requestFullscreen(element) {
+    if (!element) {
+      return null;
+    }
+    if (typeof element.requestFullscreen === "function") {
+      return element.requestFullscreen();
+    }
+    if (typeof element.webkitRequestFullscreen === "function") {
+      element.webkitRequestFullscreen();
+      return null;
+    }
+    if (typeof element.msRequestFullscreen === "function") {
+      element.msRequestFullscreen();
+      return null;
+    }
     return null;
   }
-  var elementApi = plugin.getElementById(idName);
-  if (!elementApi || typeof elementApi.get !== 'function') {
+
+  function exitFullscreen() {
+    if (typeof document.exitFullscreen === "function") {
+      return document.exitFullscreen();
+    }
+    if (typeof document.webkitExitFullscreen === "function") {
+      document.webkitExitFullscreen();
+      return null;
+    }
+    if (typeof document.msExitFullscreen === "function") {
+      document.msExitFullscreen();
+      return null;
+    }
     return null;
   }
-  return elementApi.get();
-}
 
-function requestGalleryFullscreen() {
-  var containerEl = getGalleryElement('lg-container');
-  if (!containerEl) {
-    return;
-  }
-  var requestFullscreen = containerEl.requestFullscreen ||
-    containerEl.webkitRequestFullscreen ||
-    containerEl.msRequestFullscreen;
-  if (!requestFullscreen) {
-    return;
-  }
-  try {
-    var result = requestFullscreen.call(containerEl);
-    if (result && typeof result.catch === 'function') {
-      result.catch(function() {});
+  function ensureLightboxFullscreenButton() {
+    var root = getLightboxRootElement();
+    if (!root) {
+      return null;
     }
-  } catch (error) {}
-}
 
-function exitGalleryFullscreen() {
-  var fullscreenElement = document.fullscreenElement ||
-    document.webkitFullscreenElement ||
-    document.msFullscreenElement;
-  if (!fullscreenElement) {
-    return;
-  }
-
-  var containerEl = getGalleryElement('lg-container');
-  if (containerEl && fullscreenElement !== containerEl && !containerEl.contains(fullscreenElement)) {
-    return;
-  }
-
-  var exitFullscreen = document.exitFullscreen ||
-    document.webkitExitFullscreen ||
-    document.msExitFullscreen;
-  if (!exitFullscreen) {
-    return;
-  }
-  try {
-    var result = exitFullscreen.call(document);
-    if (result && typeof result.catch === 'function') {
-      result.catch(function() {});
+    var toolbar = root.querySelector(".lg-toolbar");
+    if (!toolbar) {
+      return null;
     }
-  } catch (error) {}
-}
 
-function refreshFillButtonState() {
-  var $fillButton = $('.lg-toolbar').find('.lg-custom-fill').first();
-  if (!$fillButton.length) {
-    return;
-  }
-
-  var label = fillModeEnabled ? 'Fit' : 'Fill';
-  var ariaLabel = fillModeEnabled ? 'Exit fill mode' : 'Fill screen';
-  $fillButton
-    .text(label)
-    .attr('title', ariaLabel)
-    .attr('aria-label', ariaLabel)
-    .attr('aria-pressed', fillModeEnabled ? 'true' : 'false')
-    .toggleClass('is-active', fillModeEnabled);
-}
-
-function setFillMode(nextState) {
-  var enabled = !!nextState;
-  fillModeEnabled = enabled;
-
-  var outerEl = getGalleryElement('lg-outer');
-  if (outerEl) {
-    $(outerEl).toggleClass('lg-photo-fill-mode', enabled);
-  }
-
-  if (enabled) {
-    requestGalleryFullscreen();
-  } else {
-    exitGalleryFullscreen();
-  }
-  refreshFillButtonState();
-}
-
-function setupFillModeSync() {
-  if (fillModeSyncBound) {
-    return;
-  }
-  fillModeSyncBound = true;
-
-  var syncFillState = function() {
-    var fullscreenElement = document.fullscreenElement ||
-      document.webkitFullscreenElement ||
-      document.msFullscreenElement;
-    if (!fullscreenElement && fillModeEnabled) {
-      setFillMode(false);
+    var button = toolbar.querySelector(".lg-fullscreen-toggle");
+    if (!button) {
+      button = document.createElement("button");
+      button.type = "button";
+      button.className = "lg-icon lg-fullscreen-toggle";
+      button.setAttribute("aria-pressed", "false");
+      button.setAttribute("aria-label", "Enter fullscreen");
+      button.setAttribute("title", "Enter fullscreen");
+      button.innerHTML = "<i class='fa-solid fa-expand' aria-hidden='true'></i>";
+      toolbar.appendChild(button);
     }
-  };
 
-  document.addEventListener('fullscreenchange', syncFillState);
-  document.addEventListener('webkitfullscreenchange', syncFillState);
-  document.addEventListener('MSFullscreenChange', syncFillState);
-}
-
-function ensureCustomZoomButtons() {
-  if (!plugin || typeof plugin.getElementById !== 'function') {
-    return;
+    return button;
   }
 
-  var toolbarApi = plugin.getElementById('lg-toolbar');
-  if (!toolbarApi || typeof toolbarApi.get !== 'function') {
-    return;
-  }
-
-  var toolbarEl = toolbarApi.get();
-  if (!toolbarEl) {
-    return;
-  }
-
-  var $toolbar = $(toolbarEl);
-  var $actualSize = getToolbarButton('actual');
-
-  if (!$toolbar.find('.lg-custom-zoom-in').length) {
-    var zoomInButton = document.createElement('button');
-    zoomInButton.type = 'button';
-    zoomInButton.id = 'lg-custom-zoom-in-' + String(plugin.lgId || 'x');
-    zoomInButton.className = 'lg-icon lg-custom-zoom-in lg-zoom-label';
-    zoomInButton.textContent = '+';
-    zoomInButton.setAttribute('title', 'Zoom in (+)');
-    zoomInButton.setAttribute('aria-label', 'Zoom in (+)');
-    if ($actualSize.length) {
-      $actualSize.before(zoomInButton);
-    } else {
-      $toolbar.append(zoomInButton);
-    }
-  }
-
-  if (!$toolbar.find('.lg-custom-zoom-out').length) {
-    var zoomOutButton = document.createElement('button');
-    zoomOutButton.type = 'button';
-    zoomOutButton.id = 'lg-custom-zoom-out-' + String(plugin.lgId || 'x');
-    zoomOutButton.className = 'lg-icon lg-custom-zoom-out lg-zoom-label';
-    zoomOutButton.textContent = '-';
-    zoomOutButton.setAttribute('title', 'Zoom out (-)');
-    zoomOutButton.setAttribute('aria-label', 'Zoom out (-)');
-    if ($actualSize.length) {
-      $actualSize.before(zoomOutButton);
-    } else {
-      $toolbar.append(zoomOutButton);
-    }
-  }
-
-  if (!$toolbar.find('.lg-custom-fill').length) {
-    var fillButton = document.createElement('button');
-    fillButton.type = 'button';
-    fillButton.id = 'lg-custom-fill-' + String(plugin.lgId || 'x');
-    fillButton.className = 'lg-icon lg-custom-fill lg-zoom-label';
-    fillButton.textContent = 'Fill';
-    fillButton.setAttribute('title', 'Fill screen');
-    fillButton.setAttribute('aria-label', 'Fill screen');
-    fillButton.setAttribute('aria-pressed', 'false');
-    if ($actualSize.length) {
-      $actualSize.after(fillButton);
-    } else {
-      $toolbar.append(fillButton);
-    }
-  }
-}
-
-function setupCustomZoomButtonHandlers() {
-  $(document).off('click.zoomboostcustom', '[id^="lg-custom-zoom-in-"]');
-  $(document).off('click.zoomboostcustom', '[id^="lg-custom-zoom-out-"]');
-  $(document).off('click.zoomboostcustom', '[id^="lg-custom-fill-"]');
-
-  $(document).on('click.zoomboostcustom', '[id^="lg-custom-zoom-in-"]', function(event) {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    applyZoomSteps('in', ZOOM_BUTTON_IN_STEPS);
-    setTimeout(refreshZoomButtonLabels, 0);
-  });
-
-  $(document).on('click.zoomboostcustom', '[id^="lg-custom-zoom-out-"]', function(event) {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    applyZoomSteps('out', ZOOM_BUTTON_OUT_STEPS);
-    setTimeout(refreshZoomButtonLabels, 0);
-  });
-
-  $(document).on('click.zoomboostcustom', '[id^="lg-custom-fill-"]', function(event) {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    setFillMode(!fillModeEnabled);
-    setTimeout(refreshZoomButtonLabels, 0);
-  });
-}
-
-function handleLightboxWheelZoom(event) {
-  if (!isLightboxOpen() || !canHandleWheelZoom(event)) {
-    return;
-  }
-
-  var deltaY = Number(event.deltaY);
-  if (!isFiniteNumber(deltaY) || deltaY === 0) {
-    return;
-  }
-
-  event.preventDefault();
-  var now = Date.now();
-  if (now < wheelZoomCooldownUntil) {
-    return;
-  }
-
-  var stepCount = WHEEL_ZOOM_BASE_STEPS + Math.floor(Math.abs(deltaY) / WHEEL_ZOOM_STEP_THRESHOLD);
-  stepCount = Math.max(1, Math.min(WHEEL_ZOOM_MAX_STEPS, stepCount));
-  applyZoomSteps(deltaY < 0 ? 'in' : 'out', stepCount);
-  wheelZoomCooldownUntil = now + WHEEL_ZOOM_COOLDOWN_MS;
-}
-
-function refreshZoomButtonLabels() {
-  var $zoomIn = $('.lg-toolbar').find('.lg-custom-zoom-in').first();
-  if (!$zoomIn.length) {
-    $zoomIn = getToolbarButton('in');
-  }
-  if ($zoomIn.length) {
-    $zoomIn
-      .text('+')
-      .attr('title', 'Zoom in (+)')
-      .attr('aria-label', 'Zoom in (+)')
-      .addClass('lg-zoom-label');
-  }
-
-  var $zoomOut = $('.lg-toolbar').find('.lg-custom-zoom-out').first();
-  if (!$zoomOut.length) {
-    $zoomOut = getToolbarButton('out');
-  }
-  if ($zoomOut.length) {
-    $zoomOut
-      .text('-')
-      .attr('title', 'Zoom out (-)')
-      .attr('aria-label', 'Zoom out (-)')
-      .addClass('lg-zoom-label');
-  }
-
-  var $actualSize = getToolbarButton('actual');
-  if ($actualSize.length) {
-    $actualSize
-      .removeClass('lg-zoom-in lg-zoom-out')
-      .addClass('lg-actual-size')
-      .text('1:1')
-      .attr('title', '1:1')
-      .attr('aria-label', '1:1')
-      .addClass('lg-zoom-label lg-zoom-label--actual');
-  }
-  refreshFillButtonState();
-}
-
-function setupWheelZoom() {
-  document.addEventListener('wheel', handleLightboxWheelZoom, { passive: false });
-}
-
-function setupExifPanel() {
-  var root = document.getElementById('lightgallery');
-  if (!root) {
-    return;
-  }
-  setupFillModeSync();
-
-  root.addEventListener('lgAfterOpen', function(event) {
-    ensureCustomZoomButtons();
-    setupCustomZoomButtonHandlers();
-    refreshZoomButtonLabels();
-    queueExifUpdate(getLightGalleryIndex(event));
-  });
-  root.addEventListener('lgAfterSlide', function(event) {
-    ensureCustomZoomButtons();
-    setupCustomZoomButtonHandlers();
-    refreshZoomButtonLabels();
-    queueExifUpdate(getLightGalleryIndex(event));
-  });
-  root.addEventListener('lgAfterAppendSubHtml', function(event) {
-    ensureCustomZoomButtons();
-    setupCustomZoomButtonHandlers();
-    refreshZoomButtonLabels();
-    queueExifUpdate(getLightGalleryIndex(event));
-  });
-  root.addEventListener('lgBeforeClose', function() {
-    setFillMode(false);
-    exifRequestToken += 1;
-  });
-  $(document).off('click.zoomactual', '[id^="lg-actual-size-"]');
-  $(document).on('click.zoomactual', '[id^="lg-actual-size-"]', function() {
-    setTimeout(refreshZoomButtonLabels, 0);
-  });
-}
-
-function escapeRegex(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function getVisibleItems() {
-  return $grid.find('.item').filter(function() {
-    return $(this).css('display') !== 'none';
-  });
-}
-
-function isDateSortActive() {
-  return currentSort === 'date-asc' || currentSort === 'date-desc';
-}
-
-function getSortLabel() {
-  if (currentSort === 'date-asc') {
-    return 'date oldest first';
-  }
-  if (currentSort === 'date-desc') {
-    return 'date newest first';
-  }
-  return 'random';
-}
-
-function resetSortToRandom() {
-  currentSort = 'random';
-  if ($sortSelect.length) {
-    $sortSelect.val('random');
-  }
-}
-
-function reseedRandomRanks() {
-  var $items = $grid.find('.item');
-  $items.each(function() {
-    this.setAttribute('data-random-rank', String(Math.random()));
-  });
-  $grid.isotope('updateSortData', $items);
-}
-
-function relayoutGridAfterSortUiToggle() {
-  if (!$grid || !$grid.data('isotope')) {
-    return;
-  }
-
-  var relayout = function() {
-    applyResponsiveGridSize(false);
-    $grid.isotope('layout');
-    updateTimelineScrollCues();
-  };
-
-  if (window.requestAnimationFrame) {
-    window.requestAnimationFrame(function() {
-      relayout();
-      // A second pass catches width changes after CSS grid columns settle.
-      setTimeout(relayout, 80);
-    });
-    return;
-  }
-
-  setTimeout(relayout, 16);
-  setTimeout(relayout, 96);
-}
-
-function updateSortUI() {
-  updateTimelineTopOffset();
-  var showTimeline = isDateSortActive();
-  $sortControl.toggleClass('is-timeline-active', showTimeline);
-  $galleryContent.toggleClass('is-sort-active', showTimeline);
-  $timelinePanel.toggleClass('is-hidden', !showTimeline);
-
-  if (!showTimeline) {
-    clearMonthPreview();
-    activeMonthKey = '';
-    monthTargets = {};
-    timelineMonthSequence = [];
-    $timelineMonths.empty().removeClass('is-empty');
-    $timelinePanel.removeClass('is-scrollable can-scroll-left can-scroll-right');
-  }
-
-  updateTimelineScrollCues();
-  relayoutGridAfterSortUiToggle();
-}
-
-function updateTimelineTopOffset() {
-  if (!$timelinePanel.length) {
-    return;
-  }
-
-  if (!$filterPanel.length) {
-    return;
-  }
-
-  var panelHeight = $filterPanel.outerHeight();
-  var panelTop = parseFloat($filterPanel.css('top'));
-  if (!isFiniteNumber(panelHeight)) {
-    panelHeight = 0;
-  }
-  if (!isFiniteNumber(panelTop)) {
-    panelTop = 0;
-  }
-
-  var offset = Math.max(0, panelTop + panelHeight + 8);
-  document.documentElement.style.setProperty('--timeline-top-offset', Math.round(offset) + 'px');
-}
-
-function updateScrollTopFabVisibility() {
-  if (!$scrollTopFab.length) {
-    return;
-  }
-  $scrollTopFab.toggleClass('is-visible', filterPanelCompact);
-}
-
-function updateFilterPanelCompactState(force) {
-  if (!$filterPanel.length) {
-    updateScrollTopFabVisibility();
-    return;
-  }
-
-  if (!force && Date.now() < filterPanelToggleLockUntil) {
-    return;
-  }
-
-  var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-  var shouldCompact;
-  var hoverActive = filterPanelHovered && canUseHoverState();
-  if (hoverActive) {
-    shouldCompact = false;
-  } else if (filterPanelCompact) {
-    shouldCompact = scrollY > FILTER_PANEL_COMPACT_EXIT_Y;
-  } else {
-    shouldCompact = scrollY > FILTER_PANEL_COMPACT_ENTER_Y;
-  }
-
-  if (!force && shouldCompact === filterPanelCompact) {
-    return;
-  }
-
-  var changed = shouldCompact !== filterPanelCompact;
-  filterPanelCompact = shouldCompact;
-  $filterPanel.toggleClass('is-compact', shouldCompact);
-  updateTimelineTopOffset();
-  updateScrollTopFabVisibility();
-
-  if (changed) {
-    filterPanelToggleLockUntil = Date.now() + FILTER_PANEL_TOGGLE_LOCK_MS;
-    if (filterPanelOffsetTimer) {
-      clearTimeout(filterPanelOffsetTimer);
-    }
-    filterPanelOffsetTimer = setTimeout(function() {
-      updateTimelineTopOffset();
-      filterPanelOffsetTimer = null;
-    }, 240);
-  }
-}
-
-function updateMeta() {
-  var allItems = getVisibleItems();
-  var selectedTag = currentFilter === '*' ? '#all' : currentFilter.replace('.', '#');
-  var queryInfo = currentQuery ? ' | query "' + currentQuery + '"' : '';
-  $meta.text('Active: ' + selectedTag + queryInfo + ' | sort: ' + getSortLabel() + ' | photos: ' + allItems.length);
-}
-
-function getVisibleGalleryKey() {
-  return getVisibleItems().map(function() {
-    return this.getAttribute('href') || '';
-  }).get().join('|');
-}
-
-function syncLightGallery() {
-  var key = getVisibleGalleryKey();
-  if (key === lastGalleryKey) {
-    return;
-  }
-  lastGalleryKey = key;
-  plugin.refresh();
-}
-
-function getVisibleItemInfos() {
-  var visibleInfos = [];
-  getVisibleItems().each(function() {
-    var monthKey = getItemMonthKey(this);
-    if (!monthKey) {
-      return;
-    }
-    visibleInfos.push({
-      element: this,
-      monthKey: monthKey,
-      timestamp: getItemTimestamp(this)
-    });
-  });
-
-  visibleInfos.sort(function(a, b) {
-    return currentSort === 'date-asc' ? (a.timestamp - b.timestamp) : (b.timestamp - a.timestamp);
-  });
-  return visibleInfos;
-}
-
-function updateTimeline() {
-  if (!$timelineMonths.length) {
-    return;
-  }
-  if (!isDateSortActive()) {
-    updateTimelineEdgePeek();
-    updateTimelineScrollCues();
-    return;
-  }
-
-  var visibleInfos = getVisibleItemInfos();
-  var monthCounts = {};
-  var monthOrder = [];
-  var monthElements = {};
-  monthTargets = {};
-
-  for (var i = 0; i < visibleInfos.length; i++) {
-    var info = visibleInfos[i];
-    if (!monthCounts[info.monthKey]) {
-      monthCounts[info.monthKey] = 0;
-      monthOrder.push(info.monthKey);
-      monthElements[info.monthKey] = [];
-    }
-    monthCounts[info.monthKey] += 1;
-    monthElements[info.monthKey].push(info.element);
-  }
-
-  for (var k = 0; k < monthOrder.length; k++) {
-    var monthKeyForTarget = monthOrder[k];
-    var elements = monthElements[monthKeyForTarget] || [];
-    if (!elements.length) {
-      continue;
-    }
-    monthTargets[monthKeyForTarget] = elements[Math.floor(elements.length / 2)];
-  }
-  timelineMonthSequence = monthOrder.slice();
-
-  $timelineMonths.empty();
-  if (!monthOrder.length) {
-    activeMonthKey = '';
-    timelineMonthSequence = [];
-    $timelineMonths.addClass('is-empty').text('No dated photos in current view');
-    updateTimelineEdgePeek();
-    updateTimelineScrollCues();
-    return;
-  }
-
-  $timelineMonths.removeClass('is-empty');
-  if (!monthTargets[activeMonthKey]) {
-    activeMonthKey = monthOrder[0];
-  }
-
-  for (var j = 0; j < monthOrder.length; j++) {
-    var monthKey = monthOrder[j];
-    var $button = $('<button>', {
-      type: 'button',
-      'class': 'timeline-month' + (monthKey === activeMonthKey ? ' is-active' : ''),
-      'data-month': monthKey
-    });
-    $button.append($('<span>', { 'class': 'timeline-label', text: formatMonthLabel(monthKey) }));
-    $button.append($('<span>', { 'class': 'timeline-count', text: String(monthCounts[monthKey]) }));
-    $timelineMonths.append($button);
-  }
-
-  updateTimelineEdgePeek();
-  syncActiveMonthWithViewport(true);
-  updateTimelineScrollCues();
-}
-
-function updateTimelineEdgePeek() {
-  if (!$timelineMonths.length) {
-    return;
-  }
-
-  var container = $timelineMonths.get(0);
-  if (!container) {
-    return;
-  }
-
-  var firstButton = container.querySelector('.timeline-month:first-child');
-  var lastButton = container.querySelector('.timeline-month:last-child');
-  var firstPeek = firstButton ? Math.round(firstButton.getBoundingClientRect().width / 2) : 0;
-  var lastPeek = lastButton ? Math.round(lastButton.getBoundingClientRect().width / 2) : 0;
-
-  container.style.setProperty('--timeline-first-peek', firstPeek + 'px');
-  container.style.setProperty('--timeline-last-peek', lastPeek + 'px');
-}
-
-function updateTimelineScrollCues() {
-  if (!$timelinePanel.length || !$timelineMonths.length || !isDateSortActive() || $timelinePanel.hasClass('is-hidden')) {
-    $timelinePanel.removeClass('is-scrollable can-scroll-left can-scroll-right');
-    return;
-  }
-
-  var container = $timelineMonths.get(0);
-  if (!container) {
-    $timelinePanel.removeClass('is-scrollable can-scroll-left can-scroll-right');
-    return;
-  }
-
-  var maxScrollLeft = Math.max(0, container.scrollWidth - container.clientWidth);
-  var scrollLeft = Math.max(0, container.scrollLeft);
-  var isScrollable = maxScrollLeft > 2;
-  var canScrollLeft = isScrollable && scrollLeft > 1;
-  var canScrollRight = isScrollable && scrollLeft < (maxScrollLeft - 1);
-
-  $timelinePanel.toggleClass('is-scrollable', isScrollable);
-  $timelinePanel.toggleClass('can-scroll-left', canScrollLeft);
-  $timelinePanel.toggleClass('can-scroll-right', canScrollRight);
-}
-
-function scrollToMonth(monthKey) {
-  var target = monthTargets[monthKey];
-  if (!target) {
-    return;
-  }
-
-  var centerY = getViewportCenterReferenceY();
-  var rect = target.getBoundingClientRect();
-  var targetCenterDocY = window.pageYOffset + rect.top + (rect.height / 2);
-  var top = targetCenterDocY - centerY;
-  window.scrollTo({
-    top: Math.max(0, top),
-    behavior: 'smooth'
-  });
-}
-
-function ensureTimelineButtonVisible($button, smooth) {
-  if (!$button || !$button.length || !$timelineMonths.length) {
-    return;
-  }
-
-  var container = $timelineMonths.get(0);
-  var button = $button.get(0);
-  if (!container || !button) {
-    return;
-  }
-
-  var containerRect = container.getBoundingClientRect();
-  var buttonRect = button.getBoundingClientRect();
-  var maxScrollLeft = Math.max(0, container.scrollWidth - container.clientWidth);
-  var buttonCenter = (buttonRect.left - containerRect.left) + container.scrollLeft + (buttonRect.width / 2);
-  var nextLeft = buttonCenter - (container.clientWidth / 2);
-  nextLeft = Math.max(0, Math.min(maxScrollLeft, Math.round(nextLeft)));
-
-  if (nextLeft === container.scrollLeft) {
-    return;
-  }
-
-  if (typeof container.scrollTo === 'function') {
-    container.scrollTo({
-      left: nextLeft,
-      behavior: smooth ? 'smooth' : 'auto'
-    });
-    return;
-  }
-
-  container.scrollLeft = nextLeft;
-}
-
-function isTimelineButtonCentered(monthKey) {
-  if (!monthKey || !$timelineMonths.length) {
-    return true;
-  }
-
-  var container = $timelineMonths.get(0);
-  if (!container) {
-    return true;
-  }
-
-  var $button = $timelineMonths.find('.timeline-month').filter(function() {
-    return String($(this).attr('data-month') || '') === monthKey;
-  });
-  if (!$button.length) {
-    return true;
-  }
-
-  var containerRect = container.getBoundingClientRect();
-  var buttonRect = $button.get(0).getBoundingClientRect();
-  var containerCenter = container.clientWidth / 2;
-  var buttonCenter = (buttonRect.left - containerRect.left) + (buttonRect.width / 2);
-  return Math.abs(containerCenter - buttonCenter) <= 3;
-}
-
-function setTimelineActiveMonth(monthKey, options) {
-  if (!monthKey || !$timelineMonths.length) {
-    return;
-  }
-
-  var config = {};
-  if (typeof options === 'boolean') {
-    config.smoothTimelineScroll = options;
-    config.ensureVisible = true;
-  } else {
-    config = options || {};
-  }
-
-  activeMonthKey = monthKey;
-  var $buttons = $timelineMonths.find('.timeline-month');
-  $buttons.removeClass('is-active');
-  var $activeButton = $buttons.filter(function() {
-    return String($(this).attr('data-month') || '') === monthKey;
-  });
-  $activeButton.addClass('is-active');
-
-  if (config.ensureVisible !== false) {
-    ensureTimelineButtonVisible($activeButton, !!config.smoothTimelineScroll);
-  }
-
-  updateTimelineScrollCues();
-}
-
-function getTimelineReferenceY() {
-  var rawOffset = getComputedStyle(document.documentElement).getPropertyValue('--timeline-top-offset');
-  var parsedOffset = parseFloat(rawOffset);
-  if (!isFiniteNumber(parsedOffset)) {
-    parsedOffset = 92;
-  }
-  return Math.max(36, parsedOffset + 6);
-}
-
-function getViewportCenterReferenceY() {
-  var topBound = getTimelineReferenceY();
-  var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
-  if (!isFiniteNumber(viewportHeight) || viewportHeight <= topBound) {
-    return topBound;
-  }
-  return topBound + ((viewportHeight - topBound) / 2);
-}
-
-function isNearPageTop() {
-  return (window.pageYOffset || document.documentElement.scrollTop || 0) <= 24;
-}
-
-function isNearPageBottom() {
-  var scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
-  var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
-  var docEl = document.documentElement;
-  var body = document.body;
-  var docHeight = Math.max(
-    docEl ? docEl.scrollHeight : 0,
-    body ? body.scrollHeight : 0
-  );
-  return scrollY + viewportHeight >= docHeight - 24;
-}
-
-function getMonthKeyInViewport() {
-  if (!isDateSortActive()) {
-    return '';
-  }
-  if (timelineMonthSequence.length) {
-    if (isNearPageTop()) {
-      return timelineMonthSequence[0];
-    }
-    if (isNearPageBottom()) {
-      return timelineMonthSequence[timelineMonthSequence.length - 1];
-    }
-  }
-
-  var referenceY = getViewportCenterReferenceY();
-  var closestMonth = '';
-  var closestDistance = Infinity;
-
-  getVisibleItems().each(function() {
-    var monthKey = getItemMonthKey(this);
-    if (!monthKey) {
+  function setFullscreenButtonState(isActive) {
+    var button = ensureLightboxFullscreenButton();
+    if (!button) {
       return;
     }
 
-    var rect = this.getBoundingClientRect();
-    var distance = 0;
-    if (rect.top <= referenceY && rect.bottom >= referenceY) {
-      distance = 0;
-    } else if (rect.bottom < referenceY) {
-      distance = referenceY - rect.bottom;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+    button.setAttribute("aria-label", isActive ? "Exit fullscreen" : "Enter fullscreen");
+    button.setAttribute("title", isActive ? "Exit fullscreen" : "Enter fullscreen");
+
+    var icon = button.querySelector("i");
+    if (!icon) {
+      return;
+    }
+
+    icon.classList.remove("fa-expand", "fa-compress");
+    icon.classList.add(isActive ? "fa-compress" : "fa-expand");
+  }
+
+  function syncFullscreenButtonState() {
+    setFullscreenButtonState(!!getFullscreenElement());
+  }
+
+  function toggleFullscreen() {
+    var result;
+    if (getFullscreenElement()) {
+      result = exitFullscreen();
     } else {
-      distance = rect.top - referenceY;
+      var target = getLightboxRootElement() || document.documentElement;
+      result = requestFullscreen(target);
     }
 
-    if (distance < closestDistance) {
-      closestDistance = distance;
-      closestMonth = monthKey;
+    if (result && typeof result.catch === "function") {
+      result.catch(function() {});
     }
-  });
-
-  return closestMonth;
-}
-
-function syncActiveMonthWithViewport(force) {
-  if (!$timelineMonths.length || !isDateSortActive() || $timelineMonths.hasClass('is-empty')) {
-    return;
   }
 
-  var visibleMonth = getMonthKeyInViewport();
-  if (!visibleMonth) {
-    return;
-  }
-  if (!force && visibleMonth === activeMonthKey && isTimelineButtonCentered(visibleMonth)) {
-    return;
-  }
+  function setTheme(themeName, options) {
+    var config = options || {};
+    state.theme = normalizeTheme(themeName);
+    $body.attr("data-theme", state.theme);
+    $themeSelect.val(state.theme);
+    syncCustomSelectFromNative($themeSelect);
 
-  var shouldSmoothTimelineScroll = !force && !isMobileLayout();
-  setTimelineActiveMonth(visibleMonth, {
-    smoothTimelineScroll: shouldSmoothTimelineScroll,
-    ensureVisible: true
-  });
-}
-
-function clearMonthPreview() {
-  $gridElement.removeClass('month-hover-active');
-  $grid.find('.item.is-month-hover-target').removeClass('is-month-hover-target');
-}
-
-function previewMonth(monthKey) {
-  clearMonthPreview();
-  if (!monthKey) {
-    return;
-  }
-
-  var $targets = getVisibleItems().filter(function() {
-    return getItemMonthKey(this) === monthKey;
-  });
-
-  if (!$targets.length) {
-    return;
-  }
-
-  $gridElement.addClass('month-hover-active');
-  $targets.addClass('is-month-hover-target');
-}
-
-function applyFilters(reshuffleRandom) {
-  clearMonthPreview();
-  var queryText = currentQuery.charAt(0) === '#' ? currentQuery.slice(1) : currentQuery;
-  var queryRegex = queryText ? new RegExp(escapeRegex(queryText), 'i') : null;
-  var filterFn = function() {
-    var $item = $(this);
-    var matchesTag = currentFilter === '*' ? true : $item.is(currentFilter);
-    if (!matchesTag) {
-      return false;
+    if (config.updateUrl !== false) {
+      updateUrlFromState();
     }
-    if (!queryRegex) {
-      return true;
-    }
-    var searchText = String($item.attr('data-search') || '');
-    return queryRegex.test(searchText);
-  };
-
-  var options = { filter: filterFn };
-  if (isDateSortActive()) {
-    options.sortBy = 'sortdate';
-    options.sortAscending = { sortdate: currentSort === 'date-asc' };
-  } else {
-    if (reshuffleRandom) {
-      reseedRandomRanks();
-    }
-    options.sortBy = 'randomrank';
-    options.sortAscending = { randomrank: true };
   }
 
-  $grid.isotope(options);
-}
+  function setExifVisibility(visible, options) {
+    var config = options || {};
+    state.exifVisible = !!visible;
+    $body.toggleClass("exif-hidden", !state.exifVisible);
 
-function getAllTags() {
-  var tagCounts = {};
-  $grid.find('.item').each(function() {
-    var tags = String($(this).attr('data-tags') || '').split(/\s+/);
-    for (var i = 0; i < tags.length; i++) {
-      var tag = tags[i].trim().toLowerCase();
-      if (!tag) {
-        continue;
+    if (config.persist !== false) {
+      writeStorageJson(STORAGE.exifVisible, state.exifVisible);
+    }
+    if (config.updateUrl !== false) {
+      updateUrlFromState();
+    }
+
+    $(".lg-exif-panel").each(function() {
+      var $panel = $(this);
+      syncInlineExifToggleUi($panel);
+      var $body = getExifBody($panel);
+      if (!state.exifVisible) {
+        $body.removeClass("is-loading is-empty").empty();
       }
-      tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-    }
-  });
-  return tagCounts;
-}
-
-function renderButtonGroup($container, tags, tagCounts, labelMap, options) {
-  var config = options || {};
-  $container.empty();
-  if (config.includeAll) {
-    var $allButton = $('<button>', {
-      'class': 'button' + (currentFilter === '*' ? ' is-checked' : ''),
-      'data-filter': '*',
-      text: '#all',
-      title: '#all'
     });
-    $container.append($allButton);
+
+    var lightboxContextPresent = isLightboxOpen() || !!document.querySelector(".lg-sub-html");
+    if (state.exifVisible && lightboxContextPresent) {
+      queueExifUpdate(getLightboxIndex());
+    }
   }
 
-  for (var i = 0; i < tags.length; i++) {
-    var tag = tags[i];
-    if (!tagCounts[tag]) {
-      continue;
+  function toggleExifVisibility() {
+    setExifVisibility(!state.exifVisible);
+  }
+
+  function focusSearch() {
+    $search.trigger("focus");
+    var input = $search.get(0);
+    if (input && typeof input.setSelectionRange === "function") {
+      var length = input.value.length;
+      input.setSelectionRange(length, length);
     }
-    var label = labelMap && labelMap[tag] ? labelMap[tag] : ('#' + tag);
-    var $btn = $('<button>', {
-      'class': 'button',
-      'data-filter': '.' + tag,
-      text: label,
-      title: '#' + tag
+  }
+
+  function clearSearch() {
+    state.query = "";
+    $search.val("");
+  }
+
+  function closeShortcuts() {
+    var dialog = $shortcutDialog.get(0);
+    if (!dialog) {
+      return;
+    }
+
+    if (typeof dialog.close === "function" && dialog.open) {
+      dialog.close();
+      return;
+    }
+
+    $shortcutDialog.removeAttr("open");
+  }
+
+  function openShortcuts() {
+    var dialog = $shortcutDialog.get(0);
+    if (!dialog) {
+      return;
+    }
+
+    if (typeof dialog.showModal === "function") {
+      if (dialog.open) {
+        return;
+      }
+      dialog.showModal();
+      return;
+    }
+
+    $shortcutDialog.attr("open", "open");
+  }
+
+  function surpriseMe() {
+    var visibleLinks = getVisibleItems().find(".tile-link").toArray();
+    if (!visibleLinks.length) {
+      return;
+    }
+
+    syncLightGallery();
+
+    var randomIndex = Math.floor(Math.random() * visibleLinks.length);
+    if (galleryPlugin && typeof galleryPlugin.openGallery === "function") {
+      galleryPlugin.openGallery(randomIndex);
+      return;
+    }
+
+    visibleLinks[randomIndex].click();
+  }
+
+  function updateScrollProgress() {
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+    var viewport = window.innerHeight || document.documentElement.clientHeight || 0;
+    var docHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+    var travel = Math.max(1, docHeight - viewport);
+    var progress = clamp((scrollTop / travel) * 100, 0, 100);
+
+    $scrollProgress.css("--scroll-progress", progress.toFixed(2));
+    $scrollProgress.toggleClass("is-visible", scrollTop > 180);
+  }
+
+  function resetControls() {
+    state.query = "";
+    state.country = "*";
+    state.category = "*";
+    state.sort = "random";
+
+    $search.val("");
+    $sortSelect.val("random");
+    syncCustomSelectFromNative($sortSelect);
+
+    setTheme("classic", { persist: true, updateUrl: false });
+    setExifVisibility(true, { persist: true, updateUrl: false });
+
+    updateChipUi();
+    applyFilters({ reshuffleRandom: true });
+    updateUrlFromState();
+  }
+
+  function bindEvents() {
+    $(window).on("resize", function() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(function() {
+        applyTileSize();
+        if (window.innerWidth <= MOBILE_BREAKPOINT) {
+          clearTimelinePreview();
+        }
+        if (window.innerWidth <= MOBILE_BREAKPOINT) {
+          var keepSemiExpanded = $controlDeck.hasClass("is-condensed-expanded");
+          var currentScrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+          if (currentScrollTop < 20) {
+            setDeckHidden(false);
+          } else {
+            setDeckHidden(true);
+            setDeckCondensedExpanded(keepSemiExpanded);
+          }
+        } else {
+          setDeckHidden(false);
+        }
+        if (!iso) {
+          queueTimelineActiveSync();
+          return;
+        }
+        $grid.isotope("option", {
+          masonry: {
+            columnWidth: getTileSize(),
+            fitWidth: true,
+            gutter: GRID_GUTTER
+          }
+        });
+        $grid.isotope("layout");
+        renderTimeline();
+        queueTimelineActiveSync();
+      }, 120);
     });
-    $container.append($btn);
-  }
-}
 
-function buildPresetButtons(tagCounts) {
-  renderButtonGroup($countryTags, COUNTRY_TAGS, tagCounts, COUNTRY_CODES, { includeAll: true });
-  renderButtonGroup($categoryTags, CATEGORY_TAGS, tagCounts);
-}
+    $(window).on("scroll", function() {
+      updateScrollProgress();
+      updateDeckVisibilityOnScroll();
+      queueTimelineActiveSync();
+    });
 
-function buildSearchSuggestions(tagCounts) {
-  var tags = Object.keys(tagCounts).sort();
-  $suggestions.empty();
-  for (var i = 0; i < tags.length; i++) {
-    var tag = tags[i];
-    var option = document.createElement('option');
-    option.value = '#' + tag;
-    $suggestions.append(option);
-  }
-}
+    document.addEventListener("fullscreenchange", syncFullscreenButtonState);
+    document.addEventListener("webkitfullscreenchange", syncFullscreenButtonState);
+    document.addEventListener("msfullscreenchange", syncFullscreenButtonState);
 
-function tryApplyHashtagFromQuery() {
-  if (!currentQuery || currentQuery.charAt(0) !== '#') {
-    return;
-  }
-  var rawTag = currentQuery.slice(1).trim();
-  if (!rawTag) {
-    return;
-  }
-  var desiredFilter = '.' + rawTag.toLowerCase();
-  var $matchingButton = $('#filters').find('button[data-filter="' + desiredFilter + '"]');
-  if ($matchingButton.length) {
-    currentFilter = desiredFilter;
-    $('#filters').find('.is-checked').removeClass('is-checked');
-    $matchingButton.addClass('is-checked');
-  } else {
-    currentFilter = '*';
-    $('#filters').find('.is-checked').removeClass('is-checked');
-    $('#filters').find('button[data-filter="*"]').addClass('is-checked');
-  }
-}
+    document.addEventListener("pointermove", function(event) {
+      var width = Math.max(1, window.innerWidth || 1);
+      var height = Math.max(1, window.innerHeight || 1);
+      document.documentElement.style.setProperty("--pointer-x", ((event.clientX / width) * 100).toFixed(2) + "%");
+      document.documentElement.style.setProperty("--pointer-y", ((event.clientY / height) * 100).toFixed(2) + "%");
+    }, { passive: true });
 
-function debounce(fn, delay) {
-  var timeoutId;
-  return function() {
-    var args = arguments;
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(function() {
-      fn.apply(null, args);
-    }, delay);
-  };
-}
+    $search.on("input", function() {
+      state.query = String($(this).val() || "").trim().toLowerCase();
+      applyFilters({ reshuffleRandom: false });
+    });
 
-var debouncedTimelineOffsetUpdate = debounce(function() {
-  updateFilterPanelCompactState(true);
-  applyResponsiveGridSize(false);
-  $grid.isotope('layout');
-  updateTimelineEdgePeek();
-  if (isDateSortActive()) {
-    updateTimeline();
-  } else {
-    updateTimelineScrollCues();
-  }
-  syncActiveMonthWithViewport(true);
-  updateTimelineScrollCues();
-}, 120);
-$(window).on('resize', debouncedTimelineOffsetUpdate);
-$(window).on('load', function() {
-  applyResponsiveGridSize(true);
-  updateFilterPanelCompactState(true);
-  updateTimelineEdgePeek();
-  syncActiveMonthWithViewport(true);
-  updateTimelineScrollCues();
-});
-if ($filterPanel.length) {
-  $filterPanel.on('mouseenter', function() {
-    if (!canUseHoverState()) {
-      return;
+    $clearSearch.on("click", function() {
+      clearSearch();
+      applyFilters({ reshuffleRandom: false });
+      focusSearch();
+    });
+
+    $sortSelect.on("change", function() {
+      state.sort = normalizeSort(String($(this).val() || "random").toLowerCase());
+      applyFilters({ reshuffleRandom: state.sort === "random" });
+    });
+
+    $themeSelect.on("change", function() {
+      setTheme(String($(this).val() || "aurora"));
+    });
+
+    $countryTags.on("click", ".chip", function() {
+      var tag = String(this.getAttribute("data-tag") || "*");
+      state.country = state.country === tag ? "*" : tag;
+      updateChipUi();
+      applyFilters({ reshuffleRandom: false });
+    });
+
+    $categoryTags.on("click", ".chip", function() {
+      var tag = String(this.getAttribute("data-tag") || "*");
+      state.category = state.category === tag ? "*" : tag;
+      updateChipUi();
+      applyFilters({ reshuffleRandom: false });
+    });
+
+    $timeline.on("click", ".timeline-chip", function() {
+      var monthKey = String(this.getAttribute("data-month-key") || "");
+      scrollToTimelineMonth(monthKey);
+    });
+
+    $timeline.on("mouseenter focusin", ".timeline-chip", function() {
+      var monthKey = String(this.getAttribute("data-month-key") || "");
+      previewTimelineMonth(monthKey);
+    });
+
+    $timeline.on("mouseleave", function() {
+      clearTimelinePreview();
+    });
+
+    $timeline.on("focusout", ".timeline-chip", function() {
+      window.setTimeout(function() {
+        if (!$timeline.length) {
+          return;
+        }
+        var active = document.activeElement;
+        if (active && $timeline.get(0).contains(active)) {
+          return;
+        }
+        clearTimelinePreview();
+      }, 0);
+    });
+
+    if ($deckMainRow.length) {
+      $deckMainRow.on("mouseenter", function() {
+        setDeckCondensedExpanded(true);
+      });
+
+      $deckMainRow.on("focusin", function() {
+        setDeckCondensedExpanded(true);
+      });
     }
-    filterPanelHovered = true;
-    updateFilterPanelCompactState(true);
-  });
-  $filterPanel.on('mouseleave', function() {
-    if (!canUseHoverState()) {
-      return;
+
+    $controlDeck.on("mouseleave", function() {
+      setDeckCondensedExpanded(false);
+    });
+
+    $controlDeck.on("focusout", function() {
+      window.setTimeout(function() {
+        if (!$controlDeck.length) {
+          return;
+        }
+        var active = document.activeElement;
+        if (active && $controlDeck.get(0).contains(active)) {
+          return;
+        }
+        setDeckCondensedExpanded(false);
+      }, 0);
+    });
+
+    $(document).on("click", ".lg-exif-toggle", function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleExifVisibility();
+    });
+
+    $(document).on("click", ".lg-fullscreen-toggle", function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleFullscreen();
+    });
+
+    $surpriseMe.on("click", surpriseMe);
+
+    $shuffleVisible.on("click", function() {
+      state.sort = "random";
+      $sortSelect.val("random");
+      syncCustomSelectFromNative($sortSelect);
+      applyFilters({ reshuffleRandom: true });
+    });
+
+    $resetAll.on("click", function() {
+      resetControls();
+    });
+
+    $showShortcuts.on("click", function() {
+      openShortcuts();
+    });
+
+    $closeShortcuts.on("click", function() {
+      closeShortcuts();
+    });
+
+    $shortcutDialog.on("click", function(event) {
+      if (event.target === this) {
+        closeShortcuts();
+      }
+    });
+
+    $scrollProgress.on("click", function() {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+
+    document.addEventListener("keydown", function(event) {
+      var key = String(event.key || "");
+      var target = event.target;
+      var insideCustomSelect = !!(target && typeof target.closest === "function" && target.closest(".custom-select"));
+      var isTypingField = target && (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.tagName === "SELECT" ||
+        target.isContentEditable
+      );
+
+      if (key === "Escape" && closeAllCustomSelects()) {
+        event.preventDefault();
+        return;
+      }
+
+      if (key === "/" && !event.shiftKey && !isTypingField && !insideCustomSelect) {
+        event.preventDefault();
+        focusSearch();
+        return;
+      }
+
+      if ((key === "?" || (key === "/" && event.shiftKey)) && !isTypingField && !insideCustomSelect) {
+        event.preventDefault();
+        openShortcuts();
+        return;
+      }
+
+      if (key === "Escape") {
+        if ($shortcutDialog.length && $shortcutDialog.get(0).open) {
+          closeShortcuts();
+          return;
+        }
+
+        if (getFullscreenElement()) {
+          return;
+        }
+
+        if ($search.val()) {
+          clearSearch();
+          applyFilters({ reshuffleRandom: false });
+        }
+        return;
+      }
+
+      if (isTypingField || insideCustomSelect) {
+        return;
+      }
+
+      if (key.toLowerCase() === "r") {
+        state.sort = "random";
+        $sortSelect.val("random");
+        syncCustomSelectFromNative($sortSelect);
+        applyFilters({ reshuffleRandom: true });
+      }
+
+      if (key.toLowerCase() === "f") {
+        if (isLightboxOpen()) {
+          toggleFullscreen();
+        }
+      }
+
+      if (key.toLowerCase() === "x") {
+        toggleExifVisibility();
+      }
+    });
+
+    $(document).on("click", function(event) {
+      if ($(event.target).closest(".custom-select").length) {
+        return;
+      }
+      closeAllCustomSelects();
+    });
+  }
+
+  function bootstrap() {
+    enforceTopOnReload();
+
+    prepareItems();
+
+    state.theme = "aurora";
+    var storedExifVisible = readStorageJson(STORAGE.exifVisible, true);
+    state.exifVisible = storedExifVisible !== false;
+
+    applyStateFromUrl();
+
+    $search.val(state.query);
+    $sortSelect.val(state.sort);
+    $themeSelect.val(state.theme);
+    initCustomSelects();
+
+    var tagCounts = getAllTagCounts();
+    renderChips($countryTags, COUNTRY_TAGS, COUNTRY_LABELS, "country", tagCounts);
+    renderChips($categoryTags, CATEGORY_TAGS, CATEGORY_LABELS, "category", tagCounts);
+
+    if (state.country !== "*" && !$countryTags.find('.chip[data-tag="' + state.country + '"]').length) {
+      state.country = "*";
     }
-    filterPanelHovered = false;
-    updateFilterPanelCompactState(true);
-  });
-  $filterPanel.on('touchstart pointerdown', function() {
-    // Touch interactions should never keep the panel pinned open.
-    if (canUseHoverState()) {
-      return;
+    if (state.category !== "*" && !$categoryTags.find('.chip[data-tag="' + state.category + '"]').length) {
+      state.category = "*";
     }
-    filterPanelHovered = false;
-  });
-}
-var filterPanelScrollScheduled = false;
-$(window).on('scroll', function() {
-  if (filterPanelScrollScheduled) {
-    return;
+
+    initIsotope();
+    initLightbox();
+
+    setTheme(state.theme, { persist: false, updateUrl: false });
+    setExifVisibility(state.exifVisible, { persist: false, updateUrl: false });
+    syncFullscreenButtonState();
+    updateChipUi();
+    lastScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    bindEvents();
+
+    applyFilters({ reshuffleRandom: true });
+    updateScrollProgress();
+    updateDeckVisibilityOnScroll();
+    renderTimeline();
+    updateGalleryCounts();
+    syncLightGallery();
+    queueTimelineActiveSync();
+    updateUrlFromState();
   }
 
-  filterPanelScrollScheduled = true;
-  var runUpdate = function() {
-    filterPanelScrollScheduled = false;
-    updateFilterPanelCompactState(false);
-    syncActiveMonthWithViewport(false);
-  };
-
-  if (window.requestAnimationFrame) {
-    window.requestAnimationFrame(runUpdate);
-  } else {
-    setTimeout(runUpdate, 16);
-  }
-});
-
-$grid.on('arrangeComplete', function() {
-  syncLightGallery();
-  updateMeta();
-  updateTimeline();
-  syncActiveMonthWithViewport(true);
-  updateTimelineScrollCues();
-});
-
-$('#filters').on('click', 'button', function() {
-  var nextFilter = $(this).attr('data-filter');
-  currentFilter = nextFilter;
-  $('#filters').find('.is-checked').removeClass('is-checked');
-  $(this).addClass('is-checked');
-  if (nextFilter === '*') {
-    applyFilters(false);
-    return;
-  }
-  applyFilters(false);
-});
-
-$sortSelect.on('change', function() {
-  var nextSort = String($(this).val() || '').toLowerCase();
-  if (nextSort !== 'date-asc' && nextSort !== 'date-desc') {
-    nextSort = 'random';
-  }
-  currentSort = nextSort;
-  activeMonthKey = '';
-  updateSortUI();
-  applyFilters(nextSort === 'random');
-});
-
-var debouncedApplyFilters = debounce(applyFilters, 120);
-
-$('#gallery-search').on('input', function() {
-  currentQuery = $(this).val().trim().toLowerCase();
-  tryApplyHashtagFromQuery();
-  debouncedApplyFilters(false);
-});
-
-$searchInput.on('keydown', function(event) {
-  if (event.key === 'Escape') {
-    $(this).val('');
-    currentQuery = '';
-    currentFilter = '*';
-    resetSortToRandom();
-    updateSortUI();
-    $('#filters').find('.is-checked').removeClass('is-checked');
-    $('#filters').find('button[data-filter="*"]').addClass('is-checked');
-    applyFilters(true);
-  }
-});
-
-$scrollTopFab.on('click', function() {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
-});
-
-$timelineMonths.on('click', '.timeline-month', function() {
-  var monthKey = String($(this).attr('data-month') || '');
-  if (!monthKey || !monthTargets[monthKey]) {
-    return;
-  }
-  setTimelineActiveMonth(monthKey, {
-    smoothTimelineScroll: false,
-    ensureVisible: false
-  });
-  clearMonthPreview();
-  scrollToMonth(monthKey);
-});
-
-$timelineMonths.on('mouseenter focusin', '.timeline-month', function() {
-  if (!canUseHoverState()) {
-    return;
-  }
-  var monthKey = String($(this).attr('data-month') || '');
-  previewMonth(monthKey);
-});
-
-$timelineMonths.on('mouseleave focusout', '.timeline-month', function() {
-  if (!canUseHoverState()) {
-    return;
-  }
-  clearMonthPreview();
-});
-
-$timelineMonths.on('mouseleave', function() {
-  if (!canUseHoverState()) {
-    return;
-  }
-  clearMonthPreview();
-});
-
-var debouncedTimelineCueUpdate = debounce(updateTimelineScrollCues, 40);
-$timelineMonths.on('scroll', debouncedTimelineCueUpdate);
-
-var tagCounts = getAllTags();
-buildPresetButtons(tagCounts);
-buildSearchSuggestions(tagCounts);
-setupWheelZoom();
-setupExifPanel();
-updateSortUI();
-updateFilterPanelCompactState(true);
-applyFilters(true);
+  bootstrap();
+})(window.jQuery);

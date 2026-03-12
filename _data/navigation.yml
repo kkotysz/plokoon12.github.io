@@ -6,7 +6,7 @@ main:
   # - title: "Tags"
   #   url: /tags/
   - title: "Gallery"
-    url: /gallery/
+    url: /gallery/?theme=classic
   - title: "Teaching"
     url: /teaching/
   - title: "About"
