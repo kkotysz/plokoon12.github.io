@@ -132,37 +132,41 @@
         <div id="country-tags" class="chip-group" role="list"></div>
       </div>
 
-      <div class="chip-section">
-        <p class="chip-title">Genres</p>
-        <div id="category-tags" class="chip-group" role="list"></div>
-      </div>
-
-      <div id="advanced-tags-wrap" class="chip-section">
-        <div class="chip-head">
-          <p class="chip-title">Tag filters</p>
-          <div class="chip-head-actions">
-            <button id="tag-mode-toggle" class="chip-head-button" type="button" aria-pressed="false">Match: ALL</button>
-            <button id="clear-tag-filters" class="chip-head-button" type="button">Clear tags</button>
-          </div>
-        </div>
-        <div class="tag-filter-columns">
-          <div class="tag-filter-column">
-            <p class="chip-subtitle">Include</p>
-            <div id="include-tags" class="chip-group chip-group--dense" role="list"></div>
-          </div>
-          <div class="tag-filter-column">
-            <p class="chip-subtitle">Exclude</p>
-            <div id="exclude-tags" class="chip-group chip-group--dense" role="list"></div>
-          </div>
-        </div>
-      </div>
-
       <div id="collections-wrap" class="chip-section" hidden>
         <div class="chip-head">
           <p class="chip-title">Collections</p>
           <button id="clear-collection" class="chip-head-button" type="button">Clear collection</button>
         </div>
         <div id="collection-tags" class="chip-group chip-group--dense" role="list"></div>
+      </div>
+
+      <div id="advanced-tags-wrap" class="chip-section">
+        <div class="chip-head">
+          <p class="chip-title">Tag filters</p>
+          <button
+            id="toggle-tag-filters"
+            class="chip-head-button chip-head-button--toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="tag-filter-panel"
+            aria-label="Expand tag filters">+</button>
+        </div>
+        <div id="tag-filter-panel" class="tag-filter-panel" hidden>
+          <div class="chip-head-actions">
+            <button id="tag-mode-toggle" class="chip-head-button" type="button" aria-pressed="false">Match: ALL</button>
+            <button id="clear-tag-filters" class="chip-head-button" type="button">Clear tags</button>
+          </div>
+          <div class="tag-filter-columns">
+            <div class="tag-filter-column">
+              <p class="chip-subtitle">Include</p>
+              <div id="include-tags" class="chip-group chip-group--dense" role="list"></div>
+            </div>
+            <div class="tag-filter-column">
+              <p class="chip-subtitle">Exclude</p>
+              <div id="exclude-tags" class="chip-group chip-group--dense" role="list"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
     </section>

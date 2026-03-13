@@ -72,12 +72,7 @@
     usa: "USA"
   };
 
-  var CATEGORY_TAGS = [
-    "astrophoto", "nature", "architecture", "bw",
-    "landscape", "portrait", "square", "panorama"
-  ];
-
-  var CATEGORY_LABELS = {
+  var TAG_LABELS = {
     astrophoto: "Astro",
     nature: "Nature",
     architecture: "Architecture",
@@ -93,10 +88,10 @@
   var state = {
     query: "",
     country: "*",
-    category: "*",
     includeTags: [],
     excludeTags: [],
     tagMode: "all",
+    tagFiltersExpanded: false,
     collection: "",
     mapMode: false,
     photo: "",
@@ -154,10 +149,11 @@
   var $themeSelect = $("#gallery-theme");
   var $galleryCounts = $("#gallery-counts");
   var $countryTags = $("#country-tags");
-  var $categoryTags = $("#category-tags");
   var $advancedTagsWrap = $("#advanced-tags-wrap");
+  var $tagFilterPanel = $("#tag-filter-panel");
   var $includeTags = $("#include-tags");
   var $excludeTags = $("#exclude-tags");
+  var $toggleTagFilters = $("#toggle-tag-filters");
   var $tagModeToggle = $("#tag-mode-toggle");
   var $clearTagFilters = $("#clear-tag-filters");
   var $collectionsWrap = $("#collections-wrap");
@@ -261,10 +257,6 @@
     return COUNTRY_TAGS.indexOf(value) >= 0;
   }
 
-  function isKnownCategory(value) {
-    return CATEGORY_TAGS.indexOf(value) >= 0;
-  }
-
   function toBoolFlag(value) {
     var normalized = String(value || "").toLowerCase();
     return normalized === "1" || normalized === "true" || normalized === "yes" || normalized === "on";
@@ -349,7 +341,6 @@
     var params = new URLSearchParams(window.location.search || "");
     var queryValue = params.get("q");
     var countryValue = String(params.get("country") || "").toLowerCase();
-    var categoryValue = String(params.get("category") || "").toLowerCase();
     var includeTagsValue = params.get("tags");
     var excludeTagsValue = params.get("exclude");
     var tagModeValue = params.get("tagmode");
@@ -365,9 +356,6 @@
     }
     if (isKnownCountry(countryValue)) {
       state.country = countryValue;
-    }
-    if (isKnownCategory(categoryValue)) {
-      state.category = categoryValue;
     }
     if (includeTagsValue !== null) {
       state.includeTags = parseTagList(includeTagsValue);
@@ -417,9 +405,6 @@
     }
     if (state.country !== "*") {
       params.set("country", state.country);
-    }
-    if (state.category !== "*") {
-      params.set("category", state.category);
     }
     if (state.includeTags.length) {
       params.set("tags", state.includeTags.join(","));
@@ -553,7 +538,7 @@
     if (state.query) {
       return false;
     }
-    if (state.country !== "*" || state.category !== "*") {
+    if (state.country !== "*") {
       return false;
     }
     if (state.collection) {
@@ -624,8 +609,8 @@
     if (COUNTRY_LABELS[tag]) {
       return COUNTRY_LABELS[tag];
     }
-    if (CATEGORY_LABELS[tag]) {
-      return CATEGORY_LABELS[tag];
+    if (TAG_LABELS[tag]) {
+      return TAG_LABELS[tag];
     }
     return "#" + tag;
   }
@@ -700,6 +685,21 @@
       this.classList.toggle("is-active", isActive);
       this.setAttribute("aria-pressed", isActive ? "true" : "false");
     });
+  }
+
+  function setTagFiltersExpanded(expanded) {
+    var isExpanded = !!expanded;
+    state.tagFiltersExpanded = isExpanded;
+
+    if ($tagFilterPanel.length) {
+      $tagFilterPanel.prop("hidden", !isExpanded);
+    }
+
+    if ($toggleTagFilters.length) {
+      $toggleTagFilters.text(isExpanded ? "-" : "+");
+      $toggleTagFilters.attr("aria-expanded", isExpanded ? "true" : "false");
+      $toggleTagFilters.attr("aria-label", isExpanded ? "Collapse tag filters" : "Expand tag filters");
+    }
   }
 
   function toggleTagSelection(group, tag) {
@@ -853,18 +853,15 @@
     });
   }
 
-  function renderChips($container, tags, labels, groupName, counts) {
+  function renderCountryChips($container, tags, labels, counts) {
     $container.empty();
-    var isCountryGroup = groupName === "country";
-
-    var allLabel = isCountryGroup ? "All countries" : "All genres";
     $container.append(
       $("<button>", {
         "class": "chip",
         type: "button",
-        "data-group": groupName,
+        "data-group": "country",
         "data-tag": "*",
-        text: allLabel,
+        text: "All countries",
         "aria-pressed": "true"
       })
     );
@@ -876,35 +873,19 @@
       }
 
       var label = labels[tag] || (tag.charAt(0).toUpperCase() + tag.slice(1));
-      if (isCountryGroup) {
-        var countryCode = String(label || "").trim().toUpperCase();
-        var countryCount = Number(counts[tag] || 0);
-        var countryAria = countryCode + " (" + countryCount + ")";
-
-        $container.append(
-          $("<button>", {
-            "class": "chip chip--country chip--flag-" + tag,
-            type: "button",
-            "data-group": groupName,
-            "data-tag": tag,
-            text: countryCode,
-            title: countryAria,
-            "aria-label": countryAria,
-            "aria-pressed": "false"
-          })
-        );
-        continue;
-      }
-
-      var chipLabel = label + " (" + counts[tag] + ")";
+      var countryCode = String(label || "").trim().toUpperCase();
+      var countryCount = Number(counts[tag] || 0);
+      var countryAria = countryCode + " (" + countryCount + ")";
 
       $container.append(
         $("<button>", {
-          "class": "chip",
+          "class": "chip chip--country chip--flag-" + tag,
           type: "button",
-          "data-group": groupName,
+          "data-group": "country",
           "data-tag": tag,
-          text: chipLabel,
+          text: countryCode,
+          title: countryAria,
+          "aria-label": countryAria,
           "aria-pressed": "false"
         })
       );
@@ -915,13 +896,6 @@
     $countryTags.find(".chip").each(function() {
       var tag = String(this.getAttribute("data-tag") || "*");
       var isActive = tag === state.country;
-      this.classList.toggle("is-active", isActive);
-      this.setAttribute("aria-pressed", isActive ? "true" : "false");
-    });
-
-    $categoryTags.find(".chip").each(function() {
-      var tag = String(this.getAttribute("data-tag") || "*");
-      var isActive = tag === state.category;
       this.classList.toggle("is-active", isActive);
       this.setAttribute("aria-pressed", isActive ? "true" : "false");
     });
@@ -1578,10 +1552,6 @@
     var i = 0;
 
     if (state.country !== "*" && tags.indexOf(state.country) < 0) {
-      return false;
-    }
-
-    if (state.category !== "*" && tags.indexOf(state.category) < 0) {
       return false;
     }
 
@@ -3193,8 +3163,8 @@
   function resetControls() {
     state.query = "";
     state.country = "*";
-    state.category = "*";
     clearTagFilters();
+    state.tagFiltersExpanded = false;
     state.collection = "";
     state.photo = "";
     progressiveLimit = clamp(PROGRESSIVE_INITIAL_LIMIT, 1, Math.max(1, totalPhotoCount));
@@ -3210,6 +3180,7 @@
     setMapMode(false, { updateUrl: false });
     setCopyViewButtonLabel("Copy view");
 
+    setTagFiltersExpanded(state.tagFiltersExpanded);
     updateChipUi();
     applyFilters({ reshuffleRandom: true });
     updateUrlFromState({ keepPhoto: false });
@@ -3301,11 +3272,8 @@
       applyFilters({ reshuffleRandom: false });
     });
 
-    $categoryTags.on("click", ".chip", function() {
-      var tag = String(this.getAttribute("data-tag") || "*");
-      state.category = state.category === tag ? "*" : tag;
-      updateChipUi();
-      applyFilters({ reshuffleRandom: false });
+    $toggleTagFilters.on("click", function() {
+      setTagFiltersExpanded(!state.tagFiltersExpanded);
     });
 
     $includeTags.on("click", ".chip", function() {
@@ -3597,8 +3565,7 @@
     initCustomSelects();
 
     var tagCounts = getAllTagCounts();
-    renderChips($countryTags, COUNTRY_TAGS, COUNTRY_LABELS, "country", tagCounts);
-    renderChips($categoryTags, CATEGORY_TAGS, CATEGORY_LABELS, "category", tagCounts);
+    renderCountryChips($countryTags, COUNTRY_TAGS, COUNTRY_LABELS, tagCounts);
     renderAdvancedTagFilters(tagCounts);
     buildCollections(tagCounts);
     renderCollections();
@@ -3606,9 +3573,6 @@
 
     if (state.country !== "*" && !$countryTags.find('.chip[data-tag="' + state.country + '"]').length) {
       state.country = "*";
-    }
-    if (state.category !== "*" && !$categoryTags.find('.chip[data-tag="' + state.category + '"]').length) {
-      state.category = "*";
     }
     if (state.collection && !collectionIndex[state.collection]) {
       state.collection = "";
@@ -3621,6 +3585,7 @@
     setExifVisibility(state.exifVisible, { persist: false, updateUrl: false });
     setMapMode(state.mapMode, { updateUrl: false });
     syncFullscreenButtonState();
+    setTagFiltersExpanded(state.tagFiltersExpanded);
     updateChipUi();
     lastScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
     bindEvents();

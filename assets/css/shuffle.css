@@ -1003,6 +1003,16 @@ body.gallery-page .pill-link--instagram:focus-within {
   background: linear-gradient(135deg, color-mix(in srgb, var(--accent-a) 18%, white), color-mix(in srgb, var(--accent-b) 18%, white));
 }
 
+.chip-head-button--toggle {
+  min-width: 34px;
+  padding: 0.28rem 0.45rem;
+  font-family: "Space Mono", monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: none;
+}
+
 .chip-subtitle {
   margin: 0;
   font-size: 0.62rem;
@@ -1010,6 +1020,15 @@ body.gallery-page .pill-link--instagram:focus-within {
   text-transform: uppercase;
   color: var(--ink-soft);
   font-weight: 700;
+}
+
+.tag-filter-panel {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.tag-filter-panel[hidden] {
+  display: none !important;
 }
 
 .tag-filter-columns {
