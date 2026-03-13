@@ -176,6 +176,7 @@
   var $shortcutDialog = $("#shortcut-dialog");
   var $showShortcuts = $("#show-shortcuts");
   var $closeShortcuts = $("#close-shortcuts");
+  var $deckCollapseSentinel = $();
 
   function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
@@ -1498,15 +1499,34 @@
 
   function setDeckHidden(hidden) {
     var hadCondensedClass = $controlDeck.hasClass("is-condensed");
+    var isMobile = window.innerWidth <= MOBILE_BREAKPOINT;
+    var willChange = hadCondensedClass !== !!hidden;
+    var beforeHeight = 0;
 
     if (!$controlDeck.length) {
       return;
+    }
+
+    if (willChange) {
+      beforeHeight = $controlDeck.outerHeight(true) || 0;
     }
 
     deckHidden = !!hidden;
     $controlDeck.toggleClass("is-condensed", deckHidden);
     if (!deckHidden) {
       $controlDeck.removeClass("is-condensed-expanded");
+    }
+
+    if ($deckCollapseSentinel.length) {
+      if (isMobile && deckHidden && willChange) {
+        var afterHeight = $controlDeck.outerHeight(true) || 0;
+        var spacerHeight = Math.max(0, Math.round(beforeHeight - afterHeight));
+        $deckCollapseSentinel.css("height", spacerHeight + "px");
+      } else if (!isMobile) {
+        $deckCollapseSentinel.css("height", "0px");
+      } else if (!deckHidden) {
+        $deckCollapseSentinel.css("height", "0px");
+      }
     }
 
     var hasCondensedClass = $controlDeck.hasClass("is-condensed");
@@ -1522,6 +1542,38 @@
     }
 
     $controlDeck.toggleClass("is-condensed-expanded", !!expanded);
+  }
+
+  function ensureDeckCollapseSentinel() {
+    if (!$controlDeck.length) {
+      return;
+    }
+
+    $deckCollapseSentinel = $("#deck-collapse-sentinel");
+    if ($deckCollapseSentinel.length) {
+      return;
+    }
+
+    $deckCollapseSentinel = $("<div>", {
+      id: "deck-collapse-sentinel",
+      "class": "deck-collapse-sentinel",
+      "aria-hidden": "true"
+    });
+    $controlDeck.after($deckCollapseSentinel);
+  }
+
+  function isDeckOutOfView() {
+    if ($deckCollapseSentinel.length) {
+      var sentinelRect = $deckCollapseSentinel.get(0).getBoundingClientRect();
+      return sentinelRect.bottom <= 0;
+    }
+
+    if (!$controlDeck.length) {
+      return false;
+    }
+
+    var rect = $controlDeck.get(0).getBoundingClientRect();
+    return rect.bottom <= 0;
   }
 
   function updateDeckVisibilityOnScroll() {
@@ -1542,20 +1594,31 @@
     }
 
     if (isMobile) {
+      var deckOutOfView = isDeckOutOfView();
+
       if (nearTop) {
         setDeckHidden(false);
         lastScrollY = scrollTop;
         return;
       }
 
-      if (hasExpandedFilterPanels()) {
+      if (hasExpandedFilterPanels() && !deckOutOfView) {
         setDeckHidden(false);
         lastScrollY = scrollTop;
         return;
       }
 
-      if (!deckHidden) {
+      if (deckHidden && !deckOutOfView) {
+        setDeckHidden(false);
+        lastScrollY = scrollTop;
+        return;
+      }
+
+      if (!deckHidden && deckOutOfView) {
         setDeckHidden(true);
+        setDeckCondensedExpanded(false);
+        lastScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+        return;
       }
 
       if (delta < -hideDelta) {
@@ -1574,7 +1637,7 @@
       return;
     }
 
-    if (!deckHidden && scrollTop > 220) {
+    if (!deckHidden && isDeckOutOfView()) {
       setDeckHidden(true);
     }
 
@@ -3249,11 +3312,13 @@
         if (window.innerWidth <= MOBILE_BREAKPOINT) {
           var keepSemiExpanded = $controlDeck.hasClass("is-condensed-expanded");
           var currentScrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
-          if (currentScrollTop < 20 || hasExpandedFilterPanels()) {
+          if (currentScrollTop < 20 || (hasExpandedFilterPanels() && !isDeckOutOfView())) {
             setDeckHidden(false);
-          } else {
+          } else if (isDeckOutOfView()) {
             setDeckHidden(true);
             setDeckCondensedExpanded(keepSemiExpanded);
+          } else {
+            setDeckHidden(false);
           }
         } else {
           setDeckHidden(false);
@@ -3596,6 +3661,8 @@
       state.collection = "";
       $collectionsWrap.prop("hidden", true);
     }
+
+    ensureDeckCollapseSentinel();
 
     prepareItems();
     progressiveLimit = clamp(PROGRESSIVE_INITIAL_LIMIT, 1, Math.max(1, totalPhotoCount));
