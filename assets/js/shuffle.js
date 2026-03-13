@@ -8,6 +8,7 @@
   var GRID_GUTTER = 10;
   var MOBILE_BREAKPOINT = 760;
   var SMALL_MOBILE_BREAKPOINT = 520;
+  var ISOTOPE_TRANSITION_MS = "240ms";
 
   var STORAGE = {
     exifVisible: "gallery:exif-visible:v1"
@@ -105,6 +106,7 @@
   var lastScrollY = 0;
   var deckToggleLockUntil = 0;
   var DECK_TOGGLE_LOCK_MS = 260;
+  var hasEnabledIsotopeTransitions = false;
   var secretThemeCombo = {
     lastKey: "",
     lastAt: 0
@@ -1220,15 +1222,27 @@
       sortAscending: sortOptions.sortAscending
     });
 
-    updateGalleryCounts();
     updateUrlFromState();
+  }
+
+  function enableIsotopeTransitions() {
+    if (hasEnabledIsotopeTransitions || !iso) {
+      return;
+    }
+
+    hasEnabledIsotopeTransitions = true;
+    $grid.isotope("option", {
+      transitionDuration: ISOTOPE_TRANSITION_MS
+    });
   }
 
   function initIsotope() {
     applyTileSize();
+    hasEnabledIsotopeTransitions = false;
 
     iso = $grid.isotope({
       itemSelector: ".item",
+      transitionDuration: 0,
       masonry: {
         columnWidth: getTileSize(),
         fitWidth: true,
@@ -1250,14 +1264,11 @@
       }
     }).data("isotope");
 
-    $grid.imagesLoaded().progress(function() {
-      $grid.isotope("layout");
-    });
-
     $grid.on("arrangeComplete", function() {
       syncLightGallery();
       renderTimeline();
       updateGalleryCounts();
+      enableIsotopeTransitions();
     });
   }
 

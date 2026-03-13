@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+  {% assign gallery_assets_v = "g1" %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Gallery</title>
@@ -14,7 +15,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-thumbnail.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-  <link rel="stylesheet" href="/assets/css/shuffle.css?v=20260312-dropdown-trigger-border-fix-v25">
+  <link rel="stylesheet" href="/assets/css/shuffle.css?v={{ gallery_assets_v }}">
 
   <link rel="shortcut icon" type="image/png" href="/favicon.png">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -200,6 +201,6 @@
     </div>
   </dialog>
 
-  <script src="/assets/js/shuffle.js?v=20260312-secret-theme-hidden-v9"></script>
+  <script src="/assets/js/shuffle.js?v={{ gallery_assets_v }}"></script>
 </body>
 </html>
