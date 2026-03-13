@@ -249,7 +249,7 @@
   }
 
   function normalizeTheme(value) {
-    var valid = ["aurora", "classic", "midnight", "ember", "jade", "rainbow"];
+    var valid = ["aurora", "classic", "midnight", "ember", "jade", "paperink", "mintpop", "noir", "rainbow"];
     return valid.indexOf(value) >= 0 ? value : "classic";
   }
 

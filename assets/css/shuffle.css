@@ -109,6 +109,57 @@ body.gallery-page[data-theme="jade"] {
   --surface-dark: rgba(8, 19, 14, 0.88);
 }
 
+body.gallery-page[data-theme="paperink"] {
+  --bg-0: #f8f1e7;
+  --bg-1: #efe4d4;
+  --panel: rgba(255, 252, 246, 0.72);
+  --panel-strong: rgba(255, 252, 246, 0.9);
+  --ink: #15110d;
+  --ink-soft: #66584b;
+  --line: rgba(21, 17, 13, 0.18);
+  --accent-a: #1a1713;
+  --accent-b: #d4552d;
+  --accent-c: #b99267;
+  --glow: rgba(212, 85, 45, 0.2);
+  --shadow-soft: 0 14px 34px rgba(44, 26, 12, 0.16);
+  --shadow-strong: 0 24px 44px rgba(44, 26, 12, 0.22);
+  --surface-dark: rgba(245, 235, 220, 0.92);
+}
+
+body.gallery-page[data-theme="mintpop"] {
+  --bg-0: #e6fff5;
+  --bg-1: #d9f1ff;
+  --panel: rgba(255, 255, 255, 0.74);
+  --panel-strong: rgba(255, 255, 255, 0.9);
+  --ink: #123242;
+  --ink-soft: #4e7384;
+  --line: rgba(18, 50, 66, 0.18);
+  --accent-a: #00b894;
+  --accent-b: #ff4f81;
+  --accent-c: #6c63ff;
+  --glow: rgba(255, 79, 129, 0.2);
+  --shadow-soft: 0 14px 34px rgba(13, 47, 62, 0.14);
+  --shadow-strong: 0 24px 44px rgba(13, 47, 62, 0.2);
+  --surface-dark: rgba(238, 253, 255, 0.92);
+}
+
+body.gallery-page[data-theme="noir"] {
+  --bg-0: #161616;
+  --bg-1: #0a0a0a;
+  --panel: rgba(24, 24, 24, 0.8);
+  --panel-strong: rgba(15, 15, 15, 0.94);
+  --ink: #f2f2f2;
+  --ink-soft: #b8b8b8;
+  --line: rgba(232, 232, 232, 0.22);
+  --accent-a: #ffffff;
+  --accent-b: #c6c6c6;
+  --accent-c: #8e8e8e;
+  --glow: rgba(255, 255, 255, 0.18);
+  --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.5);
+  --shadow-strong: 0 30px 58px rgba(0, 0, 0, 0.66);
+  --surface-dark: rgba(8, 8, 8, 0.9);
+}
+
 body.gallery-page[data-theme="rainbow"] {
   --bg-0: #21102a;
   --bg-1: #0f1a2b;
@@ -187,45 +238,45 @@ body.gallery-page[data-theme="rainbow"] .ambient-grid {
   animation: rainbowGridShift 7.2s linear infinite;
 }
 
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .search-wrap,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .select-wrap,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .pill-button,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .pill-link,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .chip-head-button,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .chip,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .timeline-chip,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .custom-select-trigger,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .custom-select-option,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .deck-stats,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .gallery-count-pill,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .shortcut-content kbd {
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .search-wrap,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .select-wrap,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .pill-button,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .pill-link,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .chip-head-button,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .chip,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .timeline-chip,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .custom-select-trigger,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .custom-select-option,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .deck-stats,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .gallery-count-pill,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .shortcut-content kbd {
   background: var(--surface-dark);
 }
 
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .icon-button:hover {
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .icon-button:hover {
   background: var(--surface-dark);
 }
 
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .pill-button.is-active,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .chip-head-button.is-active,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .chip.is-active,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .timeline-chip.is-active,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .custom-select-option.is-active {
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .pill-button.is-active,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .chip-head-button.is-active,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .chip.is-active,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .timeline-chip.is-active,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .custom-select-option.is-active {
   color: var(--ink);
   border-color: color-mix(in srgb, var(--accent-a) 62%, var(--line));
   background: color-mix(in srgb, var(--panel-strong) 84%, black 16%);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-a) 22%, transparent);
 }
 
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .custom-select-menu {
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .custom-select-menu {
   background: color-mix(in srgb, var(--surface-dark) 86%, black 14%);
   border-color: color-mix(in srgb, var(--accent-a) 34%, var(--line));
 }
 
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .select-wrap.has-custom-select:hover,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .select-wrap.has-custom-select:focus-within,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .custom-select-option:hover,
-body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="rainbow"]) .custom-select-option:focus-visible {
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .select-wrap.has-custom-select:hover,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .select-wrap.has-custom-select:focus-within,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .custom-select-option:hover,
+body.gallery-page:is([data-theme="classic"], [data-theme="midnight"], [data-theme="ember"], [data-theme="jade"], [data-theme="paperink"], [data-theme="mintpop"], [data-theme="noir"], [data-theme="rainbow"]) .custom-select-option:focus-visible {
   border-color: color-mix(in srgb, var(--accent-a) 58%, var(--line));
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-a) 22%, transparent);
 }
