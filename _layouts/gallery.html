@@ -13,7 +13,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-zoom.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-thumbnail.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
   <link rel="stylesheet" href="/assets/css/shuffle.css?v={{ gallery_assets_v }}">
@@ -27,7 +26,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/plugins/zoom/lg-zoom.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/plugins/thumbnail/lg-thumbnail.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.jsdelivr.net/npm/exifr/dist/lite.umd.js" crossorigin="anonymous"></script>
 
   {% include /analytics-providers/google-gtag.html %}
@@ -35,7 +33,7 @@
 <body
   class="gallery-page"
   data-theme="classic"
-  data-feature-map="true"
+  data-feature-map="false"
   data-feature-collections="true"
   data-feature-progressive-load="true">
   <div class="ambient ambient--left" aria-hidden="true"></div>
@@ -89,11 +87,6 @@
         <button id="reset-all" class="pill-button" type="button">
           <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
           <span>Reset</span>
-        </button>
-
-        <button id="toggle-map" class="pill-button" type="button" aria-pressed="false">
-          <i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>
-          <span>Map</span>
         </button>
 
         <button id="copy-view-link" class="pill-button" type="button">
@@ -172,11 +165,6 @@
     </section>
 
     <section class="gallery-stage">
-      <section id="gallery-map-section" class="gallery-map-section" hidden>
-        <div id="gallery-map" class="gallery-map" aria-label="Map with photo markers"></div>
-        <p id="gallery-map-summary" class="gallery-map-summary">Map is ready.</p>
-      </section>
-
       <div id="lightgallery" class="grid" data-total-items="{{ site.data.gallery | size }}">
         {% for photo in site.data.gallery %}
           {% assign tags_list = photo.tags | split: " " %}
@@ -260,7 +248,6 @@
         <li><kbd>/</kbd> focus search</li>
         <li><kbd>r</kbd> reshuffle visible photos</li>
         <li><kbd>f</kbd> fullscreen (lightbox)</li>
-        <li><kbd>m</kbd> toggle map mode</li>
         <li><kbd>c</kbd> copy shareable link</li>
         <li><kbd>x</kbd> show/hide EXIF</li>
         <li><kbd>?</kbd> open this help</li>

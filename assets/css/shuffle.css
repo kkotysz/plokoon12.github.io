@@ -1318,37 +1318,6 @@ body.gallery-page[data-theme="rainbow"] #country-tags .chip--country.is-active {
   min-height: min(70vh, 920px);
 }
 
-body.gallery-page.is-map-mode .grid {
-  display: none;
-}
-
-.gallery-map-section {
-  display: grid;
-  gap: 0.45rem;
-  margin: 0.1rem 0 0.9rem;
-}
-
-.gallery-map-section[hidden] {
-  display: none !important;
-}
-
-.gallery-map {
-  width: 100%;
-  min-height: 470px;
-  border-radius: var(--radius-l);
-  border: 1px solid var(--line);
-  overflow: hidden;
-  box-shadow: var(--shadow-soft);
-}
-
-.gallery-map-summary {
-  margin: 0;
-  font-size: 0.74rem;
-  font-family: "Space Mono", monospace;
-  color: var(--ink-soft);
-  letter-spacing: 0.02em;
-}
-
 .grid {
   margin: 0 auto;
   position: relative;
@@ -2258,10 +2227,6 @@ body.gallery-page.is-map-mode .grid {
     padding: 0.45rem 0.2rem;
   }
 
-  .gallery-map {
-    min-height: 360px;
-  }
-
   .tile-permalink-chip {
     opacity: 1;
     transform: none;
@@ -2285,10 +2250,6 @@ body.gallery-page.is-map-mode .grid {
 
   .gallery-stage {
     border-radius: 0;
-  }
-
-  .gallery-map {
-    min-height: 300px;
   }
 
   .deck-input {

@@ -3396,11 +3396,6 @@
       resetControls();
     });
 
-    $toggleMap.on("click", function() {
-      setMapMode(!state.mapMode);
-      applyFilters({ reshuffleRandom: false });
-    });
-
     $copyViewLink.on("click", function() {
       copyCurrentViewLink();
     });
@@ -3506,11 +3501,6 @@
         }
       }
 
-      if (keyLower === "m" && noModifierKeys) {
-        setMapMode(!state.mapMode);
-        applyFilters({ reshuffleRandom: false });
-      }
-
       if (keyLower === "c" && noModifierKeys) {
         copyCurrentViewLink();
       }
@@ -3531,7 +3521,7 @@
   function bootstrap() {
     enforceTopOnReload();
 
-    FEATURES.mapMode = readFeatureFlag("data-feature-map", true);
+    FEATURES.mapMode = readFeatureFlag("data-feature-map", false);
     FEATURES.collections = readFeatureFlag("data-feature-collections", true);
     FEATURES.progressiveLoad = readFeatureFlag("data-feature-progressive-load", true);
 
