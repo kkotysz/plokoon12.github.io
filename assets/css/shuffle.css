@@ -1330,24 +1330,6 @@ body.gallery-page.is-map-mode .grid {
   letter-spacing: 0.02em;
 }
 
-.gallery-load-more {
-  margin: 0.85rem 0 0.2rem;
-  display: grid;
-  justify-items: center;
-  gap: 0.42rem;
-}
-
-.gallery-load-more[hidden] {
-  display: none !important;
-}
-
-.gallery-load-more-status {
-  margin: 0;
-  font-size: 0.72rem;
-  color: var(--ink-soft);
-  letter-spacing: 0.02em;
-}
-
 .grid {
   margin: 0 auto;
   position: relative;

@@ -140,6 +140,7 @@
   var allTagFilterTags = [];
   var totalPhotoCount = 0;
   var progressiveLimit = PROGRESSIVE_INITIAL_LIMIT;
+  var progressiveLoadPending = false;
   var copyLinkResetTimer = 0;
   var pendingPhotoOpenId = "";
 
@@ -166,9 +167,6 @@
   var $copyViewLink = $("#copy-view-link");
   var $mapSection = $("#gallery-map-section");
   var $mapSummary = $("#gallery-map-summary");
-  var $loadMoreWrap = $("#gallery-load-more-wrap");
-  var $loadMoreButton = $("#gallery-load-more");
-  var $loadMoreStatus = $("#gallery-load-more-status");
   var $timelineWrap = $("#date-timeline-wrap");
   var $timeline = $("#date-timeline");
   var $deckMainRow = $controlDeck.find(".deck-row--main").first();
@@ -567,29 +565,43 @@
     return true;
   }
 
-  function updateLoadMoreUi() {
-    if (!$loadMoreWrap.length || !$loadMoreStatus.length || !$loadMoreButton.length) {
-      return;
-    }
-
+  function canLoadMorePhotos() {
     if (!FEATURES.progressiveLoad || !isProgressiveFilterActive()) {
-      $loadMoreWrap.prop("hidden", true);
-      return;
+      return false;
     }
-
-    var loaded = Math.min(progressiveLimit, totalPhotoCount);
-    var hasMore = loaded < totalPhotoCount;
-    $loadMoreWrap.prop("hidden", false);
-    $loadMoreButton.prop("disabled", !hasMore);
-    $loadMoreStatus.text("Loaded " + loaded + " / " + totalPhotoCount + " photos");
+    return progressiveLimit < totalPhotoCount;
   }
 
   function loadMorePhotos() {
-    if (!FEATURES.progressiveLoad) {
+    if (!canLoadMorePhotos()) {
+      return false;
+    }
+
+    var nextLimit = Math.min(totalPhotoCount, progressiveLimit + PROGRESSIVE_LOAD_STEP);
+    if (nextLimit <= progressiveLimit) {
+      return false;
+    }
+
+    progressiveLoadPending = true;
+    progressiveLimit = nextLimit;
+    applyFilters({ reshuffleRandom: false });
+    return true;
+  }
+
+  function maybeAutoLoadMoreOnScroll() {
+    if (progressiveLoadPending || !canLoadMorePhotos()) {
       return;
     }
-    progressiveLimit = Math.min(totalPhotoCount, progressiveLimit + PROGRESSIVE_LOAD_STEP);
-    applyFilters({ reshuffleRandom: false });
+
+    var doc = document.documentElement;
+    var scrollTop = window.pageYOffset || doc.scrollTop || 0;
+    var viewportHeight = window.innerHeight || doc.clientHeight || 0;
+    var documentHeight = Math.max(document.body.scrollHeight || 0, doc.scrollHeight || 0);
+    var distanceToBottom = documentHeight - (scrollTop + viewportHeight);
+
+    if (distanceToBottom <= 320) {
+      loadMorePhotos();
+    }
   }
 
   function getOrderedFilterTags(counts) {
@@ -1713,13 +1725,7 @@
 
     var total = totalPhotoCount || $grid.find(".item").length;
     var visible = getVisibleItems().length;
-    if (isProgressiveFilterActive()) {
-      var loaded = Math.min(progressiveLimit, total);
-      $galleryCounts.text("Visible " + visible + " / loaded " + loaded + " / total " + total);
-    } else {
-      $galleryCounts.text("Visible " + visible + " / " + total + " photos");
-    }
-    updateLoadMoreUi();
+    $galleryCounts.text("Visible " + visible + " / " + total + " photos");
   }
 
   function getVisibleSignature() {
@@ -2180,9 +2186,11 @@
     }).data("isotope");
 
     $grid.on("arrangeComplete", function() {
+      progressiveLoadPending = false;
       syncLightGallery();
       renderTimeline();
       updateGalleryCounts();
+      maybeAutoLoadMoreOnScroll();
       if (state.mapMode) {
         renderMapForVisibleItems();
       }
@@ -3190,6 +3198,7 @@
     state.collection = "";
     state.photo = "";
     progressiveLimit = clamp(PROGRESSIVE_INITIAL_LIMIT, 1, Math.max(1, totalPhotoCount));
+    progressiveLoadPending = false;
     state.sort = "random";
 
     $search.val("");
@@ -3251,6 +3260,7 @@
       updateScrollProgress();
       updateDeckVisibilityOnScroll();
       queueTimelineActiveSync();
+      maybeAutoLoadMoreOnScroll();
     });
 
     document.addEventListener("fullscreenchange", syncFullscreenButtonState);
@@ -3427,10 +3437,6 @@
       copyCurrentViewLink();
     });
 
-    $loadMoreButton.on("click", function() {
-      loadMorePhotos();
-    });
-
     $showShortcuts.on("click", function() {
       openShortcuts();
     });
@@ -3574,10 +3580,6 @@
     if (!FEATURES.collections && $collectionsWrap.length) {
       state.collection = "";
       $collectionsWrap.prop("hidden", true);
-    }
-
-    if (!FEATURES.progressiveLoad && $loadMoreWrap.length) {
-      $loadMoreWrap.prop("hidden", true);
     }
 
     prepareItems();
