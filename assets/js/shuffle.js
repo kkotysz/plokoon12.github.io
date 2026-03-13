@@ -1546,7 +1546,8 @@
     return String(item.getAttribute("data-tags") || "").split(/\s+/).filter(Boolean);
   }
 
-  function itemMatches(item) {
+  function itemMatches(item, options) {
+    var config = options || {};
     var tags = getItemTags(item);
     var query = state.query;
     var i = 0;
@@ -1619,7 +1620,7 @@
       }
     }
 
-    if (isProgressiveFilterActive()) {
+    if (!config.ignoreProgressive && isProgressiveFilterActive()) {
       var progressiveIndex = Number(item.getAttribute("data-progressive-index") || 0);
       if (progressiveIndex >= progressiveLimit) {
         return false;
@@ -1633,6 +1634,16 @@
     return $grid.find(".item").filter(function() {
       return !this.classList.contains("isotope-hidden") && this.style.display !== "none";
     });
+  }
+
+  function getMatchedItemCountIgnoringProgressive() {
+    var matched = 0;
+    $grid.find(".item").each(function() {
+      if (itemMatches(this, { ignoreProgressive: true })) {
+        matched += 1;
+      }
+    });
+    return matched;
   }
 
   function clearTimelinePreview() {
@@ -1694,7 +1705,7 @@
     }
 
     var total = totalPhotoCount || $grid.find(".item").length;
-    var visible = getVisibleItems().length;
+    var visible = getMatchedItemCountIgnoringProgressive();
     $galleryCounts.text("Visible " + visible + " / " + total + " photos");
   }
 
