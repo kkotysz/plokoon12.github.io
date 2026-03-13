@@ -1738,6 +1738,12 @@
     });
   }
 
+  function getLightboxItems() {
+    return $grid.find(".item").filter(function() {
+      return itemMatches(this, { ignoreProgressive: true });
+    });
+  }
+
   function getMatchedItemCountIgnoringProgressive() {
     var matched = 0;
     $grid.find(".item").each(function() {
@@ -1811,24 +1817,30 @@
     $galleryCounts.text("Visible " + visible + " / " + total + " photos");
   }
 
-  function getVisibleSignature() {
-    return getVisibleItems().map(function() {
-      return this.getAttribute("data-id") || this.getAttribute("href") || "";
-    }).get().join("|");
+  function syncLightboxTargets() {
+    var signatureParts = [];
+
+    $grid.find(".item").each(function() {
+      var include = itemMatches(this, { ignoreProgressive: true });
+      this.classList.toggle("is-lightbox-target", include);
+      if (include) {
+        signatureParts.push(this.getAttribute("data-id") || "");
+      }
+    });
+
+    return signatureParts.join("|");
   }
 
   function syncLightGallery() {
-    if (!galleryPlugin) {
-      return;
-    }
-
-    var signature = getVisibleSignature();
+    var signature = syncLightboxTargets();
     if (signature === lastVisibleSignature) {
       return;
     }
 
     lastVisibleSignature = signature;
-    galleryPlugin.refresh();
+    if (galleryPlugin && typeof galleryPlugin.refresh === "function") {
+      galleryPlugin.refresh();
+    }
   }
 
   function escapeHtml(value) {
@@ -1862,14 +1874,14 @@
       return false;
     }
 
-    var visibleItems = getVisibleItems().toArray();
-    if (!visibleItems.length) {
+    var lightboxItems = getLightboxItems().toArray();
+    if (!lightboxItems.length) {
       return false;
     }
 
     var targetIndex = -1;
-    for (var i = 0; i < visibleItems.length; i++) {
-      if (photoIdsMatch(visibleItems[i].getAttribute("data-id"), targetId)) {
+    for (var i = 0; i < lightboxItems.length; i++) {
+      if (photoIdsMatch(lightboxItems[i].getAttribute("data-id"), targetId)) {
         targetIndex = i;
         break;
       }
@@ -1886,7 +1898,7 @@
       return true;
     }
 
-    var $link = $(visibleItems[targetIndex]).find(".tile-link").first();
+    var $link = $(lightboxItems[targetIndex]).find(".tile-link").first();
     if ($link.length && $link.get(0)) {
       $link.get(0).click();
       return true;
@@ -2292,8 +2304,10 @@
       return;
     }
 
+    lastVisibleSignature = syncLightboxTargets();
+
     galleryPlugin = lightGallery(root, {
-      selector: ".item:not(.isotope-hidden):not([style*='display: none']) .tile-link",
+      selector: ".item.is-lightbox-target .tile-link",
       plugins: [lgZoom, lgThumbnail],
       speed: 380,
       download: false,
