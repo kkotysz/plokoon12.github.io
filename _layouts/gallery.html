@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  {% assign gallery_assets_v = "g1" %}
+  {% assign gallery_assets_v = "g2" %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Gallery</title>
@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-zoom.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lg-thumbnail.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
   <link rel="stylesheet" href="/assets/css/shuffle.css?v={{ gallery_assets_v }}">
@@ -26,11 +27,17 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/plugins/zoom/lg-zoom.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/plugins/thumbnail/lg-thumbnail.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.jsdelivr.net/npm/exifr/dist/lite.umd.js" crossorigin="anonymous"></script>
 
   {% include /analytics-providers/google-gtag.html %}
 </head>
-<body class="gallery-page" data-theme="classic">
+<body
+  class="gallery-page"
+  data-theme="classic"
+  data-feature-map="true"
+  data-feature-collections="true"
+  data-feature-progressive-load="true">
   <div class="ambient ambient--left" aria-hidden="true"></div>
   <div class="ambient ambient--right" aria-hidden="true"></div>
   <div class="ambient-grid" aria-hidden="true"></div>
@@ -84,6 +91,16 @@
           <span>Reset</span>
         </button>
 
+        <button id="toggle-map" class="pill-button" type="button" aria-pressed="false">
+          <i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>
+          <span>Map</span>
+        </button>
+
+        <button id="copy-view-link" class="pill-button" type="button">
+          <i class="fa-solid fa-link" aria-hidden="true"></i>
+          <span>Copy view</span>
+        </button>
+
         <button id="show-shortcuts" class="pill-button" type="button">
           <i class="fa-solid fa-keyboard" aria-hidden="true"></i>
           <span>Shortcuts</span>
@@ -120,12 +137,47 @@
         <div id="category-tags" class="chip-group" role="list"></div>
       </div>
 
+      <div id="advanced-tags-wrap" class="chip-section">
+        <div class="chip-head">
+          <p class="chip-title">Tag filters</p>
+          <div class="chip-head-actions">
+            <button id="tag-mode-toggle" class="chip-head-button" type="button" aria-pressed="false">Match: ALL</button>
+            <button id="clear-tag-filters" class="chip-head-button" type="button">Clear tags</button>
+          </div>
+        </div>
+        <div class="tag-filter-columns">
+          <div class="tag-filter-column">
+            <p class="chip-subtitle">Include</p>
+            <div id="include-tags" class="chip-group chip-group--dense" role="list"></div>
+          </div>
+          <div class="tag-filter-column">
+            <p class="chip-subtitle">Exclude</p>
+            <div id="exclude-tags" class="chip-group chip-group--dense" role="list"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="collections-wrap" class="chip-section" hidden>
+        <div class="chip-head">
+          <p class="chip-title">Collections</p>
+          <button id="clear-collection" class="chip-head-button" type="button">Clear collection</button>
+        </div>
+        <div id="collection-tags" class="chip-group chip-group--dense" role="list"></div>
+      </div>
+
     </section>
 
     <section class="gallery-stage">
-      <div id="lightgallery" class="grid">
+      <section id="gallery-map-section" class="gallery-map-section" hidden>
+        <div id="gallery-map" class="gallery-map" aria-label="Map with photo markers"></div>
+        <p id="gallery-map-summary" class="gallery-map-summary">Map is ready.</p>
+      </section>
+
+      <div id="lightgallery" class="grid" data-total-items="{{ site.data.gallery | size }}">
         {% for photo in site.data.gallery %}
           {% assign tags_list = photo.tags | split: " " %}
+          {% assign slug = photo.filename | split: "." | first %}
+          {% assign thumb_base = photo.filename | split: "." | first %}
           {% capture clean_tags %}
             {% for tag in tags_list %}
               {% assign clean_tag = tag | strip | downcase %}
@@ -142,26 +194,33 @@
             data-id="{{ photo.filename }}"
             data-sort="{{ photo.filename }}"
             data-tags="{{ tags_attr }}"
-            data-search="{{ desc_text | strip_html | downcase }} {{ tags_attr }}"
+            data-search="{{ desc_text | strip_html | downcase }} {{ tags_attr }} {{ photo.country | default: '' | strip_html | downcase }} {{ photo.city | default: '' | strip_html | downcase }}"
             data-desc="{{ desc_text | escape }}"
-            data-aspect="{{ photo.aspect }}">
+            data-aspect="{{ photo.aspect }}"
+            data-permalink="/gallery/photo/{{ slug }}/"
+            data-lat="{{ photo.lat | default: '' }}"
+            data-lon="{{ photo.lon | default: '' }}"
+            data-country="{{ photo.country | default: '' | downcase | escape }}"
+            data-city="{{ photo.city | default: '' | downcase | escape }}">
 
             <a
               href="/assets/photos/{{ photo.filename }}"
               class="tile-link"
-              data-sub-html="<h3 class='lg-title'>{{ desc_text | escape }}</h3><p class='lg-tags'>{% for tag in tags_list %}{% assign clean_tag = tag | strip %}{% if clean_tag != '' %}#{{ clean_tag | escape }} {% endif %}{% endfor %}</p>">
+              data-sub-html="<h3 class='lg-title'>{{ desc_text | escape }}</h3><p class='lg-tags'>{% for tag in tags_list %}{% assign clean_tag = tag | strip %}{% if clean_tag != '' %}#{{ clean_tag | escape }} {% endif %}{% endfor %}</p><p class='lg-links'><a class='lg-permalink-link' href='/gallery/photo/{{ slug }}/'>Photo page</a></p>">
               <article class="tile">
-                {% if photo.aspect == 'landscape' %}
-                  <img src="/assets/photos/thumb_{{ photo.filename }}" alt="{{ desc_text | escape }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/assets/images/notfound_landscape.jpg';">
-                {% elsif photo.aspect == 'portrait' %}
-                  <img src="/assets/photos/thumb_{{ photo.filename }}" alt="{{ desc_text | escape }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/assets/images/notfound_portrait.jpg';">
+                {% assign fallback_image = "/assets/images/notfound_landscape.jpg" %}
+                {% if photo.aspect == 'portrait' %}
+                  {% assign fallback_image = "/assets/images/notfound_portrait.jpg" %}
                 {% elsif photo.aspect == 'square' %}
-                  <img src="/assets/photos/thumb_{{ photo.filename }}" alt="{{ desc_text | escape }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/assets/images/notfound_square.jpg';">
+                  {% assign fallback_image = "/assets/images/notfound_square.jpg" %}
                 {% elsif photo.aspect == 'panorama' %}
-                  <img src="/assets/photos/thumb_{{ photo.filename }}" alt="{{ desc_text | escape }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/assets/images/notfound_pano.jpg';">
-                {% else %}
-                  <img src="/assets/photos/thumb_{{ photo.filename }}" alt="{{ desc_text | escape }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='/assets/images/notfound_landscape.jpg';">
+                  {% assign fallback_image = "/assets/images/notfound_pano.jpg" %}
                 {% endif %}
+                <picture>
+                  <source srcset="/assets/photos/thumb_{{ thumb_base }}.avif" type="image/avif">
+                  <source srcset="/assets/photos/thumb_{{ thumb_base }}.webp" type="image/webp">
+                  <img src="/assets/photos/thumb_{{ photo.filename }}" srcset="/assets/photos/thumb_{{ photo.filename }} 1x, /assets/photos/{{ photo.filename }} 2x" alt="{{ desc_text | escape }}" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='{{ fallback_image }}';">
+                </picture>
 
                 <div class="tile-overlay">
                   <h2 class="tile-title">{{ desc_text }}</h2>
@@ -176,8 +235,19 @@
                 </div>
               </article>
             </a>
+            <a class="tile-permalink-chip" href="/gallery/photo/{{ slug }}/" aria-label="Open dedicated photo page">
+              <i class="fa-solid fa-link" aria-hidden="true"></i>
+              <span>Photo page</span>
+            </a>
           </div>
         {% endfor %}
+      </div>
+      <div id="gallery-load-more-wrap" class="gallery-load-more" hidden>
+        <button id="gallery-load-more" class="pill-button" type="button">
+          <i class="fa-solid fa-plus" aria-hidden="true"></i>
+          <span>Load more</span>
+        </button>
+        <p id="gallery-load-more-status" class="gallery-load-more-status">Showing all loaded photos.</p>
       </div>
     </section>
   </main>
@@ -193,6 +263,8 @@
         <li><kbd>/</kbd> focus search</li>
         <li><kbd>r</kbd> reshuffle visible photos</li>
         <li><kbd>f</kbd> fullscreen (lightbox)</li>
+        <li><kbd>m</kbd> toggle map mode</li>
+        <li><kbd>c</kbd> copy shareable link</li>
         <li><kbd>x</kbd> show/hide EXIF</li>
         <li><kbd>?</kbd> open this help</li>
         <li><kbd>Esc</kbd> exit fullscreen / close help / clear search</li>

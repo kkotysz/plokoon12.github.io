@@ -9,6 +9,9 @@
   var MOBILE_BREAKPOINT = 760;
   var SMALL_MOBILE_BREAKPOINT = 520;
   var ISOTOPE_TRANSITION_MS = "240ms";
+  var PROGRESSIVE_INITIAL_LIMIT = 180;
+  var PROGRESSIVE_LOAD_STEP = 120;
+  var MAX_MAP_MARKERS = 450;
 
   var STORAGE = {
     exifVisible: "gallery:exif-visible:v1"
@@ -31,6 +34,7 @@
     MAKE: 0x010F,
     MODEL: 0x0110,
     DATETIME: 0x0132,
+    GPS_POINTER: 0x8825,
     EXIF_POINTER: 0x8769,
     DATETIME_ORIGINAL: 0x9003,
     EXPOSURE_TIME: 0x829A,
@@ -40,7 +44,11 @@
     PIXEL_X_DIMENSION: 0xA002,
     PIXEL_Y_DIMENSION: 0xA003,
     FOCAL_LENGTH_35: 0xA405,
-    LENS_MODEL: 0xA434
+    LENS_MODEL: 0xA434,
+    GPS_LAT_REF: 0x0001,
+    GPS_LAT: 0x0002,
+    GPS_LON_REF: 0x0003,
+    GPS_LON: 0x0004
   };
 
   var COUNTRY_TAGS = [
@@ -86,9 +94,21 @@
     query: "",
     country: "*",
     category: "*",
+    includeTags: [],
+    excludeTags: [],
+    tagMode: "all",
+    collection: "",
+    mapMode: false,
+    photo: "",
     sort: "random",
     theme: "classic",
     exifVisible: true
+  };
+
+  var FEATURES = {
+    mapMode: false,
+    collections: false,
+    progressiveLoad: false
   };
 
   var galleryPlugin = null;
@@ -97,6 +117,7 @@
   var iso = null;
   var exifCache = {};
   var exifRequestToken = 0;
+  var gpsCache = {};
   var timelineEntries = [];
   var activeTimelineKey = "";
   var timelinePreviewKey = "";
@@ -111,6 +132,16 @@
     lastKey: "",
     lastAt: 0
   };
+  var mapRenderToken = 0;
+  var mapLayer = null;
+  var mapInstance = null;
+  var collectionDefs = [];
+  var collectionIndex = {};
+  var allTagFilterTags = [];
+  var totalPhotoCount = 0;
+  var progressiveLimit = PROGRESSIVE_INITIAL_LIMIT;
+  var copyLinkResetTimer = 0;
+  var pendingPhotoOpenId = "";
 
   var $body = $(document.body);
   var $controlDeck = $(".control-deck");
@@ -123,6 +154,21 @@
   var $galleryCounts = $("#gallery-counts");
   var $countryTags = $("#country-tags");
   var $categoryTags = $("#category-tags");
+  var $advancedTagsWrap = $("#advanced-tags-wrap");
+  var $includeTags = $("#include-tags");
+  var $excludeTags = $("#exclude-tags");
+  var $tagModeToggle = $("#tag-mode-toggle");
+  var $clearTagFilters = $("#clear-tag-filters");
+  var $collectionsWrap = $("#collections-wrap");
+  var $collectionTags = $("#collection-tags");
+  var $clearCollection = $("#clear-collection");
+  var $toggleMap = $("#toggle-map");
+  var $copyViewLink = $("#copy-view-link");
+  var $mapSection = $("#gallery-map-section");
+  var $mapSummary = $("#gallery-map-summary");
+  var $loadMoreWrap = $("#gallery-load-more-wrap");
+  var $loadMoreButton = $("#gallery-load-more");
+  var $loadMoreStatus = $("#gallery-load-more-status");
   var $timelineWrap = $("#date-timeline-wrap");
   var $timeline = $("#date-timeline");
   var $deckMainRow = $controlDeck.find(".deck-row--main").first();
@@ -226,6 +272,63 @@
     return normalized === "1" || normalized === "true" || normalized === "yes" || normalized === "on";
   }
 
+  function readFeatureFlag(attrName, fallbackValue) {
+    var raw = $body.attr(attrName);
+    if (raw === undefined || raw === null || raw === "") {
+      return !!fallbackValue;
+    }
+    return toBoolFlag(raw);
+  }
+
+  function normalizeTagToken(value) {
+    return String(value || "")
+      .trim()
+      .toLowerCase()
+      .replace(/^#+/, "")
+      .replace(/[^a-z0-9\-]/g, "");
+  }
+
+  function normalizeTagMode(value) {
+    return String(value || "").toLowerCase() === "any" ? "any" : "all";
+  }
+
+  function parseTagList(value) {
+    if (!value) {
+      return [];
+    }
+    var raw = String(value)
+      .split(/[\s,]+/)
+      .map(normalizeTagToken)
+      .filter(Boolean);
+    var unique = [];
+    for (var i = 0; i < raw.length; i++) {
+      if (unique.indexOf(raw[i]) < 0) {
+        unique.push(raw[i]);
+      }
+    }
+    return unique;
+  }
+
+  function parsePhotoId(value) {
+    return String(value || "").trim();
+  }
+
+  function stripPhotoExtension(value) {
+    return String(value || "").replace(/\.[^.]+$/, "");
+  }
+
+  function photoIdsMatch(a, b) {
+    var left = parsePhotoId(a);
+    var right = parsePhotoId(b);
+    if (!left || !right) {
+      return false;
+    }
+    if (left === right) {
+      return true;
+    }
+    return stripPhotoExtension(left) === stripPhotoExtension(right);
+  }
+
   function readStorageJson(key, fallbackValue) {
     try {
       var raw = localStorage.getItem(key);
@@ -249,6 +352,12 @@
     var queryValue = params.get("q");
     var countryValue = String(params.get("country") || "").toLowerCase();
     var categoryValue = String(params.get("category") || "").toLowerCase();
+    var includeTagsValue = params.get("tags");
+    var excludeTagsValue = params.get("exclude");
+    var tagModeValue = params.get("tagmode");
+    var collectionValue = String(params.get("collection") || "").trim();
+    var mapValue = params.get("map");
+    var photoValue = params.get("photo");
     var sortValue = String(params.get("sort") || "").toLowerCase();
     var themeValue = String(params.get("theme") || "").toLowerCase();
     var exifValue = params.get("exif");
@@ -262,6 +371,24 @@
     if (isKnownCategory(categoryValue)) {
       state.category = categoryValue;
     }
+    if (includeTagsValue !== null) {
+      state.includeTags = parseTagList(includeTagsValue);
+    }
+    if (excludeTagsValue !== null) {
+      state.excludeTags = parseTagList(excludeTagsValue);
+    }
+    if (tagModeValue !== null) {
+      state.tagMode = normalizeTagMode(tagModeValue);
+    }
+    if (collectionValue) {
+      state.collection = collectionValue.toLowerCase();
+    }
+    if (mapValue !== null && FEATURES.mapMode) {
+      state.mapMode = toBoolFlag(mapValue);
+    }
+    if (photoValue !== null) {
+      state.photo = parsePhotoId(photoValue);
+    }
     if (sortValue) {
       state.sort = normalizeSort(sortValue);
     }
@@ -273,10 +400,19 @@
       var normalized = String(exifValue || "").toLowerCase();
       state.exifVisible = !(normalized === "0" || normalized === "false" || normalized === "no" || normalized === "off" || normalized === "hide");
     }
+
+    if (state.excludeTags.length && state.includeTags.length) {
+      state.excludeTags = state.excludeTags.filter(function(tag) {
+        return state.includeTags.indexOf(tag) < 0;
+      });
+    }
   }
 
-  function updateUrlFromState() {
+  function updateUrlFromState(options) {
+    var config = options || {};
     var params = new URLSearchParams();
+    var photoId = config.photoId !== undefined ? parsePhotoId(config.photoId) : state.photo;
+    var keepPhotoParam = config.keepPhoto !== false;
 
     if (state.query) {
       params.set("q", state.query);
@@ -287,6 +423,21 @@
     if (state.category !== "*") {
       params.set("category", state.category);
     }
+    if (state.includeTags.length) {
+      params.set("tags", state.includeTags.join(","));
+    }
+    if (state.excludeTags.length) {
+      params.set("exclude", state.excludeTags.join(","));
+    }
+    if (state.tagMode === "any") {
+      params.set("tagmode", "any");
+    }
+    if (state.collection) {
+      params.set("collection", state.collection);
+    }
+    if (state.mapMode) {
+      params.set("map", "1");
+    }
     if (state.sort !== "random") {
       params.set("sort", state.sort);
     }
@@ -295,6 +446,9 @@
     }
     if (!state.exifVisible) {
       params.set("exif", "0");
+    }
+    if (keepPhotoParam && photoId) {
+      params.set("photo", photoId);
     }
 
     var basePath = window.location.pathname;
@@ -330,22 +484,44 @@
   }
 
   function prepareItems() {
+    var index = 0;
     $grid.find(".item").each(function() {
       var source = this.getAttribute("data-sort") || "";
       var parsed = parseDateFromFilename(source);
       this.setAttribute("data-random-rank", String(Math.random()));
       this.setAttribute("data-date-ts", parsed ? String(parsed.getTime()) : "0");
       this.setAttribute("data-month-key", parsed ? getMonthKeyFromDate(parsed) : "");
+      this.setAttribute("data-year", parsed ? String(parsed.getFullYear()) : "");
+      this.setAttribute("data-grid-index", String(index));
+      this.setAttribute("data-progressive-index", String(index));
+      index += 1;
     });
+    totalPhotoCount = Number($grid.attr("data-total-items")) || index;
+    progressiveLimit = clamp(progressiveLimit, 1, Math.max(1, totalPhotoCount));
+    reseedProgressiveOrder();
   }
 
   function reseedRandomRanks() {
     $grid.find(".item").each(function() {
       this.setAttribute("data-random-rank", String(Math.random()));
     });
+    reseedProgressiveOrder();
 
     if (iso) {
       $grid.isotope("updateSortData", $grid.find(".item"));
+    }
+  }
+
+  function reseedProgressiveOrder() {
+    var nodes = $grid.find(".item").toArray();
+    nodes.sort(function(a, b) {
+      var aRank = Number(a.getAttribute("data-random-rank") || 0);
+      var bRank = Number(b.getAttribute("data-random-rank") || 0);
+      return aRank - bRank;
+    });
+
+    for (var i = 0; i < nodes.length; i++) {
+      nodes[i].setAttribute("data-progressive-index", String(i));
     }
   }
 
@@ -364,6 +540,305 @@
     });
 
     return counts;
+  }
+
+  function isProgressiveFilterActive() {
+    if (!FEATURES.progressiveLoad) {
+      return false;
+    }
+    if (state.mapMode) {
+      return false;
+    }
+    if (state.sort !== "random") {
+      return false;
+    }
+    if (state.query) {
+      return false;
+    }
+    if (state.country !== "*" || state.category !== "*") {
+      return false;
+    }
+    if (state.collection) {
+      return false;
+    }
+    if (state.includeTags.length || state.excludeTags.length) {
+      return false;
+    }
+    return true;
+  }
+
+  function updateLoadMoreUi() {
+    if (!$loadMoreWrap.length || !$loadMoreStatus.length || !$loadMoreButton.length) {
+      return;
+    }
+
+    if (!FEATURES.progressiveLoad || !isProgressiveFilterActive()) {
+      $loadMoreWrap.prop("hidden", true);
+      return;
+    }
+
+    var loaded = Math.min(progressiveLimit, totalPhotoCount);
+    var hasMore = loaded < totalPhotoCount;
+    $loadMoreWrap.prop("hidden", false);
+    $loadMoreButton.prop("disabled", !hasMore);
+    $loadMoreStatus.text("Loaded " + loaded + " / " + totalPhotoCount + " photos");
+  }
+
+  function loadMorePhotos() {
+    if (!FEATURES.progressiveLoad) {
+      return;
+    }
+    progressiveLimit = Math.min(totalPhotoCount, progressiveLimit + PROGRESSIVE_LOAD_STEP);
+    applyFilters({ reshuffleRandom: false });
+  }
+
+  function getOrderedFilterTags(counts) {
+    var tags = Object.keys(counts || {}).filter(function(tag) {
+      return !!tag;
+    });
+
+    tags.sort(function(a, b) {
+      var byCount = Number(counts[b] || 0) - Number(counts[a] || 0);
+      if (byCount !== 0) {
+        return byCount;
+      }
+      return a.localeCompare(b);
+    });
+
+    return tags;
+  }
+
+  function prettyTagLabel(tag) {
+    if (COUNTRY_LABELS[tag]) {
+      return COUNTRY_LABELS[tag];
+    }
+    if (CATEGORY_LABELS[tag]) {
+      return CATEGORY_LABELS[tag];
+    }
+    return "#" + tag;
+  }
+
+  function normalizeTagState() {
+    var include = state.includeTags.filter(function(tag) {
+      return allTagFilterTags.indexOf(tag) >= 0;
+    });
+    var exclude = state.excludeTags.filter(function(tag) {
+      return allTagFilterTags.indexOf(tag) >= 0 && include.indexOf(tag) < 0;
+    });
+    state.includeTags = include;
+    state.excludeTags = exclude;
+    state.tagMode = normalizeTagMode(state.tagMode);
+  }
+
+  function renderAdvancedTagFilters(counts) {
+    if (!$advancedTagsWrap.length || !$includeTags.length || !$excludeTags.length) {
+      return;
+    }
+
+    allTagFilterTags = getOrderedFilterTags(counts);
+    normalizeTagState();
+
+    $includeTags.empty();
+    $excludeTags.empty();
+
+    for (var i = 0; i < allTagFilterTags.length; i++) {
+      var tag = allTagFilterTags[i];
+      var count = Number(counts[tag] || 0);
+      var label = prettyTagLabel(tag) + " (" + count + ")";
+
+      $includeTags.append(
+        $("<button>", {
+          "class": "chip chip--filter chip--include",
+          type: "button",
+          "data-tag": tag,
+          text: label,
+          "aria-pressed": "false"
+        })
+      );
+
+      $excludeTags.append(
+        $("<button>", {
+          "class": "chip chip--filter chip--exclude",
+          type: "button",
+          "data-tag": tag,
+          text: label,
+          "aria-pressed": "false"
+        })
+      );
+    }
+  }
+
+  function updateTagFilterUi() {
+    if ($tagModeToggle.length) {
+      var isAny = state.tagMode === "any";
+      $tagModeToggle.text(isAny ? "Match: ANY" : "Match: ALL");
+      $tagModeToggle.attr("aria-pressed", isAny ? "true" : "false");
+    }
+
+    $includeTags.find(".chip").each(function() {
+      var tag = String(this.getAttribute("data-tag") || "");
+      var isActive = state.includeTags.indexOf(tag) >= 0;
+      this.classList.toggle("is-active", isActive);
+      this.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+
+    $excludeTags.find(".chip").each(function() {
+      var tag = String(this.getAttribute("data-tag") || "");
+      var isActive = state.excludeTags.indexOf(tag) >= 0;
+      this.classList.toggle("is-active", isActive);
+      this.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+  }
+
+  function toggleTagSelection(group, tag) {
+    var clean = normalizeTagToken(tag);
+    if (!clean) {
+      return;
+    }
+
+    if (group === "include") {
+      if (state.includeTags.indexOf(clean) >= 0) {
+        state.includeTags = state.includeTags.filter(function(value) {
+          return value !== clean;
+        });
+      } else {
+        state.includeTags.push(clean);
+      }
+      state.excludeTags = state.excludeTags.filter(function(value) {
+        return value !== clean;
+      });
+      return;
+    }
+
+    if (group === "exclude") {
+      if (state.excludeTags.indexOf(clean) >= 0) {
+        state.excludeTags = state.excludeTags.filter(function(value) {
+          return value !== clean;
+        });
+      } else {
+        state.excludeTags.push(clean);
+      }
+      state.includeTags = state.includeTags.filter(function(value) {
+        return value !== clean;
+      });
+    }
+  }
+
+  function clearTagFilters() {
+    state.includeTags = [];
+    state.excludeTags = [];
+    state.tagMode = "all";
+  }
+
+  function buildCollections(tagCounts) {
+    var counts = tagCounts || {};
+    collectionDefs = [];
+    collectionIndex = {};
+
+    var yearCounts = {};
+    $grid.find(".item").each(function() {
+      var year = String(this.getAttribute("data-year") || "");
+      if (!year) {
+        return;
+      }
+      yearCounts[year] = (yearCounts[year] || 0) + 1;
+    });
+
+    var baseDefs = [
+      { id: "astro", label: "Astro Nights", include: ["astrophoto"], exclude: [] },
+      { id: "mono", label: "Monochrome", include: ["bw"], exclude: [] },
+      { id: "city", label: "City Geometry", include: ["architecture"], exclude: [] },
+      { id: "nature", label: "Nature Escapes", include: ["nature"], exclude: [] },
+      { id: "pano", label: "Panoramas", include: ["panorama"], exclude: [] },
+      { id: "stars", label: "Night Sky", include: ["night"], exclude: [] }
+    ];
+
+    for (var i = 0; i < baseDefs.length; i++) {
+      var def = baseDefs[i];
+      var canAdd = true;
+      if (Array.isArray(def.include) && def.include.length) {
+        for (var k = 0; k < def.include.length; k++) {
+          if (!counts[def.include[k]]) {
+            canAdd = false;
+            break;
+          }
+        }
+      }
+      if (!canAdd) {
+        continue;
+      }
+      collectionDefs.push(def);
+      collectionIndex[def.id] = def;
+    }
+
+    var yearList = Object.keys(yearCounts).sort(function(a, b) {
+      return Number(b) - Number(a);
+    });
+    for (var j = 0; j < yearList.length; j++) {
+      var year = yearList[j];
+      if (yearCounts[year] < 6) {
+        continue;
+      }
+      var yearDef = {
+        id: "year-" + year,
+        label: "Year " + year + " (" + yearCounts[year] + ")",
+        year: String(year),
+        include: [],
+        exclude: []
+      };
+      collectionDefs.push(yearDef);
+      collectionIndex[yearDef.id] = yearDef;
+    }
+  }
+
+  function renderCollections() {
+    if (!$collectionsWrap.length || !$collectionTags.length) {
+      return;
+    }
+    if (!FEATURES.collections) {
+      $collectionsWrap.prop("hidden", true);
+      return;
+    }
+
+    if (!collectionDefs.length) {
+      $collectionsWrap.prop("hidden", true);
+      return;
+    }
+
+    $collectionTags.empty();
+    $collectionTags.append(
+      $("<button>", {
+        "class": "chip",
+        type: "button",
+        "data-collection-id": "",
+        text: "All photos",
+        "aria-pressed": "true"
+      })
+    );
+
+    for (var i = 0; i < collectionDefs.length; i++) {
+      var def = collectionDefs[i];
+      $collectionTags.append(
+        $("<button>", {
+          "class": "chip chip--collection",
+          type: "button",
+          "data-collection-id": def.id,
+          text: def.label,
+          "aria-pressed": "false"
+        })
+      );
+    }
+
+    $collectionsWrap.prop("hidden", false);
+  }
+
+  function updateCollectionsUi() {
+    $collectionTags.find(".chip").each(function() {
+      var id = String(this.getAttribute("data-collection-id") || "");
+      var isActive = !id ? !state.collection : state.collection === id;
+      this.classList.toggle("is-active", isActive);
+      this.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
   }
 
   function renderChips($container, tags, labels, groupName, counts) {
@@ -438,6 +913,9 @@
       this.classList.toggle("is-active", isActive);
       this.setAttribute("aria-pressed", isActive ? "true" : "false");
     });
+
+    updateTagFilterUi();
+    updateCollectionsUi();
   }
 
   function getCustomSelectOptionLabel($select, value) {
@@ -1085,6 +1563,7 @@
   function itemMatches(item) {
     var tags = getItemTags(item);
     var query = state.query;
+    var i = 0;
 
     if (state.country !== "*" && tags.indexOf(state.country) < 0) {
       return false;
@@ -1094,17 +1573,78 @@
       return false;
     }
 
-    if (!query) {
-      return true;
+    if (state.includeTags.length) {
+      if (state.tagMode === "any") {
+        var anyMatch = false;
+        for (i = 0; i < state.includeTags.length; i++) {
+          if (tags.indexOf(state.includeTags[i]) >= 0) {
+            anyMatch = true;
+            break;
+          }
+        }
+        if (!anyMatch) {
+          return false;
+        }
+      } else {
+        for (i = 0; i < state.includeTags.length; i++) {
+          if (tags.indexOf(state.includeTags[i]) < 0) {
+            return false;
+          }
+        }
+      }
     }
 
-    var plainQuery = query.charAt(0) === "#" ? query.slice(1) : query;
-    if (!plainQuery) {
-      return true;
+    if (state.excludeTags.length) {
+      for (i = 0; i < state.excludeTags.length; i++) {
+        if (tags.indexOf(state.excludeTags[i]) >= 0) {
+          return false;
+        }
+      }
     }
 
-    var searchText = String(item.getAttribute("data-search") || "");
-    return searchText.indexOf(plainQuery) >= 0;
+    if (state.collection) {
+      var def = collectionIndex[state.collection];
+      if (def) {
+        if (def.year && String(item.getAttribute("data-year") || "") !== String(def.year)) {
+          return false;
+        }
+
+        if (Array.isArray(def.include) && def.include.length) {
+          for (i = 0; i < def.include.length; i++) {
+            if (tags.indexOf(def.include[i]) < 0) {
+              return false;
+            }
+          }
+        }
+
+        if (Array.isArray(def.exclude) && def.exclude.length) {
+          for (i = 0; i < def.exclude.length; i++) {
+            if (tags.indexOf(def.exclude[i]) >= 0) {
+              return false;
+            }
+          }
+        }
+      }
+    }
+
+    if (query) {
+      var plainQuery = query.charAt(0) === "#" ? query.slice(1) : query;
+      if (plainQuery) {
+        var searchText = String(item.getAttribute("data-search") || "");
+        if (searchText.indexOf(plainQuery) < 0) {
+          return false;
+        }
+      }
+    }
+
+    if (isProgressiveFilterActive()) {
+      var progressiveIndex = Number(item.getAttribute("data-progressive-index") || 0);
+      if (progressiveIndex >= progressiveLimit) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   function getVisibleItems() {
@@ -1171,9 +1711,15 @@
       return;
     }
 
-    var total = $grid.find(".item").length;
+    var total = totalPhotoCount || $grid.find(".item").length;
     var visible = getVisibleItems().length;
-    $galleryCounts.text("Visible " + visible + " / " + total + " photos");
+    if (isProgressiveFilterActive()) {
+      var loaded = Math.min(progressiveLimit, total);
+      $galleryCounts.text("Visible " + visible + " / loaded " + loaded + " / total " + total);
+    } else {
+      $galleryCounts.text("Visible " + visible + " / " + total + " photos");
+    }
+    updateLoadMoreUi();
   }
 
   function getVisibleSignature() {
@@ -1196,8 +1742,377 @@
     galleryPlugin.refresh();
   }
 
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function getItemByPhotoId(photoId) {
+    var clean = parsePhotoId(photoId);
+    if (!clean) {
+      return null;
+    }
+    var found = null;
+    $grid.find(".item").each(function() {
+      var itemId = String(this.getAttribute("data-id") || "");
+      if (photoIdsMatch(itemId, clean)) {
+        found = this;
+        return false;
+      }
+    });
+    return found;
+  }
+
+  function openPhotoInLightboxById(photoId) {
+    var targetId = parsePhotoId(photoId);
+    if (!targetId) {
+      return false;
+    }
+
+    var visibleItems = getVisibleItems().toArray();
+    if (!visibleItems.length) {
+      return false;
+    }
+
+    var targetIndex = -1;
+    for (var i = 0; i < visibleItems.length; i++) {
+      if (photoIdsMatch(visibleItems[i].getAttribute("data-id"), targetId)) {
+        targetIndex = i;
+        break;
+      }
+    }
+
+    if (targetIndex < 0) {
+      return false;
+    }
+
+    syncLightGallery();
+
+    if (galleryPlugin && typeof galleryPlugin.openGallery === "function") {
+      galleryPlugin.openGallery(targetIndex);
+      return true;
+    }
+
+    var $link = $(visibleItems[targetIndex]).find(".tile-link").first();
+    if ($link.length && $link.get(0)) {
+      $link.get(0).click();
+      return true;
+    }
+
+    return false;
+  }
+
+  function ensurePhotoVisibleForOpen(photoId) {
+    var item = getItemByPhotoId(photoId);
+    if (!item) {
+      return false;
+    }
+    if (FEATURES.progressiveLoad && isProgressiveFilterActive()) {
+      var progressiveIndex = Number(item.getAttribute("data-progressive-index") || 0);
+      if (progressiveIndex >= progressiveLimit) {
+        progressiveLimit = Math.min(totalPhotoCount, progressiveIndex + 1);
+      }
+    }
+    return true;
+  }
+
+  function updatePhotoStateFromLightbox(index) {
+    if (!galleryPlugin || !Array.isArray(galleryPlugin.galleryItems) || !galleryPlugin.galleryItems.length) {
+      state.photo = "";
+      return;
+    }
+
+    var safeIndex = clamp(Number(index) || 0, 0, galleryPlugin.galleryItems.length - 1);
+    var galleryItem = galleryPlugin.galleryItems[safeIndex] || {};
+    var source = String(galleryItem.src || galleryItem.href || "").split("#")[0].split("?")[0];
+    var filename = source.split("/").pop() || "";
+    state.photo = filename;
+    updateUrlFromState({ photoId: filename, keepPhoto: true });
+  }
+
+  function setCopyViewButtonLabel(label) {
+    if (!$copyViewLink.length) {
+      return;
+    }
+    var $text = $copyViewLink.find("span").first();
+    if (!$text.length) {
+      return;
+    }
+    $text.text(label);
+  }
+
+  function copyCurrentViewLink() {
+    var link = window.location.href;
+    if (!navigator.clipboard || typeof navigator.clipboard.writeText !== "function") {
+      window.prompt("Copy this gallery link:", link);
+      return;
+    }
+
+    navigator.clipboard.writeText(link).then(function() {
+      setCopyViewButtonLabel("Copied");
+      if (copyLinkResetTimer) {
+        window.clearTimeout(copyLinkResetTimer);
+      }
+      copyLinkResetTimer = window.setTimeout(function() {
+        setCopyViewButtonLabel("Copy view");
+      }, 1400);
+    }).catch(function() {
+      window.prompt("Copy this gallery link:", link);
+    });
+  }
+
+  function parseGpsCoordinate(value) {
+    if (typeof value === "string") {
+      var trimmed = value.trim();
+      if (!trimmed) {
+        return null;
+      }
+      var parsed = Number(trimmed);
+      if (isFiniteNumber(parsed)) {
+        return parsed;
+      }
+    }
+    if (isFiniteNumber(value)) {
+      return Number(value);
+    }
+    if (Array.isArray(value) && value.length) {
+      var first = Number(value[0]);
+      if (isFiniteNumber(first)) {
+        return first;
+      }
+    }
+    return null;
+  }
+
+  function getGeoFromDataAttributes(item) {
+    if (!item) {
+      return null;
+    }
+    var lat = parseGpsCoordinate(item.getAttribute("data-lat"));
+    var lon = parseGpsCoordinate(item.getAttribute("data-lon"));
+    if (!isFiniteNumber(lat) || !isFiniteNumber(lon)) {
+      return null;
+    }
+    return { lat: lat, lon: lon };
+  }
+
+  function loadGeoFromExif(source) {
+    var src = String(source || "").trim();
+    if (!src) {
+      return Promise.resolve(null);
+    }
+    if (Object.prototype.hasOwnProperty.call(gpsCache, src)) {
+      return Promise.resolve(gpsCache[src]);
+    }
+
+    function fallbackFromBinary() {
+      return fetch(src, { cache: "force-cache" })
+        .then(function(response) {
+          if (!response.ok) {
+            throw new Error("Image download failed");
+          }
+          return response.arrayBuffer();
+        })
+        .then(function(arrayBuffer) {
+          var parsedExif = parseExifFromJpeg(arrayBuffer);
+          var exif = toFallbackExifObject(parsedExif) || {};
+          var lat = parseGpsCoordinate(exif.GPSLatitude);
+          var lon = parseGpsCoordinate(exif.GPSLongitude);
+          if (!isFiniteNumber(lat) || !isFiniteNumber(lon)) {
+            gpsCache[src] = null;
+            return null;
+          }
+          var normalized = { lat: Number(lat), lon: Number(lon) };
+          gpsCache[src] = normalized;
+          return normalized;
+        })
+        .catch(function() {
+          gpsCache[src] = null;
+          return null;
+        });
+    }
+
+    if (!window.exifr || (typeof window.exifr.gps !== "function" && typeof window.exifr.parse !== "function")) {
+      return fallbackFromBinary();
+    }
+
+    var readerPromise = typeof window.exifr.gps === "function"
+      ? window.exifr.gps(src)
+      : window.exifr.parse(src, { gps: true });
+
+    return Promise.resolve(readerPromise).then(function(gps) {
+      var lat = parseGpsCoordinate(gps && (gps.latitude || gps.lat || gps.GPSLatitude));
+      var lon = parseGpsCoordinate(gps && (gps.longitude || gps.lon || gps.GPSLongitude));
+      if (isFiniteNumber(lat) && isFiniteNumber(lon)) {
+        var normalized = { lat: Number(lat), lon: Number(lon) };
+        gpsCache[src] = normalized;
+        return normalized;
+      }
+      return fallbackFromBinary();
+    }).catch(function() {
+      return fallbackFromBinary();
+    });
+  }
+
+  function resolveItemGeo(item) {
+    var direct = getGeoFromDataAttributes(item);
+    if (direct) {
+      return Promise.resolve(direct);
+    }
+
+    var link = item ? item.querySelector(".tile-link") : null;
+    var src = link ? (link.getAttribute("href") || "") : "";
+    return loadGeoFromExif(src);
+  }
+
+  function ensureMapInstance() {
+    if (!FEATURES.mapMode || !$mapSection.length || !$mapSummary.length) {
+      return null;
+    }
+    if (!window.L) {
+      return null;
+    }
+    if (mapInstance) {
+      return mapInstance;
+    }
+
+    var container = document.getElementById("gallery-map");
+    if (!container) {
+      return null;
+    }
+
+    mapInstance = window.L.map(container, {
+      zoomControl: true,
+      scrollWheelZoom: true
+    });
+
+    window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: "&copy; OpenStreetMap contributors"
+    }).addTo(mapInstance);
+
+    mapLayer = window.L.layerGroup().addTo(mapInstance);
+    return mapInstance;
+  }
+
+  function renderMapForVisibleItems() {
+    if (!FEATURES.mapMode || !state.mapMode) {
+      return;
+    }
+
+    var map = ensureMapInstance();
+    if (!map || !mapLayer) {
+      if ($mapSummary.length) {
+        $mapSummary.text("Map unavailable in this browser.");
+      }
+      return;
+    }
+
+    var items = getVisibleItems().toArray();
+    if (!items.length) {
+      mapLayer.clearLayers();
+      $mapSummary.text("No visible photos to map.");
+      return;
+    }
+
+    var sample = items.slice(0, MAX_MAP_MARKERS);
+    var token = ++mapRenderToken;
+    $mapSummary.text("Loading map markers...");
+
+    var promises = sample.map(function(item) {
+      return resolveItemGeo(item).then(function(geo) {
+        return { item: item, geo: geo };
+      });
+    });
+
+    Promise.all(promises).then(function(rows) {
+      if (token !== mapRenderToken) {
+        return;
+      }
+
+      mapLayer.clearLayers();
+
+      var bounds = [];
+      var mapped = 0;
+      for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        if (!row || !row.geo || !isFiniteNumber(row.geo.lat) || !isFiniteNumber(row.geo.lon)) {
+          continue;
+        }
+
+        mapped += 1;
+        var latLng = [row.geo.lat, row.geo.lon];
+        bounds.push(latLng);
+
+        var photoId = String(row.item.getAttribute("data-id") || "");
+        var desc = String(row.item.getAttribute("data-desc") || "Untitled");
+        var permalink = String(row.item.getAttribute("data-permalink") || "/gallery/");
+        var popupHtml = "<strong>" + escapeHtml(desc) + "</strong><br><a href='" + escapeHtml(permalink) + "'>Photo page</a>";
+
+        var marker = window.L.marker(latLng, { title: desc });
+        marker.bindPopup(popupHtml);
+        marker.on("click", (function(id) {
+          return function() {
+            openPhotoInLightboxById(id);
+          };
+        })(photoId));
+        marker.addTo(mapLayer);
+      }
+
+      if (bounds.length) {
+        map.fitBounds(bounds, {
+          padding: [28, 28],
+          maxZoom: 13
+        });
+      } else {
+        map.setView([20, 0], 2);
+      }
+
+      var sampleSuffix = items.length > sample.length ? " (limited preview)" : "";
+      $mapSummary.text("Mapped " + mapped + " / " + sample.length + " visible photos" + sampleSuffix + ".");
+
+      window.setTimeout(function() {
+        if (mapInstance) {
+          mapInstance.invalidateSize();
+        }
+      }, 40);
+    });
+  }
+
+  function setMapMode(enabled, options) {
+    var config = options || {};
+    if (!FEATURES.mapMode) {
+      state.mapMode = false;
+      return;
+    }
+
+    state.mapMode = !!enabled;
+    $body.toggleClass("is-map-mode", state.mapMode);
+    $toggleMap.toggleClass("is-active", state.mapMode).attr("aria-pressed", state.mapMode ? "true" : "false");
+    $mapSection.prop("hidden", !state.mapMode);
+
+    if (state.mapMode) {
+      renderMapForVisibleItems();
+    }
+    if (config.updateUrl !== false) {
+      updateUrlFromState();
+    }
+  }
+
   function applyFilters(options) {
     var config = options || {};
+    if (state.collection && !collectionIndex[state.collection]) {
+      state.collection = "";
+    }
+
+    if (state.photo) {
+      ensurePhotoVisibleForOpen(state.photo);
+    }
+
     syncSortModeUi();
     clearTimelinePreview();
 
@@ -1268,6 +2183,14 @@
       syncLightGallery();
       renderTimeline();
       updateGalleryCounts();
+      if (state.mapMode) {
+        renderMapForVisibleItems();
+      }
+      if (pendingPhotoOpenId) {
+        if (openPhotoInLightboxById(pendingPhotoOpenId)) {
+          pendingPhotoOpenId = "";
+        }
+      }
       enableIsotopeTransitions();
     });
   }
@@ -1295,13 +2218,17 @@
     root.addEventListener("lgAfterOpen", function(event) {
       ensureLightboxFullscreenButton();
       syncFullscreenButtonState();
-      queueExifUpdate(getLightboxIndex(event));
+      var index = getLightboxIndex(event);
+      queueExifUpdate(index);
+      updatePhotoStateFromLightbox(index);
     });
 
     root.addEventListener("lgAfterSlide", function(event) {
       ensureLightboxFullscreenButton();
       syncFullscreenButtonState();
-      queueExifUpdate(getLightboxIndex(event));
+      var index = getLightboxIndex(event);
+      queueExifUpdate(index);
+      updatePhotoStateFromLightbox(index);
     });
 
     root.addEventListener("lgBeforeClose", function() {
@@ -1314,6 +2241,11 @@
           exitResult.catch(function() {});
         }
       }
+    });
+
+    root.addEventListener("lgAfterClose", function() {
+      state.photo = "";
+      updateUrlFromState({ keepPhoto: false });
     });
   }
 
@@ -1741,10 +2673,16 @@
         if (isFiniteNumber(exifPointer)) {
           exifIfd = readIfdEntries(view, tiffStart + exifPointer, tiffStart, littleEndian) || {};
         }
+        var gpsPointer = exifValueAsNumber(ifd0[EXIF_TAGS.GPS_POINTER]);
+        var gpsIfd = {};
+        if (isFiniteNumber(gpsPointer)) {
+          gpsIfd = readIfdEntries(view, tiffStart + gpsPointer, tiffStart, littleEndian) || {};
+        }
 
         return {
           ifd0: ifd0,
-          exif: exifIfd
+          exif: exifIfd,
+          gps: gpsIfd
         };
       }
 
@@ -1761,10 +2699,47 @@
 
     var ifd0 = parsedExif.ifd0 || {};
     var exif = parsedExif.exif || {};
+    var gps = parsedExif.gps || {};
     var pixelX = exifValueAsNumber(exif[EXIF_TAGS.PIXEL_X_DIMENSION]);
     var pixelY = exifValueAsNumber(exif[EXIF_TAGS.PIXEL_Y_DIMENSION]);
     var imageWidth = exifValueAsNumber(ifd0[EXIF_TAGS.IMAGE_WIDTH]);
     var imageHeight = exifValueAsNumber(ifd0[EXIF_TAGS.IMAGE_HEIGHT]);
+
+    function parseGpsRationals(raw) {
+      if (!Array.isArray(raw) || raw.length < 3) {
+        return null;
+      }
+
+      function toNumber(part) {
+        if (part && typeof part === "object" && isFiniteNumber(part.value)) {
+          return Number(part.value);
+        }
+        var numeric = Number(part);
+        return isFiniteNumber(numeric) ? numeric : null;
+      }
+
+      var d = toNumber(raw[0]);
+      var m = toNumber(raw[1]);
+      var s = toNumber(raw[2]);
+      if (!isFiniteNumber(d) || !isFiniteNumber(m) || !isFiniteNumber(s)) {
+        return null;
+      }
+      return d + (m / 60) + (s / 3600);
+    }
+
+    function applyGpsRef(value, ref) {
+      if (!isFiniteNumber(value)) {
+        return null;
+      }
+      var normalizedRef = String(ref || "").trim().toUpperCase();
+      if (normalizedRef === "S" || normalizedRef === "W") {
+        return -Math.abs(value);
+      }
+      return Math.abs(value);
+    }
+
+    var gpsLat = applyGpsRef(parseGpsRationals(gps[EXIF_TAGS.GPS_LAT]), exifValueAsString(gps[EXIF_TAGS.GPS_LAT_REF]));
+    var gpsLon = applyGpsRef(parseGpsRationals(gps[EXIF_TAGS.GPS_LON]), exifValueAsString(gps[EXIF_TAGS.GPS_LON_REF]));
 
     return {
       Make: exifValueAsString(ifd0[EXIF_TAGS.MAKE]),
@@ -1782,7 +2757,9 @@
       PixelXDimension: pixelX,
       PixelYDimension: pixelY,
       ExifImageWidth: pixelX || imageWidth,
-      ExifImageHeight: pixelY || imageHeight
+      ExifImageHeight: pixelY || imageHeight,
+      GPSLatitude: gpsLat,
+      GPSLongitude: gpsLon
     };
   }
 
@@ -2209,6 +3186,10 @@
     state.query = "";
     state.country = "*";
     state.category = "*";
+    clearTagFilters();
+    state.collection = "";
+    state.photo = "";
+    progressiveLimit = clamp(PROGRESSIVE_INITIAL_LIMIT, 1, Math.max(1, totalPhotoCount));
     state.sort = "random";
 
     $search.val("");
@@ -2217,10 +3198,12 @@
 
     setTheme("classic", { persist: true, updateUrl: false });
     setExifVisibility(true, { persist: true, updateUrl: false });
+    setMapMode(false, { updateUrl: false });
+    setCopyViewButtonLabel("Copy view");
 
     updateChipUi();
     applyFilters({ reshuffleRandom: true });
-    updateUrlFromState();
+    updateUrlFromState({ keepPhoto: false });
   }
 
   function bindEvents() {
@@ -2257,6 +3240,10 @@
         $grid.isotope("layout");
         renderTimeline();
         queueTimelineActiveSync();
+        if (state.mapMode && mapInstance) {
+          mapInstance.invalidateSize();
+          renderMapForVisibleItems();
+        }
       }, 120);
     });
 
@@ -2307,6 +3294,47 @@
     $categoryTags.on("click", ".chip", function() {
       var tag = String(this.getAttribute("data-tag") || "*");
       state.category = state.category === tag ? "*" : tag;
+      updateChipUi();
+      applyFilters({ reshuffleRandom: false });
+    });
+
+    $includeTags.on("click", ".chip", function() {
+      var tag = String(this.getAttribute("data-tag") || "");
+      toggleTagSelection("include", tag);
+      state.collection = "";
+      updateChipUi();
+      applyFilters({ reshuffleRandom: false });
+    });
+
+    $excludeTags.on("click", ".chip", function() {
+      var tag = String(this.getAttribute("data-tag") || "");
+      toggleTagSelection("exclude", tag);
+      state.collection = "";
+      updateChipUi();
+      applyFilters({ reshuffleRandom: false });
+    });
+
+    $tagModeToggle.on("click", function() {
+      state.tagMode = state.tagMode === "all" ? "any" : "all";
+      updateChipUi();
+      applyFilters({ reshuffleRandom: false });
+    });
+
+    $clearTagFilters.on("click", function() {
+      clearTagFilters();
+      updateChipUi();
+      applyFilters({ reshuffleRandom: false });
+    });
+
+    $collectionTags.on("click", ".chip", function() {
+      var id = String(this.getAttribute("data-collection-id") || "");
+      state.collection = state.collection === id ? "" : id;
+      updateChipUi();
+      applyFilters({ reshuffleRandom: false });
+    });
+
+    $clearCollection.on("click", function() {
+      state.collection = "";
       updateChipUi();
       applyFilters({ reshuffleRandom: false });
     });
@@ -2388,6 +3416,19 @@
 
     $resetAll.on("click", function() {
       resetControls();
+    });
+
+    $toggleMap.on("click", function() {
+      setMapMode(!state.mapMode);
+      applyFilters({ reshuffleRandom: false });
+    });
+
+    $copyViewLink.on("click", function() {
+      copyCurrentViewLink();
+    });
+
+    $loadMoreButton.on("click", function() {
+      loadMorePhotos();
     });
 
     $showShortcuts.on("click", function() {
@@ -2491,6 +3532,15 @@
         }
       }
 
+      if (keyLower === "m" && noModifierKeys) {
+        setMapMode(!state.mapMode);
+        applyFilters({ reshuffleRandom: false });
+      }
+
+      if (keyLower === "c" && noModifierKeys) {
+        copyCurrentViewLink();
+      }
+
       if (keyLower === "x") {
         toggleExifVisibility();
       }
@@ -2507,7 +3557,31 @@
   function bootstrap() {
     enforceTopOnReload();
 
+    FEATURES.mapMode = readFeatureFlag("data-feature-map", true);
+    FEATURES.collections = readFeatureFlag("data-feature-collections", true);
+    FEATURES.progressiveLoad = readFeatureFlag("data-feature-progressive-load", true);
+
+    if (!FEATURES.mapMode) {
+      state.mapMode = false;
+      if ($toggleMap.length) {
+        $toggleMap.prop("hidden", true);
+      }
+      if ($mapSection.length) {
+        $mapSection.prop("hidden", true);
+      }
+    }
+
+    if (!FEATURES.collections && $collectionsWrap.length) {
+      state.collection = "";
+      $collectionsWrap.prop("hidden", true);
+    }
+
+    if (!FEATURES.progressiveLoad && $loadMoreWrap.length) {
+      $loadMoreWrap.prop("hidden", true);
+    }
+
     prepareItems();
+    progressiveLimit = clamp(PROGRESSIVE_INITIAL_LIMIT, 1, Math.max(1, totalPhotoCount));
 
     state.theme = "classic";
     var storedExifVisible = readStorageJson(STORAGE.exifVisible, true);
@@ -2523,6 +3597,10 @@
     var tagCounts = getAllTagCounts();
     renderChips($countryTags, COUNTRY_TAGS, COUNTRY_LABELS, "country", tagCounts);
     renderChips($categoryTags, CATEGORY_TAGS, CATEGORY_LABELS, "category", tagCounts);
+    renderAdvancedTagFilters(tagCounts);
+    buildCollections(tagCounts);
+    renderCollections();
+    normalizeTagState();
 
     if (state.country !== "*" && !$countryTags.find('.chip[data-tag="' + state.country + '"]').length) {
       state.country = "*";
@@ -2530,16 +3608,24 @@
     if (state.category !== "*" && !$categoryTags.find('.chip[data-tag="' + state.category + '"]').length) {
       state.category = "*";
     }
+    if (state.collection && !collectionIndex[state.collection]) {
+      state.collection = "";
+    }
 
     initIsotope();
     initLightbox();
 
     setTheme(state.theme, { persist: false, updateUrl: false });
     setExifVisibility(state.exifVisible, { persist: false, updateUrl: false });
+    setMapMode(state.mapMode, { updateUrl: false });
     syncFullscreenButtonState();
     updateChipUi();
     lastScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
     bindEvents();
+
+    if (state.photo) {
+      pendingPhotoOpenId = state.photo;
+    }
 
     applyFilters({ reshuffleRandom: true });
     updateScrollProgress();
