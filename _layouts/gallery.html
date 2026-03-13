@@ -131,9 +131,20 @@
       <div id="collections-wrap" class="chip-section" hidden>
         <div class="chip-head">
           <p class="chip-title">Collections</p>
-          <button id="clear-collection" class="chip-head-button" type="button">Clear collection</button>
+          <button
+            id="toggle-collections"
+            class="chip-head-button chip-head-button--toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="collections-panel"
+            aria-label="Expand collections">+</button>
         </div>
-        <div id="collection-tags" class="chip-group chip-group--dense" role="list"></div>
+        <div id="collections-panel" class="collections-panel" hidden>
+          <div class="chip-head-actions">
+            <button id="clear-collection" class="chip-head-button" type="button">Clear collection</button>
+          </div>
+          <div id="collection-tags" class="chip-group chip-group--dense" role="list"></div>
+        </div>
       </div>
 
       <div id="advanced-tags-wrap" class="chip-section">

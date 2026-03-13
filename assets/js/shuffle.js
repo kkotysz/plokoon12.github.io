@@ -92,6 +92,7 @@
     excludeTags: [],
     tagMode: "all",
     tagFiltersExpanded: false,
+    collectionsExpanded: false,
     collection: "",
     mapMode: false,
     photo: "",
@@ -157,7 +158,9 @@
   var $tagModeToggle = $("#tag-mode-toggle");
   var $clearTagFilters = $("#clear-tag-filters");
   var $collectionsWrap = $("#collections-wrap");
+  var $collectionsPanel = $("#collections-panel");
   var $collectionTags = $("#collection-tags");
+  var $toggleCollections = $("#toggle-collections");
   var $clearCollection = $("#clear-collection");
   var $toggleMap = $("#toggle-map");
   var $copyViewLink = $("#copy-view-link");
@@ -700,6 +703,33 @@
       $toggleTagFilters.attr("aria-expanded", isExpanded ? "true" : "false");
       $toggleTagFilters.attr("aria-label", isExpanded ? "Collapse tag filters" : "Expand tag filters");
     }
+
+    if (isExpanded && window.innerWidth <= MOBILE_BREAKPOINT) {
+      setDeckHidden(false);
+    }
+  }
+
+  function setCollectionsExpanded(expanded) {
+    var isExpanded = !!expanded;
+    state.collectionsExpanded = isExpanded;
+
+    if ($collectionsPanel.length) {
+      $collectionsPanel.prop("hidden", !isExpanded);
+    }
+
+    if ($toggleCollections.length) {
+      $toggleCollections.text(isExpanded ? "-" : "+");
+      $toggleCollections.attr("aria-expanded", isExpanded ? "true" : "false");
+      $toggleCollections.attr("aria-label", isExpanded ? "Collapse collections" : "Expand collections");
+    }
+
+    if (isExpanded && window.innerWidth <= MOBILE_BREAKPOINT) {
+      setDeckHidden(false);
+    }
+  }
+
+  function hasExpandedFilterPanels() {
+    return !!(state.tagFiltersExpanded || state.collectionsExpanded);
   }
 
   function toggleTagSelection(group, tag) {
@@ -808,11 +838,13 @@
       return;
     }
     if (!FEATURES.collections) {
+      setCollectionsExpanded(false);
       $collectionsWrap.prop("hidden", true);
       return;
     }
 
     if (!collectionDefs.length) {
+      setCollectionsExpanded(false);
       $collectionsWrap.prop("hidden", true);
       return;
     }
@@ -842,6 +874,7 @@
     }
 
     $collectionsWrap.prop("hidden", false);
+    setCollectionsExpanded(state.collectionsExpanded);
   }
 
   function updateCollectionsUi() {
@@ -1510,6 +1543,12 @@
 
     if (isMobile) {
       if (nearTop) {
+        setDeckHidden(false);
+        lastScrollY = scrollTop;
+        return;
+      }
+
+      if (hasExpandedFilterPanels()) {
         setDeckHidden(false);
         lastScrollY = scrollTop;
         return;
@@ -3176,6 +3215,7 @@
     state.country = "*";
     clearTagFilters();
     state.tagFiltersExpanded = false;
+    state.collectionsExpanded = false;
     state.collection = "";
     state.photo = "";
     progressiveLimit = clamp(PROGRESSIVE_INITIAL_LIMIT, 1, Math.max(1, totalPhotoCount));
@@ -3192,6 +3232,7 @@
     setCopyViewButtonLabel("Copy view");
 
     setTagFiltersExpanded(state.tagFiltersExpanded);
+    setCollectionsExpanded(state.collectionsExpanded);
     updateChipUi();
     applyFilters({ reshuffleRandom: true });
     updateUrlFromState({ keepPhoto: false });
@@ -3208,7 +3249,7 @@
         if (window.innerWidth <= MOBILE_BREAKPOINT) {
           var keepSemiExpanded = $controlDeck.hasClass("is-condensed-expanded");
           var currentScrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
-          if (currentScrollTop < 20) {
+          if (currentScrollTop < 20 || hasExpandedFilterPanels()) {
             setDeckHidden(false);
           } else {
             setDeckHidden(true);
@@ -3285,6 +3326,10 @@
 
     $toggleTagFilters.on("click", function() {
       setTagFiltersExpanded(!state.tagFiltersExpanded);
+    });
+
+    $toggleCollections.on("click", function() {
+      setCollectionsExpanded(!state.collectionsExpanded);
     });
 
     $includeTags.on("click", ".chip", function() {
@@ -3547,6 +3592,7 @@
     }
 
     if (!FEATURES.collections && $collectionsWrap.length) {
+      state.collectionsExpanded = false;
       state.collection = "";
       $collectionsWrap.prop("hidden", true);
     }
@@ -3587,6 +3633,7 @@
     setMapMode(state.mapMode, { updateUrl: false });
     syncFullscreenButtonState();
     setTagFiltersExpanded(state.tagFiltersExpanded);
+    setCollectionsExpanded(state.collectionsExpanded);
     updateChipUi();
     lastScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
     bindEvents();

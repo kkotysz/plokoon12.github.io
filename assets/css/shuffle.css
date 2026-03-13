@@ -1073,12 +1073,14 @@ body.gallery-page .pill-link--instagram:focus-within {
   font-weight: 700;
 }
 
-.tag-filter-panel {
+.tag-filter-panel,
+.collections-panel {
   display: grid;
   gap: 0.42rem;
 }
 
-.tag-filter-panel[hidden] {
+.tag-filter-panel[hidden],
+.collections-panel[hidden] {
   display: none !important;
 }
 
@@ -2119,6 +2121,11 @@ body.gallery-page[data-theme="rainbow"] #country-tags .chip--country.is-active {
     top: calc(env(safe-area-inset-top) + 6px);
     border-radius: 20px;
     padding: 0.72rem;
+    max-height: calc(100vh - env(safe-area-inset-top) - 12px);
+    max-height: calc(100dvh - env(safe-area-inset-top) - 12px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     transition: none;
     will-change: auto;
   }
@@ -2254,9 +2261,23 @@ body.gallery-page[data-theme="rainbow"] #country-tags .chip--country.is-active {
     display: none;
   }
 
+  #show-shortcuts {
+    display: none !important;
+  }
+
   .gallery-count-pill {
     grid-column: 1 / -1;
     justify-content: center;
+  }
+
+  #country-tags,
+  #collection-tags,
+  #tag-filter-panel {
+    max-height: min(42vh, 320px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    padding-right: 0.2rem;
   }
 
   .chip {
