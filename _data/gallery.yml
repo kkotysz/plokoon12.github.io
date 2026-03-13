@@ -78,6 +78,10 @@
   tags: astrophoto bialkow poland landscape
   aspect: landscape
   desc: Białków trails part 2
+- filename: 2019-02-23_06-46-56.jpg
+  tags: panorama
+  aspect: panorama
+  desc: From Śnieżka during sunrise
 - filename: 2019-02-23_07-03-17.jpg
   tags: panorama
   aspect: panorama
@@ -86,10 +90,6 @@
   tags: nature bw landscape
   aspect: landscape
   desc: Ice desert near Śnieżka peak
-- filename: 2019-02-23_06-46-56.jpg
-  tags: panorama
-  aspect: panorama
-  desc: From Śnieżka during sunrise
 - filename: 2019-03-26_15-44-09.jpg
   tags: architecture wroclaw poland landscape
   aspect: landscape
@@ -1329,11 +1329,11 @@
 - filename: 2025-08-26_08-17-24.jpg
   tags: landscape nature spain tenerife
   aspect: landscape
-  desc: Mirador -  Finca La Espiral 1
+  desc: Mirador - Finca La Espiral 1
 - filename: 2025-08-26_09-43-18.jpg
   tags: landscape nature spain tenerife
   aspect: landscape
-  desc: Mirador -  Finca La Espiral 2
+  desc: Mirador - Finca La Espiral 2
 - filename: 2025-08-26_16-11-29.jpg
   tags: landscape nature spain tenerife
   aspect: landscape
@@ -1349,15 +1349,15 @@
 - filename: 2025-08-27_20-23-48.jpg
   tags: landscape nature spain tenerife
   aspect: landscape
-  desc: Mirador -  Finca La Espiral 3
+  desc: Mirador - Finca La Espiral 3
 - filename: 2025-08-27_20-28-18.jpg
   tags: landscape nature spain sunset tenerife
   aspect: landscape
-  desc: Sunset -  Finca La Espiral 1
+  desc: Sunset - Finca La Espiral 1
 - filename: 2025-08-27_20-29-52.jpg
   tags: landscape nature spain sunset tenerife
   aspect: landscape
-  desc: Sunset -  Finca La Espiral 2
+  desc: Sunset - Finca La Espiral 2
 - filename: 2025-08-28_15-04-49.jpg
   tags: architecture landscape spain tenerife
   aspect: landscape
@@ -1369,7 +1369,7 @@
 - filename: 2025-08-29_08-17-37.jpg
   tags: landscape nature spain sunrise tenerife
   aspect: landscape
-  desc: Sunrise -  Finca La Espiral 1
+  desc: Sunrise - Finca La Espiral 1
 - filename: 2025-08-29_13-09-22.jpg
   tags: landscape lizard nature spain tenerife
   aspect: landscape
