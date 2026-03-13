@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  {% assign photo_title = page.photo_desc | default: page.title | default: "Gallery photo" %}
+  {% assign photo_tags = page.photo_tags | default: "" %}
+  {% assign photo_description = photo_title %}
+  {% if photo_tags != "" %}
+    {% assign photo_description = photo_description | append: " | Tags: " | append: photo_tags %}
+  {% endif %}
+
+  <title>{{ photo_title | escape }} | Gallery</title>
+  <meta name="description" content="{{ photo_description | escape }}">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="{{ photo_title | escape }}">
+  <meta property="og:description" content="{{ photo_description | escape }}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta property="og:image" content="{{ page.image | absolute_url }}">
+  <meta property="og:site_name" content="{{ site.title | escape }}">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ photo_title | escape }}">
+  <meta name="twitter:description" content="{{ photo_description | escape }}">
+  <meta name="twitter:image" content="{{ page.image | absolute_url }}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="/assets/css/shuffle.css?v=g2">
+  <link rel="shortcut icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  {% include /analytics-providers/google-gtag.html %}
+
+  <style>
+    .photo-page-stage {
+      display: grid;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    .photo-page-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-l);
+      background: var(--panel);
+      padding: 1rem;
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      gap: 0.6rem;
+    }
+    .photo-page-kicker {
+      margin: 0;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      font-weight: 700;
+    }
+    .photo-page-title {
+      margin: 0;
+      font-size: clamp(1.2rem, 3.8vw, 2rem);
+      line-height: 1.1;
+    }
+    .photo-page-tags {
+      margin: 0;
+      font-family: "Space Mono", monospace;
+      font-size: 0.76rem;
+      color: var(--ink-soft);
+    }
+    .photo-page-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+    .photo-page-figure {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-l);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      background: var(--panel);
+    }
+    .photo-page-figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+      max-height: min(76vh, 980px);
+      object-fit: contain;
+      background: rgba(0, 0, 0, 0.2);
+    }
+    @media (max-width: 760px) {
+      .photo-page-stage {
+        padding: 0.65rem;
+      }
+    }
+  </style>
+</head>
+<body class="gallery-page" data-theme="classic">
+  <div class="ambient ambient--left" aria-hidden="true"></div>
+  <div class="ambient ambient--right" aria-hidden="true"></div>
+  <div class="ambient-grid" aria-hidden="true"></div>
+
+  <main class="gallery-shell">
+    <section class="gallery-stage photo-page-stage">
+      <article class="photo-page-card">
+        <p class="photo-page-kicker">Photo permalink</p>
+        <h1 class="photo-page-title">{{ photo_title }}</h1>
+        {% if photo_tags != "" %}
+          <p class="photo-page-tags">
+            {% assign tags_list = photo_tags | split: " " %}
+            {% for tag in tags_list %}
+              {% assign clean_tag = tag | strip %}
+              {% if clean_tag != "" %}
+                #{{ clean_tag }}
+              {% endif %}
+            {% endfor %}
+          </p>
+        {% endif %}
+        <div class="photo-page-actions">
+          <a class="pill-link" href="/gallery/?photo={{ page.photo_file | uri_escape }}">
+            <i class="fa-solid fa-up-right-from-square" aria-hidden="true"></i>
+            <span>Open in Gallery</span>
+          </a>
+          <a class="pill-link" href="{{ page.image }}">
+            <i class="fa-solid fa-maximize" aria-hidden="true"></i>
+            <span>Open Full Size</span>
+          </a>
+          <a class="pill-link" href="/gallery/">
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            <span>Back to Gallery</span>
+          </a>
+        </div>
+      </article>
+
+      <figure class="photo-page-figure">
+        <img src="{{ page.image }}" alt="{{ photo_title | escape }}" loading="eager" decoding="async">
+      </figure>
+    </section>
+  </main>
+</body>
+</html>
