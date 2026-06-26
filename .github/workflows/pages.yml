@@ -1,0 +1,72 @@
+name: Deploy Pages
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout site
+        uses: actions/checkout@v6
+        with:
+          path: site
+
+      - name: Checkout Slowo Analyzer
+        uses: actions/checkout@v6
+        with:
+          repository: kkotysz/slowo-analyzer
+          path: slowo-analyzer
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: slowo-analyzer/package-lock.json
+
+      - name: Install Slowo Analyzer dependencies
+        run: npm ci
+        working-directory: slowo-analyzer
+
+      - name: Test Slowo Analyzer
+        run: npm test
+        working-directory: slowo-analyzer
+
+      - name: Build Slowo Analyzer
+        run: npm run build:pages
+        working-directory: slowo-analyzer
+
+      - name: Prepare Pages artifact
+        run: |
+          mkdir page
+          rsync -a --exclude='.git' --exclude='.github' --exclude='slowo-analyzer' site/ page/
+          mkdir -p page/slowo-analyzer
+          cp -R slowo-analyzer/dist/. page/slowo-analyzer/
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: page
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
