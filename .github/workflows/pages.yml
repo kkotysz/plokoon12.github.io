@@ -33,6 +33,19 @@ jobs:
           repository: kkotysz/slowo-analyzer
           path: slowo-analyzer
 
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+          working-directory: site
+
+      - name: Build Jekyll site
+        run: bundle exec jekyll build --destination ../page
+        working-directory: site
+        env:
+          JEKYLL_ENV: production
+
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
@@ -54,8 +67,6 @@ jobs:
 
       - name: Prepare Pages artifact
         run: |
-          mkdir page
-          rsync -a --exclude='.git' --exclude='.github' --exclude='slowo-analyzer' site/ page/
           mkdir -p page/slowo-analyzer
           cp -R slowo-analyzer/dist/. page/slowo-analyzer/
 
