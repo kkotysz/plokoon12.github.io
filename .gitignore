@@ -8,4 +8,5 @@ _layouts/krzkot-web.code-workspace
 *.code-workspace
 .bundle/config
 *.lock
+!Gemfile.lock
 /vendor
