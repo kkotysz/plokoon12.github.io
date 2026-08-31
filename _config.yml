@@ -55,6 +55,7 @@ exclude:
   - DEPLOYMENT.md
   - node_modules
   - tmp
+  - vendor
 
 # Plugins (previously gems:)
 plugins:
