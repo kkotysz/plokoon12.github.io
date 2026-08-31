@@ -11,6 +11,13 @@ abort("[site-check] Missing build directory: #{root}") unless root.directory?
 
 errors = []
 html_files = root.glob("**/*.html")
+forbidden_analytics = {
+  "Google Tag Manager" => /googletagmanager\.com/i,
+  "Google Analytics endpoint" => /google-analytics\.com/i,
+  "legacy Universal Analytics identifier" => /\bUA-\d{4,}-\d+\b/i,
+  "Google Analytics measurement identifier" => /\bG-[A-Z0-9]{6,}\b/,
+  "empty gtag configuration" => /gtag\(\s*['\"]config['\"]\s*,\s*['\"]\s*['\"]/i
+}.freeze
 
 def local_reference?(value)
   return false if value.nil? || value.empty?
@@ -42,7 +49,12 @@ end
 
 html_files.each do |html_file|
   relative_html = html_file.relative_path_from(root)
-  document = Nokogiri::HTML5(html_file.read, max_errors: 100)
+  html_source = html_file.read
+  forbidden_analytics.each do |label, pattern|
+    errors << "#{relative_html}: contains forbidden analytics integration (#{label})" if html_source.match?(pattern)
+  end
+
+  document = Nokogiri::HTML5(html_source, max_errors: 100)
   document.errors.each do |error|
     errors << "#{relative_html}: invalid HTML (#{error.message.strip})"
   end

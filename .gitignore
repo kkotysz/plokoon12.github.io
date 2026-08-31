@@ -10,3 +10,7 @@ _layouts/krzkot-web.code-workspace
 *.lock
 !Gemfile.lock
 /vendor
+node_modules/
+.lighthouseci/
+tmp/
+test-results/

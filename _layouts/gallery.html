@@ -28,7 +28,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/plugins/thumbnail/lg-thumbnail.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.jsdelivr.net/npm/exifr/dist/lite.umd.js" crossorigin="anonymous"></script>
 
-  {% include /analytics-providers/google-gtag.html %}
 </head>
 <body
   class="gallery-page"
@@ -37,7 +36,7 @@
   data-feature-collections="true"
   data-feature-progressive-load="true">
   <header class="gallery-brandbar">
-    <a class="gallery-brandbar__brand" href="/">
+    <a class="gallery-brandbar__brand" href="/" aria-label="Krzysztof Kotysz — portfolio home">
       <span aria-hidden="true"></span>
       <strong>Krzysztof Kotysz</strong>
     </a>
@@ -140,7 +139,7 @@
 
       <div class="chip-section">
         <p class="chip-title">Countries</p>
-        <div id="country-tags" class="chip-group" role="list"></div>
+        <div id="country-tags" class="chip-group" role="group" aria-label="Countries"></div>
       </div>
 
       <div id="collections-wrap" class="chip-section" hidden>

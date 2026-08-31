@@ -1,0 +1,13 @@
+{
+  "name": "krzkot-portfolio-release-audits",
+  "private": true,
+  "scripts": {
+    "audit:axe": "node scripts/audit_accessibility.mjs",
+    "audit:lighthouse": "node scripts/run_lighthouse.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@lhci/cli": "0.15.1",
+    "playwright": "1.62.1"
+  }
+}

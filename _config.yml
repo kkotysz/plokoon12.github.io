@@ -53,6 +53,8 @@ collections:
 # to override the default setting.
 exclude:
   - DEPLOYMENT.md
+  - node_modules
+  - tmp
 
 # Plugins (previously gems:)
 plugins:

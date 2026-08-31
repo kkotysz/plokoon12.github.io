@@ -1020,6 +1020,7 @@
     var selectId = String($select.attr("id") || "");
     var menuId = (selectId ? (selectId + "-menu") : ("custom-select-menu-" + Math.random().toString(36).slice(2)));
     var selectedLabel = getCustomSelectOptionLabel($select, $select.val());
+    var fieldLabel = String($wrap.children("span").first().text() || "Options").trim();
 
     $wrap.addClass("has-custom-select");
     $select.addClass("is-native-hidden");
@@ -1051,7 +1052,8 @@
     var $menu = $("<div>", {
       "class": "custom-select-menu",
       id: menuId,
-      role: "listbox"
+      role: "listbox",
+      "aria-label": fieldLabel
     });
 
     $select.find("option").each(function() {

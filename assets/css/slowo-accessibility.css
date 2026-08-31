@@ -1,0 +1,22 @@
+:root {
+  --danger-aa: #963838;
+  --green-aa: #285d3d;
+}
+
+:root[data-theme="dark"] {
+  --danger-aa: #ff9494;
+  --green-aa: #b5e0c4;
+}
+
+.danger-text {
+  color: var(--danger-aa);
+}
+
+.word-row.active .row-index {
+  color: var(--green-aa);
+}
+
+.mobile-workspace-tab.active {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
