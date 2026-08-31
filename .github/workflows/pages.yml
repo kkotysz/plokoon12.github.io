@@ -41,7 +41,7 @@ jobs:
           working-directory: site
 
       - name: Build Jekyll site
-        run: bundle exec jekyll build --destination ../page
+        run: bundle exec jekyll build --destination ../page --baseurl ""
         working-directory: site
         env:
           JEKYLL_ENV: production
@@ -71,6 +71,10 @@ jobs:
         run: |
           mkdir -p page/slowo-analyzer
           cp -R slowo-analyzer/dist/. page/slowo-analyzer/
+
+      - name: Validate HTML and internal links
+        run: bundle exec ruby scripts/check_site.rb ../page
+        working-directory: site
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

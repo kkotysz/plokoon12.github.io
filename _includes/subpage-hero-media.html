@@ -1,0 +1,15 @@
+{% assign hero_key = include.key | default: page.hero_key %}
+{% assign hero_position = page.hero_position | default: "center center" %}
+{% if hero_key %}
+  <picture class="subpage-hero__media" aria-hidden="true" style="--hero-position: {{ hero_position }};">
+    <source srcset="{{ '/assets/images/portfolio/heroes/' | append: hero_key | append: '-960.avif' | relative_url }} 960w, {{ '/assets/images/portfolio/heroes/' | append: hero_key | append: '-1920.avif' | relative_url }} 1920w" sizes="100vw" type="image/avif">
+    <source srcset="{{ '/assets/images/portfolio/heroes/' | append: hero_key | append: '-960.webp' | relative_url }} 960w, {{ '/assets/images/portfolio/heroes/' | append: hero_key | append: '-1920.webp' | relative_url }} 1920w" sizes="100vw" type="image/webp">
+    <img src="{{ '/assets/images/portfolio/heroes/' | append: hero_key | append: '-1920.jpg' | relative_url }}" srcset="{{ '/assets/images/portfolio/heroes/' | append: hero_key | append: '-960.jpg' | relative_url }} 960w, {{ '/assets/images/portfolio/heroes/' | append: hero_key | append: '-1920.jpg' | relative_url }} 1920w" sizes="100vw" alt="" width="1920" height="1280" loading="eager" fetchpriority="high" decoding="async">
+  </picture>
+  <div class="subpage-hero__veil" aria-hidden="true"></div>
+  {% if page.hero_photo %}
+    <a class="subpage-hero__credit" href="{{ '/gallery/photo/' | append: page.hero_photo | append: '/' | relative_url }}" aria-label="View {{ page.hero_caption | default: 'this photograph' }} in the photography archive">
+      <span>{{ page.hero_caption | default: "Photography archive" }}</span><span aria-hidden="true">↗</span>
+    </a>
+  {% endif %}
+{% endif %}

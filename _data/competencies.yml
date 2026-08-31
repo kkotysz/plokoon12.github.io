@@ -1,0 +1,45 @@
+- name: Software
+  items:
+    - Python
+    - JavaScript
+    - Fortran
+    - Web applications
+  projects:
+    - bhtom
+    - alps
+- name: Infrastructure
+  items:
+    - Linux
+    - Docker
+    - Workflow orchestration
+    - Networking
+    - NFS
+    - VPN
+  projects:
+    - bhtom
+- name: Data
+  items:
+    - Time-series analysis
+    - Fourier analysis
+    - Image processing
+    - Spectroscopy
+  projects:
+    - scientific-data-processing
+- name: Systems
+  items:
+    - Sensors
+    - CCD cameras
+    - Telescope control
+    - Hardware-software integration
+  projects:
+    - alps
+    - telescope-software-automation
+- name: Delivery
+  items:
+    - Documentation
+    - Grants
+    - Teaching
+    - International collaboration
+  projects:
+    - bhtom
+    - telescope-software-automation

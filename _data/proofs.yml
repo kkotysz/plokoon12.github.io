@@ -1,0 +1,50 @@
+- id: bhtom-network
+  value: "100+"
+  label: "telescopes coordinated through BHTOM"
+  project: bhtom
+  home: true
+- id: bhtom-pipeline
+  value: "BHTOM"
+  label: "international collaboration and pipeline integration"
+  project: bhtom
+  home: true
+- id: data-light-curves
+  value: "4,000+"
+  label: "stellar light curves analysed"
+  project: scientific-data-processing
+  home: true
+- id: telescope-fieldwork
+  value: "81 + 87 nights"
+  label: "across four campaigns in Chile and work on the 60 cm telescope in Białków"
+  project: telescope-software-automation
+  home: true
+- id: alps-live-network
+  value: "Live system"
+  label: "ALPS measurements, station status and environmental data"
+  project: alps
+  home: true
+- id: alps-sqm
+  value: SQM
+  label: "night-sky brightness measurements"
+  project: alps
+  home: false
+- id: data-candidates
+  value: "90"
+  label: "objects selected for closer investigation"
+  project: scientific-data-processing
+  home: false
+- id: data-spectra
+  value: "70+"
+  label: "spectra prepared for analysis"
+  project: scientific-data-processing
+  home: false
+- id: telescope-software
+  value: "60 cm"
+  label: "telescope software"
+  project: telescope-software-automation
+  home: false
+- id: telescope-automation
+  value: "32 cm"
+  label: "telescope automation"
+  project: telescope-software-automation
+  home: false

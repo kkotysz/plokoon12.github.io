@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="520" viewBox="0 0 1440 520" role="img" aria-labelledby="title desc">
+  <title id="title">Telescope software and automation flow</title>
+  <desc id="desc">Sensors and CCD cameras connect to telescope control software, automation, diagnostics, observations and scientific data.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0l10 5-10 5z" fill="#f2b84b"/></marker></defs>
+  <rect width="1440" height="520" fill="#0c0f11"/>
+  <g stroke="#252a2e" stroke-width="1" opacity=".72"><path d="M0 130h1440M0 260h1440M0 390h1440M240 0v520M480 0v520M720 0v520M960 0v520M1200 0v520"/></g>
+  <g fill="none" stroke="#f2b84b" stroke-width="3" marker-end="url(#arrow)"><path d="M250 260h155M525 260h155M800 260h155M1075 260h155"/></g>
+  <g font-family="Arial,Helvetica,sans-serif" fill="#f4f0e7">
+    <g transform="translate(70 175)"><rect width="180" height="170" fill="#111519" stroke="#3c4247"/><rect x="49" y="43" width="82" height="64" fill="none" stroke="#f2b84b" stroke-width="4"/><circle cx="90" cy="75" r="22" fill="none" stroke="#aeb2b5" stroke-width="4"/><path d="M64 33h52" stroke="#f2b84b" stroke-width="4"/><text x="90" y="143" text-anchor="middle" font-size="17"><tspan x="90">Sensors +</tspan><tspan x="90" dy="22">CCD cameras</tspan></text></g>
+    <g transform="translate(405 175)"><rect width="120" height="170" fill="#111519" stroke="#3c4247"/><path d="M28 42h64v72H28zM38 57h44M38 72h32M38 87h38" fill="none" stroke="#f2b84b" stroke-width="4"/><text x="60" y="143" text-anchor="middle" font-size="17"><tspan x="60">Telescope</tspan><tspan x="60" dy="22">control</tspan></text></g>
+    <g transform="translate(680 175)"><rect width="120" height="170" fill="#111519" stroke="#3c4247"/><circle cx="60" cy="75" r="34" fill="none" stroke="#f2b84b" stroke-width="4"/><path d="M60 31v15M60 104v15M16 75h15M89 75h15M29 44l11 11M80 95l11 11M29 106l11-11M80 55l11-11" stroke="#f2b84b" stroke-width="4"/><text x="60" y="143" text-anchor="middle" font-size="17"><tspan x="60">Automation +</tspan><tspan x="60" dy="22">diagnostics</tspan></text></g>
+    <g transform="translate(955 175)"><rect width="120" height="170" fill="#111519" stroke="#3c4247"/><path d="M24 109l24-36 18 16 30-49" fill="none" stroke="#f2b84b" stroke-width="4"/><circle cx="48" cy="73" r="5" fill="#f2b84b"/><circle cx="66" cy="89" r="5" fill="#f2b84b"/><circle cx="96" cy="40" r="5" fill="#f2b84b"/><text x="60" y="145" text-anchor="middle" font-size="17">Observations</text></g>
+    <g transform="translate(1230 175)"><rect width="140" height="170" fill="#111519" stroke="#3c4247"/><path d="M25 105h90M35 96V60M55 96V44M75 96V70M95 96V52" stroke="#f2b84b" stroke-width="6"/><text x="70" y="143" text-anchor="middle" font-size="17"><tspan x="70">Scientific</tspan><tspan x="70" dy="22">data</tspan></text></g>
+  </g>
+  <text x="70" y="75" fill="#f2b84b" font-family="monospace" font-size="16" letter-spacing="3">TELESCOPE SYSTEM / FIELD VIEW</text>
+</svg>

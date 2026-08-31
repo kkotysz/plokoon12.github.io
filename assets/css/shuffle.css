@@ -405,6 +405,60 @@ body.gallery-page::before {
   z-index: -4;
 }
 
+.gallery-brandbar {
+  position: relative;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(1700px, calc(100% - 2.2rem));
+  min-height: 64px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--line);
+  font-family: "Bricolage Grotesque", sans-serif;
+}
+
+.gallery-brandbar__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.gallery-brandbar__brand > span {
+  display: block;
+  width: 2.2rem;
+  height: 2.2rem;
+  flex: 0 0 2.2rem;
+  background: var(--accent-a);
+  -webkit-mask: url("/site-logo.png") center / contain no-repeat;
+  mask: url("/site-logo.png") center / contain no-repeat;
+}
+
+.gallery-brandbar__brand strong {
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+}
+
+.gallery-brandbar nav {
+  display: flex;
+  gap: 1.2rem;
+}
+
+.gallery-brandbar nav a {
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.gallery-brandbar nav a:hover,
+.gallery-brandbar nav a[aria-current="page"] {
+  color: var(--accent-a);
+}
+
 .ambient {
   position: fixed;
   width: min(44vw, 580px);
@@ -448,6 +502,20 @@ body.gallery-page::before {
   margin: 1rem auto 3.5rem;
   position: relative;
   z-index: 3;
+}
+
+@media (max-width: 520px) {
+  .gallery-brandbar {
+    width: min(100% - 1.3rem, 1700px);
+  }
+
+  .gallery-brandbar__brand strong {
+    display: none;
+  }
+
+  .gallery-brandbar nav {
+    gap: 0.8rem;
+  }
 }
 
 .hero {

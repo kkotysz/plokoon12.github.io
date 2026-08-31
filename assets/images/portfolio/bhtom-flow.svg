@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="520" viewBox="0 0 1440 520" role="img" aria-labelledby="title desc">
+  <title id="title">Conceptual BHTOM system flow</title>
+  <desc id="desc">A telescope network sends data to a portal, then workflow orchestration, CCD processing and standardised photometry.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0l10 5-10 5z" fill="#f2b84b"/></marker></defs>
+  <rect width="1440" height="520" fill="#0c0f11"/>
+  <g stroke="#252a2e" stroke-width="1" opacity=".72"><path d="M0 130h1440M0 260h1440M0 390h1440M240 0v520M480 0v520M720 0v520M960 0v520M1200 0v520"/></g>
+  <g fill="none" stroke="#f2b84b" stroke-width="3" marker-end="url(#arrow)"><path d="M250 260h155M525 260h155M800 260h155M1075 260h155"/></g>
+  <g font-family="Arial,Helvetica,sans-serif">
+    <g transform="translate(70 175)"><rect width="180" height="170" fill="#111519" stroke="#3c4247"/><circle cx="90" cy="55" r="26" fill="none" stroke="#f2b84b" stroke-width="4"/><path d="M56 112h68M72 112l-18 30M108 112l18 30" stroke="#aeb2b5" stroke-width="4"/><text x="90" y="158" text-anchor="middle" fill="#f4f0e7" font-size="18">Telescope network</text></g>
+    <g transform="translate(405 175)"><rect width="120" height="170" fill="#111519" stroke="#3c4247"/><path d="M31 44h58v73H31zM43 61h34M43 75h34M43 89h23" fill="none" stroke="#f2b84b" stroke-width="4"/><text x="60" y="146" text-anchor="middle" fill="#f4f0e7" font-size="17"><tspan x="60">Portal +</tspan><tspan x="60" dy="22">data intake</tspan></text></g>
+    <g transform="translate(680 175)"><rect width="120" height="170" fill="#111519" stroke="#3c4247"/><g fill="none" stroke="#f2b84b" stroke-width="4"><circle cx="60" cy="54" r="18"/><circle cx="36" cy="96" r="12"/><circle cx="84" cy="96" r="12"/><path d="M52 70L41 84M68 70l11 14"/></g><text x="60" y="143" text-anchor="middle" fill="#f4f0e7" font-size="17"><tspan x="60">Workflow</tspan><tspan x="60" dy="22">orchestration</tspan></text></g>
+    <g transform="translate(955 175)"><rect width="120" height="170" fill="#111519" stroke="#3c4247"/><path d="M28 50h64v55H28zM38 40h44M38 115h44" fill="none" stroke="#f2b84b" stroke-width="4"/><circle cx="60" cy="78" r="13" fill="none" stroke="#aeb2b5" stroke-width="3"/><text x="60" y="143" text-anchor="middle" fill="#f4f0e7" font-size="17"><tspan x="60">CCD reduction</tspan><tspan x="60" dy="22">+ calibration</tspan></text></g>
+    <g transform="translate(1230 175)"><rect width="140" height="170" fill="#111519" stroke="#3c4247"/><path d="M30 105l24-30 21 12 31-42" fill="none" stroke="#f2b84b" stroke-width="4"/><circle cx="54" cy="75" r="5" fill="#f2b84b"/><circle cx="75" cy="87" r="5" fill="#f2b84b"/><circle cx="106" cy="45" r="5" fill="#f2b84b"/><text x="70" y="143" text-anchor="middle" fill="#f4f0e7" font-size="17"><tspan x="70">Standardised</tspan><tspan x="70" dy="22">photometry</tspan></text></g>
+  </g>
+  <text x="70" y="75" fill="#f2b84b" font-family="monospace" font-size="16" letter-spacing="3">BHTOM / PUBLIC CONCEPTUAL VIEW</text>
+</svg>

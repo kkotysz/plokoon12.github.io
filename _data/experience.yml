@@ -1,0 +1,35 @@
+- published: true
+  role: "BHTOM Engineering Specialist and Contractor"
+  organization: "University of Warsaw - Astronomical Observatory"
+  location: "Warsaw, Poland"
+  start: "2024-02"
+  end: "Present"
+  display_start: "Feb 2024"
+  display_end: "Present"
+  summary: "Engineering and operating software for a worldwide network of observatories."
+  highlights:
+    - "Operate BHTOM, coordinating and monitoring observations across a network of more than 100 telescopes."
+    - "Helped standardise the automatic CCD image-reduction workflow and package it in containers for distributed observatory deployments."
+    - "Collaborated within BHTOM on integration of the complete processing pipeline with the wider observation platform."
+  projects:
+    - bhtom
+
+- published: true
+  role: "Doctoral Researcher and Research Assistant"
+  organization: "University of Wrocław - Institute of Astronomy"
+  location: "Wrocław and Białków, Poland"
+  start: "2018"
+  end: "Present"
+  display_start: "2018"
+  display_end: "Present"
+  summary: "Building scientific software, measurement infrastructure, processing space-telescope data and working directly with observatory instrumentation."
+  highlights:
+    - "Authored software supporting the 60-cm Cassegrain telescope and contributes to automation and robotisation of the 32-cm telescope at Białków Observatory."
+    - "Independently designed and implemented the current ALPS public website and contributes to the wider multi-site measurement system connecting stations, sensors, services and data."
+    - "Built analysis programs for space-telescope data, screened more than 4,000 TESS light curves and selected 90 objects for detailed Fourier analysis."
+    - "Operated and diagnosed professional instruments during 168 observing nights: 87 at Białków and 81 across four campaigns in Chile."
+    - "Prepared a spectroscopic dataset for more than 70 targets and secured and delivered NCN PRELUDIUM-17 project 2019/33/N/ST9/01818."
+  projects:
+    - alps
+    - scientific-data-processing
+    - telescope-software-automation

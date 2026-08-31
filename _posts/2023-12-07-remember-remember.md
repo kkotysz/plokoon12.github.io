@@ -9,7 +9,7 @@ tags:
   - wroclaw
   - alps
 header:
-  teaser: /assets/photos/91.jpg
+  teaser: /assets/photos/2019-09-24_02-25-24.jpg
 ---
 In recent months there has been an increased solar activity with quite a lot of solar flares that resulted in CMEs (Coronal Mass Ejections) that were directed toward Earth. Earlier this year (21st of April) there have been a M1.7 class solar flare on the Sun that resulted in CME - mass ejected from the Sun travelled with velocity over 800km/s after 2 days reached the Earth. This can be seen in an animation from  SOHO/LASCO C3 instrument.
 

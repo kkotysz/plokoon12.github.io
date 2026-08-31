@@ -1,7 +1,119 @@
 ---
-# You don't need to edit this file, it's empty on purpose.
-# Edit theme's home layout instead if you wanna make some changes
-# See: https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-layout: home
-author_profile: true
+layout: portfolio
+title: Research / Software Engineer
+description: Research and software engineer building data pipelines, distributed systems and scientific instrumentation.
+permalink: /
+hero: true
+og_image: /assets/images/portfolio/og-home.jpg
 ---
+{% assign primary_cv = site.data.cv | where: "status", "available" | first %}
+<section class="home-hero" aria-labelledby="hero-title">
+  <picture class="home-hero__media" aria-hidden="true">
+    <source srcset="{{ '/assets/images/portfolio/hero-960.avif' | relative_url }} 960w, {{ '/assets/images/portfolio/hero-1920.avif' | relative_url }} 1920w" sizes="100vw" type="image/avif">
+    <source srcset="{{ '/assets/images/portfolio/hero-960.webp' | relative_url }} 960w, {{ '/assets/images/portfolio/hero-1920.webp' | relative_url }} 1920w" sizes="100vw" type="image/webp">
+    <img src="{{ '/assets/images/portfolio/hero-1920.jpg' | relative_url }}" srcset="{{ '/assets/images/portfolio/hero-960.jpg' | relative_url }} 960w, {{ '/assets/images/portfolio/hero-1920.jpg' | relative_url }} 1920w" sizes="100vw" alt="" width="1920" height="1282" fetchpriority="high">
+  </picture>
+  <div class="home-hero__veil" aria-hidden="true"></div>
+  <div class="home-hero__content shell">
+    <p class="home-hero__name hero-animate">Krzysztof Kotysz</p>
+    <h1 id="hero-title" class="hero-animate">Research /<br>Software Engineer</h1>
+    <p class="home-hero__statement hero-animate">Building data pipelines, distributed systems and scientific instrumentation.</p>
+    <div class="hero-actions hero-animate">
+      <a class="button button--primary" href="{{ '/projects/' | relative_url }}">View projects</a>
+      <a class="button button--quiet" href="{{ primary_cv.file | relative_url }}" download>Download CV</a>
+      <a class="button button--quiet" href="https://github.com/kkotysz" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+  <a class="hero-scroll" href="#evidence"><span>Selected evidence</span><span aria-hidden="true">↓</span></a>
+</section>
+
+<section id="evidence" class="evidence-section shell section-space" aria-labelledby="evidence-title">
+  <div class="section-heading reveal">
+    <div><p class="section-index">01 / Evidence</p><h2 id="evidence-title">Systems that work<br>at real scale.</h2></div>
+    <p>Software is only useful when it survives real data, real instruments and real operational constraints.</p>
+  </div>
+  <ol class="evidence-list">
+    {% assign home_proofs = site.data.proofs | where: "home", true %}
+    {% for proof in home_proofs %}
+      {% assign proof_project = site.projects | where: "slug", proof.project | first %}
+      <li class="reveal"><a href="{{ proof_project.url | relative_url }}"><strong>{{ proof.value }}</strong><span>{{ proof.label }}</span><span class="evidence-list__arrow" aria-hidden="true">↗</span></a></li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="featured-projects section-space" aria-labelledby="featured-projects-title">
+  <div class="shell section-heading reveal">
+    <div><p class="section-index">02 / Selected projects</p><h2 id="featured-projects-title">Across the full stack —<br>from sensor to service.</h2></div>
+    <a class="text-link" href="{{ '/projects/' | relative_url }}">All projects <span aria-hidden="true">→</span></a>
+  </div>
+  {% assign featured_projects = site.projects | where: "featured", true | sort: "order" %}
+  <div class="project-ledger">
+    {% for project in featured_projects %}
+      <article class="project-row reveal">
+        <a class="project-row__media" href="{{ project.url | relative_url }}" tabindex="-1" aria-hidden="true"><img src="{{ project.diagram | relative_url }}" alt="" width="1440" height="520" loading="lazy"></a>
+        <div class="project-row__copy shell">
+          <p class="project-row__number">0{{ forloop.index }}</p>
+          <div><p class="eyebrow">{{ project.eyebrow }}</p><h3><a href="{{ project.url | relative_url }}">{{ project.short_title | default: project.title }}</a></h3><p>{{ project.summary }}</p></div>
+          <ul class="inline-list" aria-label="{{ project.title }} competencies">{% for skill in project.skills %}<li>{{ skill }}</li>{% endfor %}</ul>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="competency-section shell section-space" aria-labelledby="competency-title">
+  <div class="section-heading reveal">
+    <div><p class="section-index">03 / Capabilities</p><h2 id="competency-title">Skills grouped<br>by what they deliver.</h2></div>
+    <p>No ratings or percentage bars. Every group points to work that demonstrates it.</p>
+  </div>
+  <div class="competency-list">
+    {% for competency in site.data.competencies %}
+      <section class="competency-row reveal">
+        <h3>{{ competency.name }}</h3><p>{{ competency.items | join: " · " }}</p>
+        <div class="competency-row__links">{% for project_slug in competency.projects %}{% assign linked_project = site.projects | where: "slug", project_slug | first %}<a href="{{ linked_project.url | relative_url }}">{{ linked_project.title }}</a>{% endfor %}</div>
+      </section>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="context-section section-space" aria-labelledby="context-title">
+  <div class="shell section-heading reveal">
+    <div><p class="section-index">04 / Experience</p><h2 id="context-title">Software shaped<br>by real instruments.</h2></div>
+    <p>Current roles across distributed observatories, scientific data processing and hardware-software integration.</p>
+  </div>
+  <div class="shell context-list">
+    {% assign selected_experience = site.data.experience | where: "published", true %}
+    {% for item in selected_experience %}
+      <article class="reveal">
+        <p class="context-list__period">{{ item.display_start }} - {{ item.display_end }}</p>
+        <div>
+          <h3><a href="{{ '/experience/' | relative_url }}">{{ item.role }}</a></h3>
+          <p class="context-list__organisation">{{ item.organization }}</p>
+          <p>{{ item.summary }}</p>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+  <div class="shell context-action reveal"><a class="text-link" href="{{ '/experience/' | relative_url }}">Full experience record <span aria-hidden="true">→</span></a></div>
+</section>
+
+<section class="photography-teaser section-space" aria-labelledby="photography-title">
+  <picture class="photography-teaser__media">
+    <source srcset="{{ '/assets/images/portfolio/atacama-960.avif' | relative_url }} 960w, {{ '/assets/images/portfolio/atacama-1920.avif' | relative_url }} 1920w" sizes="100vw" type="image/avif">
+    <source srcset="{{ '/assets/images/portfolio/atacama-960.webp' | relative_url }} 960w, {{ '/assets/images/portfolio/atacama-1920.webp' | relative_url }} 1920w" sizes="100vw" type="image/webp">
+    <img src="{{ '/assets/images/portfolio/atacama-1920.jpg' | relative_url }}" alt="Sunset over the Atacama Desert with observatories on the distant ridge" width="1920" height="1282" loading="lazy">
+  </picture>
+  <div class="photography-teaser__veil" aria-hidden="true"></div>
+  <div class="photography-teaser__content shell reveal">
+    <p class="section-index">05 / Personal</p><h2 id="photography-title">Photography is how<br>I keep looking closely.</h2><p>Night skies, observatories, travel and the landscapes around the work.</p>
+    <a class="button button--primary" href="{{ '/personal/' | relative_url }}">Explore personal work</a>
+  </div>
+</section>
+
+<section class="closing-section shell section-space" aria-labelledby="closing-title">
+  <div class="closing-section__copy reveal"><p class="section-index">06 / Contact</p><h2 id="closing-title">Let’s build something<br>that has to work.</h2></div>
+  <div class="closing-section__details reveal">
+    <p>Based in Wrocław, Poland. Working across software, scientific data, infrastructure and instrumentation.</p><a class="contact-email" href="mailto:k.kotysz@gmail.com">k.kotysz@gmail.com</a>
+    <div class="closing-section__actions"><a class="text-link" href="{{ '/cv/' | relative_url }}">View CV <span aria-hidden="true">→</span></a><a class="text-link" href="{{ '/contact/' | relative_url }}">All contact links <span aria-hidden="true">→</span></a></div>
+  </div>
+</section>
