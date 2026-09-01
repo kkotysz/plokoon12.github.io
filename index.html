@@ -4,44 +4,67 @@ title: Research / Software Engineer
 description: Research and software engineer building data pipelines, distributed systems and scientific instrumentation.
 permalink: /
 hero: true
+hero_timelapse: true
 og_image: /assets/images/portfolio/og-home.jpg
 ---
 {% assign primary_cv = site.data.cv | where: "status", "available" | first %}
-<section class="home-hero" aria-labelledby="hero-title">
-  <picture class="home-hero__media" aria-hidden="true">
-    <source srcset="{{ '/assets/images/portfolio/hero-960.avif' | relative_url }} 960w, {{ '/assets/images/portfolio/hero-1920.avif' | relative_url }} 1920w" sizes="100vw" type="image/avif">
-    <source srcset="{{ '/assets/images/portfolio/hero-960.webp' | relative_url }} 960w, {{ '/assets/images/portfolio/hero-1920.webp' | relative_url }} 1920w" sizes="100vw" type="image/webp">
-    <img src="{{ '/assets/images/portfolio/hero-1920.jpg' | relative_url }}" srcset="{{ '/assets/images/portfolio/hero-960.jpg' | relative_url }} 960w, {{ '/assets/images/portfolio/hero-1920.jpg' | relative_url }} 1920w" sizes="100vw" alt="" width="1920" height="1282" fetchpriority="high">
-  </picture>
-  <div class="home-hero__veil" aria-hidden="true"></div>
-  <div class="home-hero__content shell">
-    <p class="home-hero__name hero-animate">Krzysztof Kotysz</p>
-    <h1 id="hero-title" class="hero-animate">Research /<br>Software Engineer</h1>
-    <p class="home-hero__statement hero-animate">Building data pipelines, distributed systems and scientific instrumentation.</p>
-    <div class="hero-actions hero-animate">
-      <a class="button button--primary" href="{{ '/projects/' | relative_url }}">View projects</a>
-      <a class="button button--quiet" href="{{ primary_cv.file | relative_url }}" download>Download CV</a>
-      <a class="button button--quiet" href="https://github.com/kkotysz" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+{% assign hero_asset_version = site.time | date: "%s" %}
+<div class="home-story" data-hero-timelapse>
+  <div class="home-story__backdrop" aria-hidden="true">
+    <picture class="home-hero__media" aria-hidden="true">
+      <source srcset="{{ '/assets/images/portfolio/hero-960.avif' | relative_url }}?v={{ hero_asset_version }} 960w, {{ '/assets/images/portfolio/hero-1920.avif' | relative_url }}?v={{ hero_asset_version }} 1920w" sizes="100vw" type="image/avif">
+      <source srcset="{{ '/assets/images/portfolio/hero-960.webp' | relative_url }}?v={{ hero_asset_version }} 960w, {{ '/assets/images/portfolio/hero-1920.webp' | relative_url }}?v={{ hero_asset_version }} 1920w" sizes="100vw" type="image/webp">
+      <img src="{{ '/assets/images/portfolio/hero-1920.jpg' | relative_url }}?v={{ hero_asset_version }}" srcset="{{ '/assets/images/portfolio/hero-960.jpg' | relative_url }}?v={{ hero_asset_version }} 960w, {{ '/assets/images/portfolio/hero-1920.jpg' | relative_url }}?v={{ hero_asset_version }} 1920w" sizes="100vw" alt="" width="1920" height="1282" fetchpriority="high">
+    </picture>
+    <video
+      class="home-hero__video"
+      muted
+      playsinline
+      preload="none"
+      tabindex="-1"
+      aria-hidden="true"
+      data-hero-video
+      data-src-mobile="{{ '/assets/video/portfolio/home-telescope-960.mp4' | relative_url }}?v={{ hero_asset_version }}"
+      data-src-desktop="{{ '/assets/video/portfolio/home-telescope-1600.mp4' | relative_url }}?v={{ hero_asset_version }}"
+    ></video>
+    <div class="home-story__veil"></div>
+  </div>
+  <section class="home-hero" aria-labelledby="hero-title">
+    <div class="home-hero__content shell">
+      <p class="home-hero__name hero-animate">Krzysztof Kotysz</p>
+      <h1 id="hero-title" class="hero-animate">Research /<br>Software Engineer</h1>
+      <p class="home-hero__statement hero-animate">Building data pipelines, distributed systems and scientific instrumentation.</p>
+      <div class="hero-actions hero-animate">
+        <a class="button button--primary" href="{{ '/projects/' | relative_url }}">View projects</a>
+        <a class="button button--quiet" href="{{ primary_cv.file | relative_url }}" download>Download CV</a>
+        <a class="button button--quiet" href="https://github.com/kkotysz" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+      </div>
     </div>
-  </div>
-  <a class="hero-scroll" href="#evidence"><span>Selected evidence</span><span aria-hidden="true">↓</span></a>
-</section>
+    <a class="hero-scroll" href="#evidence">
+      <span class="hero-scroll__label">
+        <span class="hero-scroll__motion">Scroll to move the telescope</span>
+        <span class="hero-scroll__static">Continue to working range</span>
+      </span>
+      <span class="hero-scroll__track" aria-hidden="true"><span></span></span>
+      <span class="hero-scroll__arrow" aria-hidden="true">↓</span>
+    </a>
+  </section>
 
-<section id="evidence" class="evidence-section shell section-space" aria-labelledby="evidence-title">
+<section id="evidence" class="home-story__chapter home-story__chapter--evidence evidence-section shell section-space" aria-labelledby="evidence-title">
   <div class="section-heading reveal">
-    <div><p class="section-index">01 / Evidence</p><h2 id="evidence-title">Systems that work<br>at real scale.</h2></div>
-    <p>Software is only useful when it survives real data, real instruments and real operational constraints.</p>
+    <div><p class="section-index">01 / Working range</p><h2 id="evidence-title">Engineering across<br>the whole system.</h2></div>
+    <p>I work where software, infrastructure, scientific data and physical instruments meet.</p>
   </div>
-  <ol class="evidence-list">
+  <ul class="evidence-list">
     {% assign home_proofs = site.data.proofs | where: "home", true %}
     {% for proof in home_proofs %}
       {% assign proof_project = site.projects | where: "slug", proof.project | first %}
-      <li class="reveal"><a href="{{ proof_project.url | relative_url }}"><strong>{{ proof.value }}</strong><span>{{ proof.label }}</span><span class="evidence-list__arrow" aria-hidden="true">↗</span></a></li>
+      <li class="reveal"><a href="{{ proof_project.url | relative_url }}"><strong>{{ proof.home_value | default: proof.value }}</strong><span>{{ proof.home_label | default: proof.label }}</span><span class="evidence-list__arrow" aria-hidden="true">↗</span></a></li>
     {% endfor %}
-  </ol>
+  </ul>
 </section>
 
-<section class="featured-projects section-space" aria-labelledby="featured-projects-title">
+<section class="home-story__chapter home-story__chapter--projects featured-projects section-space" aria-labelledby="featured-projects-title">
   <div class="shell section-heading reveal">
     <div><p class="section-index">02 / Selected projects</p><h2 id="featured-projects-title">Across the full stack —<br>from sensor to service.</h2></div>
     <a class="text-link" href="{{ '/projects/' | relative_url }}">All projects <span aria-hidden="true">→</span></a>
@@ -61,7 +84,7 @@ og_image: /assets/images/portfolio/og-home.jpg
   </div>
 </section>
 
-<section class="competency-section shell section-space" aria-labelledby="competency-title">
+<section class="home-story__chapter home-story__chapter--capabilities competency-section shell section-space" aria-labelledby="competency-title">
   <div class="section-heading reveal">
     <div><p class="section-index">03 / Capabilities</p><h2 id="competency-title">Skills grouped<br>by what they deliver.</h2></div>
     <p>No ratings or percentage bars. Every group points to work that demonstrates it.</p>
@@ -76,7 +99,7 @@ og_image: /assets/images/portfolio/og-home.jpg
   </div>
 </section>
 
-<section class="context-section section-space" aria-labelledby="context-title">
+<section class="home-story__chapter home-story__chapter--experience context-section section-space" aria-labelledby="context-title">
   <div class="shell section-heading reveal">
     <div><p class="section-index">04 / Experience</p><h2 id="context-title">Software shaped<br>by real instruments.</h2></div>
     <p>Current roles across distributed observatories, scientific data processing and hardware-software integration.</p>
@@ -96,6 +119,7 @@ og_image: /assets/images/portfolio/og-home.jpg
   </div>
   <div class="shell context-action reveal"><a class="text-link" href="{{ '/experience/' | relative_url }}">Full experience record <span aria-hidden="true">→</span></a></div>
 </section>
+</div>
 
 <section class="photography-teaser section-space" aria-labelledby="photography-title">
   <picture class="photography-teaser__media">

@@ -109,8 +109,8 @@ html_files.each do |html_file|
     errors << "#{relative_html}: duplicate id ##{id}" if count > 1
   end
 
-  document.css("[href], [src]").each do |node|
-    attribute = node.key?("href") ? "href" : "src"
+  document.css("[href], [src], [data-src-mobile], [data-src-desktop]").each do |node|
+    attribute = %w[href src data-src-mobile data-src-desktop].find { |candidate| node.key?(candidate) }
     value = node[attribute]&.strip
     next unless local_reference?(value)
 
