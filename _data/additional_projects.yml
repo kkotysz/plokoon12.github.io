@@ -1,0 +1,52 @@
+- id: astroplanner
+  title: AstroPlanner
+  eyebrow: Additional software
+  summary: A Python desktop application for planning astronomical observations, combining visibility calculations, external data services, weather analysis, telescope integration and optional local AI support.
+  stack_preview:
+    - python
+    - qt-pyside
+    - astropy
+    - sqlite
+  stack_groups:
+    - label: Application
+      items:
+        - technology: python
+          role: Application and domain logic
+        - technology: qt-pyside
+          role: Modular desktop interface
+        - technology: pydantic
+          role: Configuration and data validation
+        - technology: sqlite
+          role: Local settings and application state
+    - label: Astronomy and data
+      items:
+        - technology: astropy
+          role: Coordinates, time and astronomical calculations
+        - technology: astroplan
+          role: Visibility and observing constraints
+        - technology: astroquery
+          role: Astronomical catalogue integrations
+        - technology: numpy
+          role: Numerical processing
+    - label: Visualisation and integration
+      items:
+        - technology: matplotlib
+          role: Scientific plots and finder views
+        - technology: plotly
+          role: Interactive visibility visualisation
+        - technology: external-apis
+          role: Weather, catalogue and transient services
+        - technology: seestar-alp
+          role: Optional telescope integration and simulator workflow
+        - technology: local-llm
+          role: Optional OpenAI-compatible local assistants
+    - label: Quality
+      items:
+        - technology: pytest
+          role: Domain, storage, integration and UI tests
+        - technology: github-actions
+          role: Automated CI checks
+  links:
+    - label: Explore on GitHub
+      url: https://github.com/kkotysz/astroplanner
+      external: true

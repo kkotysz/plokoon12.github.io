@@ -34,6 +34,16 @@ hero_position: center 48%
   </ol>
 </section>
 
+<section class="professional-record shell section-rule reveal" aria-labelledby="professional-record-title">
+  <div><p class="section-index">Research and communication</p><h2 id="professional-record-title">Technical practice,<br>scientific depth.</h2></div>
+  <dl>
+    <div><dt>Education</dt><dd>PhD in Astronomy in progress at the University of Wrocław, following MSc and BSc degrees in astronomy.</dd></div>
+    <div><dt>Publications</dt><dd>Co-author of 13 peer-reviewed papers in major astronomy journals and two proceedings.</dd></div>
+    <div><dt>Teaching</dt><dd>University classes in mathematics, astronomy, statistics, Python, Fortran and Linux.</dd></div>
+    <div><dt>International work</dt><dd>Technical collaboration, conference talks, posters and workshops across Europe, Asia and the United States.</dd></div>
+  </dl>
+</section>
+
 <section class="about-personal shell section-rule reveal">
   <div><p class="section-index">Outside work</p><h2>Photography</h2></div>
   <div><p>Photography remains part of this site because it is part of how I observe places, light and technical environments—not a detached archive.</p><a class="text-link" href="{{ '/personal/' | relative_url }}">Photography, blog and teaching <span aria-hidden="true">→</span></a></div>

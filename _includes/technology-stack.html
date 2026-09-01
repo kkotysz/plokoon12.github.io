@@ -1,0 +1,23 @@
+{% assign stack_groups = include.groups %}
+{% if stack_groups and stack_groups.size > 0 %}
+  <div class="technology-groups">
+    {% for group in stack_groups %}
+      <section class="technology-group" aria-labelledby="stack-group-{{ include.scope }}-{{ forloop.index }}">
+        <h3 id="stack-group-{{ include.scope }}-{{ forloop.index }}">{{ group.label }}</h3>
+        <ul>
+          {% for item in group.items %}
+            {% assign technology = site.data.technologies[item.technology] %}
+            {% if technology %}
+              <li class="technology-item">
+                {% if technology.url %}<a class="technology-item__identity" href="{{ technology.url }}" target="_blank" rel="noopener noreferrer">{% else %}<span class="technology-item__identity">{% endif %}
+                  {% include technology-icon.html id=item.technology %}<span>{{ technology.name }}</span>
+                {% if technology.url %}</a>{% else %}</span>{% endif %}
+                <p>{{ item.role }}</p>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </section>
+    {% endfor %}
+  </div>
+{% endif %}

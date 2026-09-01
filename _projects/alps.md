@@ -10,20 +10,42 @@ system_flow:
   - Station sensors and all-sky camera
   - Data transmission
   - Service layer
-  - Measurement storage
+  - Time-series measurement storage
   - Public map, status and data views
 contributions:
   - Designed and implemented the current public ALPS website.
   - Brought station status, the network map and SQM measurements into one interface.
+  - Connected public views to time-series measurements stored in InfluxDB.
   - Presented environmental context alongside images and night-sky brightness data.
   - Contributed within the team developing the wider measurement system.
-technologies:
-  - JavaScript
-  - Web applications
-  - Sensors
-  - Networking
-  - Environmental data
-  - Hardware-software integration
+stack_preview:
+  - django
+  - influxdb
+  - docker
+  - leaflet
+stack_groups:
+  - label: Backend and data
+    items:
+      - technology: python
+        role: Application and data-service logic
+      - technology: django
+        role: Public web application backend
+      - technology: influxdb
+        role: Time-series measurement storage
+  - label: Frontend and geospatial interface
+    items:
+      - technology: javascript
+        role: Interactive status, measurement and navigation behaviour
+      - technology: leaflet
+        role: Station map and geospatial presentation
+      - technology: bootstrap-mdb
+        role: Responsive interface foundations
+  - label: Deployment
+    items:
+      - technology: docker
+        role: Reproducible service deployment
+      - technology: nginx
+        role: Public web delivery and reverse proxy
 proofs:
   - alps-live-network
   - alps-sqm

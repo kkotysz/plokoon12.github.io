@@ -70,8 +70,8 @@ layout: portfolio
   </section>
 
   <section class="case-stack shell section-rule reveal">
-    <div><p class="section-index">06 / Tools</p><h2>Technologies</h2></div>
-    <ul class="technology-list">{% for technology in page.technologies %}<li>{{ technology }}</li>{% endfor %}</ul>
+    <div><p class="section-index">06 / Tools</p><h2>Project stack</h2><p class="case-stack__intro">The technologies used across the system, grouped by the job they perform.</p></div>
+    {% include technology-stack.html groups=page.stack_groups scope=page.slug %}
   </section>
 
   <footer class="case-footer shell section-rule reveal">

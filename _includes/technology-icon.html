@@ -1,0 +1,6 @@
+{% assign technology = site.data.technologies[include.id] %}
+{% if technology.icon %}
+  <svg class="technology-icon" aria-hidden="true" focusable="false"><use href="{{ '/assets/images/portfolio/technology-icons.svg' | relative_url }}#tech-{{ technology.icon }}"></use></svg>
+{% else %}
+  <span class="technology-icon technology-icon--fallback" aria-hidden="true">{{ technology.short | default: technology.name | slice: 0, 3 }}</span>
+{% endif %}

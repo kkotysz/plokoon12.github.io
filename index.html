@@ -54,7 +54,7 @@ og_image: /assets/images/portfolio/og-home.jpg
         <div class="project-row__copy shell">
           <p class="project-row__number">0{{ forloop.index }}</p>
           <div><p class="eyebrow">{{ project.eyebrow }}</p><h3><a href="{{ project.url | relative_url }}">{{ project.short_title | default: project.title }}</a></h3><p>{{ project.summary }}</p></div>
-          <ul class="inline-list" aria-label="{{ project.title }} competencies">{% for skill in project.skills %}<li>{{ skill }}</li>{% endfor %}</ul>
+          {% include technology-preview.html items=project.stack_preview label=project.title %}
         </div>
       </article>
     {% endfor %}
@@ -85,7 +85,7 @@ og_image: /assets/images/portfolio/og-home.jpg
     {% assign selected_experience = site.data.experience | where: "published", true %}
     {% for item in selected_experience %}
       <article class="reveal">
-        <p class="context-list__period">{{ item.display_start }} - {{ item.display_end }}</p>
+        <p class="context-list__period">{% if item.display_period %}{{ item.display_period }}{% else %}{{ item.display_start }} - {{ item.display_end }}{% endif %}</p>
         <div>
           <h3><a href="{{ '/experience/' | relative_url }}">{{ item.role }}</a></h3>
           <p class="context-list__organisation">{{ item.organization }}</p>

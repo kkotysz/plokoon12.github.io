@@ -23,11 +23,12 @@ hero_position: center 54%
 <section class="experience-list shell section-rule" aria-label="Professional experience">
   {% for item in published_experience %}
     <article class="experience-item reveal">
-      <p class="experience-item__period">{{ item.display_start }}<span aria-hidden="true"> - </span>{{ item.display_end }}</p>
+      <p class="experience-item__period">{% if item.display_period %}{{ item.display_period }}{% else %}{{ item.display_start }}<span aria-hidden="true"> - </span>{{ item.display_end }}{% endif %}</p>
       <div class="experience-item__identity">
         <h2>{{ item.role }}</h2>
         <p>{{ item.organization }}</p>
         <p>{{ item.location }}</p>
+        {% if item.engagement_note %}<p class="experience-item__engagement">{{ item.engagement_note }}</p>{% endif %}
         <nav class="experience-item__projects" aria-label="Related projects for {{ item.role }}">
           {% for project_slug in item.projects %}
             {% assign linked_project = site.projects | where: "slug", project_slug | first %}

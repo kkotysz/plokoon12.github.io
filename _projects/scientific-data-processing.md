@@ -19,14 +19,42 @@ contributions:
   - Applied Fourier analysis to identify and characterise variability.
   - Prepared spectroscopic material for analysis.
   - Built and maintain lcView, a Python workbench integrating native C and Fortran engines for light-curve analysis.
-technologies:
-  - Python
-  - C
-  - Fortran
-  - Time-series analysis
-  - Fourier analysis
-  - Spectroscopy
-  - Scientific visualisation
+stack_preview:
+  - python
+  - numpy
+  - qt-pyside
+  - fortran
+stack_groups:
+  - label: Application
+    items:
+      - technology: python
+        role: Analysis workflows and application architecture
+      - technology: qt-pyside
+        role: Interactive lcView desktop workbench
+      - technology: pyqtgraph
+        role: Responsive scientific plotting
+  - label: Scientific computing
+    items:
+      - technology: numpy
+        role: Numerical arrays and transformations
+      - technology: scipy
+        role: Scientific algorithms and model fitting
+      - technology: pandas
+        role: Tabular data preparation
+      - technology: astropy
+        role: Astronomical data structures and calculations
+      - technology: matplotlib
+        role: Publication and diagnostic visualisation
+  - label: Native code and quality
+    items:
+      - technology: c
+        role: Native numerical backend
+      - technology: fortran
+        role: Integrated legacy analysis engines
+      - technology: pytest
+        role: Numerical, parsing and UI tests
+      - technology: github-actions
+        role: Automated cross-platform CI checks
 proofs:
   - data-light-curves
   - data-candidates

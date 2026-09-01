@@ -1,0 +1,164 @@
+python:
+  name: Python
+  icon: python
+  url: https://www.python.org/
+django:
+  name: Django
+  icon: django
+  url: https://www.djangoproject.com/
+django-rest-framework:
+  name: Django REST Framework
+  short: DRF
+  url: https://www.django-rest-framework.org/
+tom-toolkit:
+  name: TOM Toolkit
+  short: TOM
+  url: https://tom-toolkit.readthedocs.io/
+postgresql:
+  name: PostgreSQL
+  icon: postgresql
+  url: https://www.postgresql.org/
+mongodb:
+  name: MongoDB
+  icon: mongodb
+  url: https://www.mongodb.com/
+prefect:
+  name: Prefect
+  icon: prefect
+  url: https://www.prefect.io/
+apache-kafka:
+  name: Apache Kafka
+  icon: apachekafka
+  url: https://kafka.apache.org/
+docker:
+  name: Docker
+  icon: docker
+  url: https://www.docker.com/
+linux:
+  name: Linux
+  icon: linux
+  url: https://kernel.org/
+nginx:
+  name: Nginx
+  icon: nginx
+  url: https://nginx.org/
+gunicorn:
+  name: Gunicorn
+  icon: gunicorn
+  url: https://gunicorn.org/
+prometheus:
+  name: Prometheus
+  icon: prometheus
+  url: https://prometheus.io/
+graylog:
+  name: Graylog
+  icon: graylog
+  url: https://graylog.org/
+elasticsearch:
+  name: Elasticsearch
+  icon: elasticsearch
+  url: https://www.elastic.co/elasticsearch
+influxdb:
+  name: InfluxDB
+  icon: influxdb
+  url: https://www.influxdata.com/
+javascript:
+  name: JavaScript
+  icon: javascript
+  url: https://developer.mozilla.org/docs/Web/JavaScript
+leaflet:
+  name: Leaflet
+  icon: leaflet
+  url: https://leafletjs.com/
+bootstrap-mdb:
+  name: Bootstrap / MDB
+  icon: bootstrap
+  url: https://getbootstrap.com/
+qt-pyside:
+  name: PySide6 / Qt
+  icon: qt
+  url: https://doc.qt.io/qtforpython-6/
+pyqtgraph:
+  name: pyqtgraph
+  short: pg
+  url: https://www.pyqtgraph.org/
+numpy:
+  name: NumPy
+  icon: numpy
+  url: https://numpy.org/
+scipy:
+  name: SciPy
+  icon: scipy
+  url: https://scipy.org/
+pandas:
+  name: pandas
+  icon: pandas
+  url: https://pandas.pydata.org/
+astropy:
+  name: Astropy
+  short: AP
+  url: https://www.astropy.org/
+matplotlib:
+  name: Matplotlib
+  short: MPL
+  url: https://matplotlib.org/
+c:
+  name: C
+  icon: c
+  url: https://www.iso.org/standard/82075.html
+fortran:
+  name: Fortran
+  icon: fortran
+  url: https://fortran-lang.org/
+pytest:
+  name: pytest
+  icon: pytest
+  url: https://pytest.org/
+github-actions:
+  name: GitHub Actions
+  icon: githubactions
+  url: https://github.com/features/actions
+pydantic:
+  name: Pydantic
+  icon: pydantic
+  url: https://docs.pydantic.dev/
+sqlite:
+  name: SQLite
+  icon: sqlite
+  url: https://sqlite.org/
+astroplan:
+  name: Astroplan
+  short: APL
+  url: https://astroplan.readthedocs.io/
+astroquery:
+  name: Astroquery
+  short: AQ
+  url: https://astroquery.readthedocs.io/
+plotly:
+  name: Plotly
+  icon: plotly
+  url: https://plotly.com/python/
+external-apis:
+  name: External APIs
+  short: API
+seestar-alp:
+  name: Seestar ALP
+  short: ALP
+local-llm:
+  name: Local LLM backends
+  short: LLM
+networking:
+  name: Networking
+  short: NET
+telescope-control:
+  name: Telescope control
+  short: CTRL
+ccd-cameras:
+  name: CCD cameras
+  short: CCD
+sensors:
+  name: Sensors
+  short: SNS
+hardware-software:
+  name: Hardware-software integration
+  short: H/S
