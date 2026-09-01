@@ -1646,13 +1646,24 @@ button:focus-visible {
 @media (max-width: 68rem) {
   .nav-toggle { display: inline-flex; }
 
+  body.nav-open .site-header {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .site-header__inner > .brand,
+  .nav-toggle {
+    position: relative;
+    z-index: 1;
+  }
+
   .portfolio-nav {
     position: fixed;
-    z-index: -1;
+    z-index: 0;
     inset: 0;
     display: grid;
     padding: calc(var(--header-height) + 2rem) var(--gutter) 2rem;
-    background: rgba(9, 11, 13, 0.98);
+    background: var(--bg);
     opacity: 0;
     pointer-events: none;
     transform: translateY(-1rem);
