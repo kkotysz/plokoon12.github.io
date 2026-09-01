@@ -387,6 +387,14 @@ button:focus-visible {
     linear-gradient(180deg, rgba(4, 6, 8, 0.48) 0%, transparent 24%);
 }
 
+.is-timelapse-enabled .home-story__veil {
+  opacity: calc(1 - (var(--hero-exit-progress) * 0.42));
+}
+
+.is-timelapse-static .home-story__veil {
+  opacity: 0.68;
+}
+
 .home-hero__content {
   display: flex;
   flex-direction: column;
@@ -557,20 +565,19 @@ button:focus-visible {
   z-index: -1;
   inset: 0;
   content: "";
-  background: linear-gradient(90deg, rgba(6, 8, 10, 0.88), rgba(6, 8, 10, 0.66) 58%, rgba(6, 8, 10, 0.34));
-  backdrop-filter: blur(0.14rem);
+  background: linear-gradient(90deg, rgba(6, 8, 10, 0.56), rgba(6, 8, 10, 0.28) 58%, rgba(6, 8, 10, 0.08));
 }
 
 .home-story__chapter--projects::before {
-  background: rgba(6, 8, 10, 0.48);
+  background: rgba(6, 8, 10, 0.14);
 }
 
 .home-story__chapter--capabilities::before {
-  background: linear-gradient(90deg, rgba(6, 8, 10, 0.46), rgba(6, 8, 10, 0.72) 48%, rgba(6, 8, 10, 0.9));
+  background: linear-gradient(90deg, rgba(6, 8, 10, 0.12), rgba(6, 8, 10, 0.32) 48%, rgba(6, 8, 10, 0.58));
 }
 
 .home-story__chapter--experience::before {
-  background: linear-gradient(90deg, rgba(6, 8, 10, 0.9), rgba(6, 8, 10, 0.66) 62%, rgba(6, 8, 10, 0.36));
+  background: linear-gradient(90deg, rgba(6, 8, 10, 0.58), rgba(6, 8, 10, 0.3) 62%, rgba(6, 8, 10, 0.1));
 }
 
 .evidence-list {
@@ -663,9 +670,8 @@ button:focus-visible {
   background:
     linear-gradient(rgba(242, 184, 75, 0.045) 1px, transparent 1px),
     linear-gradient(90deg, rgba(242, 184, 75, 0.045) 1px, transparent 1px),
-    rgba(8, 11, 13, 0.76);
+    rgba(8, 11, 13, 0.42);
   background-size: 3rem 3rem;
-  backdrop-filter: blur(0.4rem);
 }
 
 .project-row__media img {
@@ -691,8 +697,7 @@ button:focus-visible {
 
 .home-story .project-row__copy {
   padding-inline: var(--gutter);
-  background: linear-gradient(90deg, rgba(7, 9, 11, 0.92), rgba(7, 9, 11, 0.74));
-  backdrop-filter: blur(0.55rem);
+  background: linear-gradient(90deg, rgba(7, 9, 11, 0.66), rgba(7, 9, 11, 0.38));
 }
 
 .project-row__copy > div {
@@ -1841,8 +1846,7 @@ button:focus-visible {
   .home-story__chapter--projects::before,
   .home-story__chapter--capabilities::before,
   .home-story__chapter--experience::before {
-    background: rgba(6, 8, 10, 0.76);
-    backdrop-filter: blur(0.22rem);
+    background: linear-gradient(90deg, rgba(6, 8, 10, 0.58), rgba(6, 8, 10, 0.36));
   }
   .home-hero__media img,
   .home-hero__video { object-position: 62% center; }

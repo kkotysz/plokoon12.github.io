@@ -109,6 +109,35 @@ await runTest("responsive sources and first viewport", async () => {
   }
 });
 
+await runTest("working range presents one coherent engineering scope", async () => {
+  const { context, page, consoleErrors } = await openHome();
+
+  try {
+    const state = await page.evaluate(() => {
+      const section = document.querySelector("#evidence");
+      return {
+        index: section.querySelector(".section-index").textContent.trim(),
+        heading: section.querySelector("h2").innerText.replace(/\s+/g, " ").trim(),
+        labels: Array.from(section.querySelectorAll(".evidence-list strong"), (item) => item.textContent.trim()),
+        text: section.textContent.replace(/\s+/g, " ").trim()
+      };
+    });
+
+    assert.equal(state.index, "01 / Working range");
+    assert.equal(state.heading, "Engineering across the whole system.");
+    assert.deepEqual(state.labels, [
+      "Distributed operations",
+      "End-to-end delivery",
+      "Scientific computing",
+      "Instrument control",
+      "Field-tested"
+    ]);
+    assert.doesNotMatch(state.text, /4,000\+|Live system|international collaboration and pipeline integration/i);
+  } finally {
+    await closeHome(context, consoleErrors);
+  }
+});
+
 await runTest("scroll controls frames until Photography replaces the backdrop", async () => {
   const { context, page, consoleErrors } = await openHome({ viewport: { width: 360, height: 800 } });
 
@@ -189,7 +218,7 @@ await runTest("reduced motion keeps the static poster", async () => {
     assert.equal(state.backdropPosition, "sticky");
     assert.equal(state.source, "");
     assert.equal(state.videoDisplay, "none");
-    assert.match(state.label, /CONTINUE TO SELECTED EVIDENCE/i);
+    assert.match(state.label, /CONTINUE TO WORKING RANGE/i);
   } finally {
     await closeHome(context, consoleErrors);
   }
@@ -216,7 +245,7 @@ await runTest("data saver keeps the static poster", async () => {
     assert.ok(state.height > state.viewportHeight * 5);
     assert.equal(state.backdropPosition, "sticky");
     assert.equal(state.source, "");
-    assert.match(state.label, /CONTINUE TO SELECTED EVIDENCE/i);
+    assert.match(state.label, /CONTINUE TO WORKING RANGE/i);
   } finally {
     await closeHome(context, consoleErrors);
   }

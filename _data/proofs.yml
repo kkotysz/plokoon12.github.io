@@ -1,27 +1,42 @@
 - id: bhtom-network
   value: "100+"
   label: "telescopes coordinated through BHTOM"
+  home_value: "Distributed operations"
+  home_label: "Software supporting a worldwide network of more than 100 telescopes."
   project: bhtom
   home: true
 - id: bhtom-pipeline
   value: "BHTOM"
   label: "international collaboration and pipeline integration"
   project: bhtom
+  home: false
+- id: alps-live-network
+  value: "Live system"
+  label: "ALPS measurements, station status and environmental data"
+  home_value: "End-to-end delivery"
+  home_label: "Sensor and environmental measurements carried through data services to a public interface."
+  project: alps
   home: true
 - id: data-light-curves
   value: "4,000+"
   label: "stellar light curves analysed"
+  home_value: "Scientific computing"
+  home_label: "Pipelines for space-telescope observations, time-series analysis, image processing and spectroscopy."
   project: scientific-data-processing
+  home: true
+- id: telescope-software
+  value: "60 cm"
+  label: "telescope software"
+  home_value: "Instrument control"
+  home_label: "Software and automation for 60 cm and 32 cm telescopes, CCD cameras and sensors."
+  project: telescope-software-automation
   home: true
 - id: telescope-fieldwork
   value: "81 + 87 nights"
   label: "across four campaigns in Chile and work on the 60 cm telescope in Białków"
+  home_value: "Field-tested"
+  home_label: "168 observing nights: 81 across four campaigns in Chile and 87 at Białków."
   project: telescope-software-automation
-  home: true
-- id: alps-live-network
-  value: "Live system"
-  label: "ALPS measurements, station status and environmental data"
-  project: alps
   home: true
 - id: alps-sqm
   value: SQM
@@ -37,11 +52,6 @@
   value: "70+"
   label: "spectra prepared for analysis"
   project: scientific-data-processing
-  home: false
-- id: telescope-software
-  value: "60 cm"
-  label: "telescope software"
-  project: telescope-software-automation
   home: false
 - id: telescope-automation
   value: "32 cm"

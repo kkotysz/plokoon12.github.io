@@ -43,7 +43,7 @@ og_image: /assets/images/portfolio/og-home.jpg
     <a class="hero-scroll" href="#evidence">
       <span class="hero-scroll__label">
         <span class="hero-scroll__motion">Scroll to move the telescope</span>
-        <span class="hero-scroll__static">Continue to selected evidence</span>
+        <span class="hero-scroll__static">Continue to working range</span>
       </span>
       <span class="hero-scroll__track" aria-hidden="true"><span></span></span>
       <span class="hero-scroll__arrow" aria-hidden="true">↓</span>
@@ -52,16 +52,16 @@ og_image: /assets/images/portfolio/og-home.jpg
 
 <section id="evidence" class="home-story__chapter home-story__chapter--evidence evidence-section shell section-space" aria-labelledby="evidence-title">
   <div class="section-heading reveal">
-    <div><p class="section-index">01 / Evidence</p><h2 id="evidence-title">Systems that work<br>at real scale.</h2></div>
-    <p>Software is only useful when it survives real data, real instruments and real operational constraints.</p>
+    <div><p class="section-index">01 / Working range</p><h2 id="evidence-title">Engineering across<br>the whole system.</h2></div>
+    <p>I work where software, infrastructure, scientific data and physical instruments meet.</p>
   </div>
-  <ol class="evidence-list">
+  <ul class="evidence-list">
     {% assign home_proofs = site.data.proofs | where: "home", true %}
     {% for proof in home_proofs %}
       {% assign proof_project = site.projects | where: "slug", proof.project | first %}
-      <li class="reveal"><a href="{{ proof_project.url | relative_url }}"><strong>{{ proof.value }}</strong><span>{{ proof.label }}</span><span class="evidence-list__arrow" aria-hidden="true">↗</span></a></li>
+      <li class="reveal"><a href="{{ proof_project.url | relative_url }}"><strong>{{ proof.home_value | default: proof.value }}</strong><span>{{ proof.home_label | default: proof.label }}</span><span class="evidence-list__arrow" aria-hidden="true">↗</span></a></li>
     {% endfor %}
-  </ol>
+  </ul>
 </section>
 
 <section class="home-story__chapter home-story__chapter--projects featured-projects section-space" aria-labelledby="featured-projects-title">
