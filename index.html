@@ -4,28 +4,50 @@ title: Research / Software Engineer
 description: Research and software engineer building data pipelines, distributed systems and scientific instrumentation.
 permalink: /
 hero: true
+hero_timelapse: true
 og_image: /assets/images/portfolio/og-home.jpg
 ---
 {% assign primary_cv = site.data.cv | where: "status", "available" | first %}
-<section class="home-hero" aria-labelledby="hero-title">
-  <picture class="home-hero__media" aria-hidden="true">
-    <source srcset="{{ '/assets/images/portfolio/hero-960.avif' | relative_url }} 960w, {{ '/assets/images/portfolio/hero-1920.avif' | relative_url }} 1920w" sizes="100vw" type="image/avif">
-    <source srcset="{{ '/assets/images/portfolio/hero-960.webp' | relative_url }} 960w, {{ '/assets/images/portfolio/hero-1920.webp' | relative_url }} 1920w" sizes="100vw" type="image/webp">
-    <img src="{{ '/assets/images/portfolio/hero-1920.jpg' | relative_url }}" srcset="{{ '/assets/images/portfolio/hero-960.jpg' | relative_url }} 960w, {{ '/assets/images/portfolio/hero-1920.jpg' | relative_url }} 1920w" sizes="100vw" alt="" width="1920" height="1282" fetchpriority="high">
-  </picture>
-  <div class="home-hero__veil" aria-hidden="true"></div>
-  <div class="home-hero__content shell">
-    <p class="home-hero__name hero-animate">Krzysztof Kotysz</p>
-    <h1 id="hero-title" class="hero-animate">Research /<br>Software Engineer</h1>
-    <p class="home-hero__statement hero-animate">Building data pipelines, distributed systems and scientific instrumentation.</p>
-    <div class="hero-actions hero-animate">
-      <a class="button button--primary" href="{{ '/projects/' | relative_url }}">View projects</a>
-      <a class="button button--quiet" href="{{ primary_cv.file | relative_url }}" download>Download CV</a>
-      <a class="button button--quiet" href="https://github.com/kkotysz" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+{% assign hero_asset_version = site.time | date: "%s" %}
+<div class="home-hero-scene" data-hero-timelapse>
+  <section class="home-hero" aria-labelledby="hero-title">
+    <picture class="home-hero__media" aria-hidden="true">
+      <source srcset="{{ '/assets/images/portfolio/hero-960.avif' | relative_url }}?v={{ hero_asset_version }} 960w, {{ '/assets/images/portfolio/hero-1920.avif' | relative_url }}?v={{ hero_asset_version }} 1920w" sizes="100vw" type="image/avif">
+      <source srcset="{{ '/assets/images/portfolio/hero-960.webp' | relative_url }}?v={{ hero_asset_version }} 960w, {{ '/assets/images/portfolio/hero-1920.webp' | relative_url }}?v={{ hero_asset_version }} 1920w" sizes="100vw" type="image/webp">
+      <img src="{{ '/assets/images/portfolio/hero-1920.jpg' | relative_url }}?v={{ hero_asset_version }}" srcset="{{ '/assets/images/portfolio/hero-960.jpg' | relative_url }}?v={{ hero_asset_version }} 960w, {{ '/assets/images/portfolio/hero-1920.jpg' | relative_url }}?v={{ hero_asset_version }} 1920w" sizes="100vw" alt="" width="1920" height="1282" fetchpriority="high">
+    </picture>
+    <video
+      class="home-hero__video"
+      muted
+      playsinline
+      preload="none"
+      tabindex="-1"
+      aria-hidden="true"
+      data-hero-video
+      data-src-mobile="{{ '/assets/video/portfolio/home-telescope-960.mp4' | relative_url }}?v={{ hero_asset_version }}"
+      data-src-desktop="{{ '/assets/video/portfolio/home-telescope-1600.mp4' | relative_url }}?v={{ hero_asset_version }}"
+    ></video>
+    <div class="home-hero__veil" aria-hidden="true"></div>
+    <div class="home-hero__content shell">
+      <p class="home-hero__name hero-animate">Krzysztof Kotysz</p>
+      <h1 id="hero-title" class="hero-animate">Research /<br>Software Engineer</h1>
+      <p class="home-hero__statement hero-animate">Building data pipelines, distributed systems and scientific instrumentation.</p>
+      <div class="hero-actions hero-animate">
+        <a class="button button--primary" href="{{ '/projects/' | relative_url }}">View projects</a>
+        <a class="button button--quiet" href="{{ primary_cv.file | relative_url }}" download>Download CV</a>
+        <a class="button button--quiet" href="https://github.com/kkotysz" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+      </div>
     </div>
-  </div>
-  <a class="hero-scroll" href="#evidence"><span>Selected evidence</span><span aria-hidden="true">↓</span></a>
-</section>
+    <a class="hero-scroll" href="#evidence">
+      <span class="hero-scroll__label">
+        <span class="hero-scroll__motion">Scroll to move the telescope</span>
+        <span class="hero-scroll__static">Continue to selected evidence</span>
+      </span>
+      <span class="hero-scroll__track" aria-hidden="true"><span></span></span>
+      <span class="hero-scroll__arrow" aria-hidden="true">↓</span>
+    </a>
+  </section>
+</div>
 
 <section id="evidence" class="evidence-section shell section-space" aria-labelledby="evidence-title">
   <div class="section-heading reveal">

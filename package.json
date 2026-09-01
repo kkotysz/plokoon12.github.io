@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "audit:axe": "node scripts/audit_accessibility.mjs",
-    "audit:lighthouse": "node scripts/run_lighthouse.mjs"
+    "audit:lighthouse": "node scripts/run_lighthouse.mjs",
+    "test:hero": "node scripts/test_home_hero.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
