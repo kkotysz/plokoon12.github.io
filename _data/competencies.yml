@@ -1,24 +1,31 @@
 - name: Software
   items:
     - Python
+    - Django
     - JavaScript
-    - Fortran
-    - Web applications
+    - PySide6
+    - C and Fortran
+    - Web and desktop applications
   projects:
     - bhtom
     - alps
+    - scientific-data-processing
 - name: Infrastructure
   items:
     - Linux
     - Docker
-    - Workflow orchestration
+    - Prefect
+    - PostgreSQL and InfluxDB
+    - Nginx
     - Networking
     - NFS
     - VPN
   projects:
     - bhtom
+    - alps
 - name: Data
   items:
+    - NumPy, SciPy and Astropy
     - Time-series analysis
     - Fourier analysis
     - Image processing
@@ -36,6 +43,7 @@
     - telescope-software-automation
 - name: Delivery
   items:
+    - Testing and CI
     - Documentation
     - Grants
     - Teaching

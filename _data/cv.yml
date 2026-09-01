@@ -1,6 +1,6 @@
 - id: software-infrastructure
   title: "Software & Infrastructure"
-  description: A focused two-page CV covering Python development, Linux infrastructure, distributed scientific systems, automation and hardware-software integration.
+  description: A focused two-page CV covering Python and Django development, Linux infrastructure, distributed scientific systems, workflow engineering, teaching and hardware-software integration.
   status: available
   file: /assets/cv/Krzysztof_Kotysz_CV_Software_Infrastructure_EN.pdf
   format: A4 PDF
@@ -8,6 +8,6 @@
   language: English
   updated: August 2026
   highlights:
-    - Python, Linux, Docker and workflow automation
-    - Distributed observatory software and operational infrastructure
-    - Scientific data systems and telescope integration
+    - Python, Django, Linux, Docker and Prefect workflow engineering
+    - Distributed observatory software, databases and operational infrastructure
+    - Scientific data systems, telescope integration and technical communication

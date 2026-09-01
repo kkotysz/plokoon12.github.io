@@ -17,13 +17,30 @@ contributions:
   - Worked on automation of a 32 cm telescope.
   - Integrated and diagnosed CCD camera and control-system behaviour.
   - Applied extensive field experience in Chile and during operation of the 60 cm telescope at Białków Observatory.
-technologies:
-  - Python
-  - Linux
-  - Networking
-  - CCD cameras
-  - Telescope control
-  - Sensors
+stack_preview:
+  - python
+  - linux
+  - telescope-control
+  - ccd-cameras
+stack_groups:
+  - label: Software and operations
+    items:
+      - technology: python
+        role: Observatory-support and automation tools
+      - technology: linux
+        role: Instrument and observatory operating environment
+      - technology: networking
+        role: Remote operation and field diagnostics
+  - label: Instrumentation
+    items:
+      - technology: telescope-control
+        role: 60 cm operation and 32 cm automation
+      - technology: ccd-cameras
+        role: Imaging hardware and acquisition diagnostics
+      - technology: sensors
+        role: Instrument and environmental inputs
+      - technology: hardware-software
+        role: End-to-end integration and fault isolation
 proofs:
   - telescope-software
   - telescope-automation

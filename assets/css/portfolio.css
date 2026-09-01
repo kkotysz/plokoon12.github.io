@@ -608,6 +608,48 @@ button:focus-visible {
   letter-spacing: 0.03em;
 }
 
+.stack-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.15rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stack-preview li {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  color: var(--text-soft);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.025em;
+}
+
+.technology-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: 0 0 auto;
+  color: currentColor;
+  fill: currentColor;
+}
+
+.technology-icon--fallback {
+  display: inline-grid;
+  width: 1.55rem;
+  height: 1.15rem;
+  place-items: center;
+  border: 1px solid currentColor;
+  font-family: var(--mono);
+  font-size: 0.46rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
 .competency-list {
   border-top: 1px solid var(--line);
 }
@@ -1102,6 +1144,79 @@ button:focus-visible {
 
 .technology-list { align-content: start; }
 
+.case-stack__intro {
+  max-width: 26rem;
+  color: var(--text-soft);
+}
+
+.technology-groups {
+  border-top: 1px solid var(--line);
+}
+
+.technology-group {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.32fr) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  padding-block: 1.75rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.technology-group h3 {
+  margin: 0;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.technology-group ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.technology-item {
+  min-width: 0;
+  padding: 0.1rem 0 1rem;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.technology-item:hover,
+.technology-item:focus-within {
+  color: var(--accent);
+  transform: translateX(0.2rem);
+}
+
+.technology-item__identity {
+  display: inline-flex;
+  gap: 0.65rem;
+  align-items: center;
+  margin-bottom: 0.35rem;
+  color: var(--text);
+  font-size: 0.92rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.technology-item:hover .technology-item__identity,
+.technology-item__identity:focus-visible {
+  color: var(--accent);
+}
+
+.technology-item p,
+.secondary-project .technology-item p {
+  margin: 0;
+  color: var(--text-faint);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
 .case-footer {
   padding-top: 3rem;
   padding-bottom: clamp(5rem, 10vw, 9rem);
@@ -1132,9 +1247,19 @@ button:focus-visible {
   color: var(--text-soft);
 }
 
-.project-index__row .inline-list { align-self: end; }
+.project-index__row .inline-list,
+.project-index__row .stack-preview { align-self: end; }
 .project-index__arrow { align-self: center; text-decoration: none; }
 .secondary-project { margin-top: 7rem; margin-bottom: 8rem; }
+
+@media (min-width: 52.01rem) {
+  .case-stack > div:first-child,
+  .secondary-project > div:first-child {
+    position: sticky;
+    top: calc(var(--header-height) + 2rem);
+    align-self: start;
+  }
+}
 
 .content-gate,
 .contact-panel {
@@ -1377,6 +1502,51 @@ button:focus-visible {
   padding-bottom: clamp(5rem, 9vw, 8rem);
 }
 
+.professional-record {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.7fr) minmax(0, 1.3fr);
+  gap: clamp(3rem, 10vw, 9rem);
+  padding-top: clamp(5rem, 9vw, 8rem);
+  padding-bottom: clamp(5rem, 9vw, 8rem);
+}
+
+.professional-record h2 {
+  margin-bottom: 1rem;
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-weight: 520;
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.professional-record dl { margin: 0; }
+
+.professional-record dl > div {
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.28fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  padding-block: 1.35rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.professional-record dt {
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.professional-record dd { margin: 0; color: var(--text-soft); }
+
+.experience-item__engagement {
+  max-width: 28rem;
+  margin-top: 0.85rem;
+  color: var(--text-faint) !important;
+  font-family: var(--mono);
+  font-size: 0.68rem !important;
+  line-height: 1.55;
+}
+
 .numbered-principles {
   margin: 0;
   padding: 0;
@@ -1539,6 +1709,7 @@ button:focus-visible {
   .cv-feature,
   .about-profile,
   .about-principles,
+  .professional-record,
   .experience-item { grid-template-columns: 1fr; }
   .experience-item { gap: 1.4rem; }
   .case-overview > div + div { margin-top: 2rem; padding: 2rem 0 0; border-top: 1px solid var(--line); border-left: 0; }
@@ -1546,7 +1717,9 @@ button:focus-visible {
   .flow-list li { display: grid; grid-template-columns: 3rem 1fr; align-items: center; min-height: 0; border-right: 0; border-bottom: 1px solid var(--line); }
   .flow-list span { margin: 0; }
   .project-index__row { grid-template-columns: 2.2rem 1fr 1.5rem; }
-  .project-index__row .inline-list { grid-column: 2 / -1; }
+  .project-index__row .inline-list,
+  .project-index__row .stack-preview { grid-column: 2 / -1; }
+  .technology-group { grid-template-columns: 1fr; gap: 1rem; }
   .cv-row { grid-template-columns: 2.2rem 1fr; align-items: start; }
   .cv-row .status-label,
   .cv-row .button { grid-column: 2; justify-self: start; }
@@ -1575,8 +1748,11 @@ button:focus-visible {
   .project-index__row { grid-template-columns: 1fr 1.5rem; }
   .project-index__number { grid-column: 1; }
   .project-index__row > div { grid-column: 1; }
-  .project-index__row .inline-list { grid-column: 1; }
+  .project-index__row .inline-list,
+  .project-index__row .stack-preview { grid-column: 1; }
   .project-index__arrow { grid-row: 1 / 4; grid-column: 2; }
+  .technology-group ul { grid-template-columns: 1fr; }
+  .professional-record dl > div { grid-template-columns: 1fr; gap: 0.55rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

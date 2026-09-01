@@ -6,29 +6,30 @@
   end: "Present"
   display_start: "Feb 2024"
   display_end: "Present"
+  engagement_note: "Employment and project contracts through Dec 2026"
   summary: "Engineering and operating software for a worldwide network of observatories."
   highlights:
     - "Operate BHTOM, coordinating and monitoring observations across a network of more than 100 telescopes."
     - "Helped standardise the automatic CCD image-reduction workflow and package it in containers for distributed observatory deployments."
-    - "Collaborated within BHTOM on integration of the complete processing pipeline with the wider observation platform."
+    - "Integrated the complete processing pipeline with Prefect during on-site engineering collaboration within BHTOM."
   projects:
     - bhtom
 
 - published: true
-  role: "Doctoral Researcher and Research Assistant"
+  role: "Assistant and Academic Teacher"
   organization: "University of Wrocław - Institute of Astronomy"
   location: "Wrocław and Białków, Poland"
-  start: "2018"
-  end: "Present"
-  display_start: "2018"
-  display_end: "Present"
-  summary: "Building scientific software, measurement infrastructure, processing space-telescope data and working directly with observatory instrumentation."
+  start: "2019-03"
+  end: "2026-09"
+  display_period: "2019–2020 · 2021–2022 · 2024–2025 · 2026"
+  engagement_note: "1 Mar 2019–31 Jan 2020 · 1 Nov 2021–28 Feb 2022 · 8 Oct 2024–30 Nov 2025 · 24 Feb–30 Sep 2026"
+  summary: "Teaching quantitative and computing subjects while building scientific software, processing observational data and working directly with observatory instrumentation."
   highlights:
-    - "Authored software supporting the 60-cm Cassegrain telescope and contributes to automation and robotisation of the 32-cm telescope at Białków Observatory."
-    - "Independently designed and implemented the current ALPS public website and contributes to the wider multi-site measurement system connecting stations, sensors, services and data."
-    - "Built analysis programs for space-telescope data, screened more than 4,000 TESS light curves and selected 90 objects for detailed Fourier analysis."
+    - "Authored software supporting observations with the 60-cm Cassegrain telescope and contributes to automation and robotisation of the 32-cm telescope at Białków Observatory."
+    - "Built analysis programs for heterogeneous photometric time series from space missions and ground-based observatories, including screening, Fourier analysis and long-term variability tracking."
     - "Operated and diagnosed professional instruments during 168 observing nights: 87 at Białków and 81 across four campaigns in Chile."
-    - "Prepared a spectroscopic dataset for more than 70 targets and secured and delivered NCN PRELUDIUM-17 project 2019/33/N/ST9/01818."
+    - "Secured and delivered NCN PRELUDIUM-17 project 2019/33/N/ST9/01818, covering proposal preparation, data acquisition, analysis, documentation and reporting."
+    - "Taught mathematics, astronomy, statistics, Python, Fortran and Linux and presented research through talks and posters at national and international conferences."
   projects:
     - alps
     - scientific-data-processing

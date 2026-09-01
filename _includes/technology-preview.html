@@ -1,0 +1,11 @@
+{% assign technology_ids = include.items %}
+{% if technology_ids and technology_ids.size > 0 %}
+  <ul class="stack-preview" aria-label="{{ include.label | default: 'Core project stack' }}">
+    {% for technology_id in technology_ids %}
+      {% assign technology = site.data.technologies[technology_id] %}
+      {% if technology %}
+        <li>{% include technology-icon.html id=technology_id %}<span>{{ technology.name }}</span></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endif %}
