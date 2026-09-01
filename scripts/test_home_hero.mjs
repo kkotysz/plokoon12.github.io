@@ -67,6 +67,8 @@ await runTest("responsive sources and first viewport", async () => {
       const state = await page.evaluate(() => {
         const scene = document.querySelector("[data-hero-timelapse]");
         const hero = document.querySelector(".home-hero");
+        const backdrop = document.querySelector(".home-story__backdrop");
+        const photography = document.querySelector(".photography-teaser");
         const video = document.querySelector("[data-hero-video]");
         const cue = document.querySelector(".hero-scroll");
         const buttons = Array.from(document.querySelectorAll(".hero-actions .button"));
@@ -76,6 +78,9 @@ await runTest("responsive sources and first viewport", async () => {
           sceneEnabled: scene.classList.contains("is-timelapse-enabled"),
           sceneHeight: scene.offsetHeight,
           heroHeight: hero.offsetHeight,
+          backdropHeight: backdrop.offsetHeight,
+          backdropPosition: getComputedStyle(backdrop).position,
+          photographyOffset: photography.offsetTop - scene.offsetTop,
           source: video.currentSrc,
           cueText: cue.innerText.replace(/\s+/g, " ").trim(),
           cueVisible: cueBox.top >= 0 && cueBox.bottom <= innerHeight,
@@ -88,8 +93,11 @@ await runTest("responsive sources and first viewport", async () => {
       });
 
       assert.equal(state.sceneEnabled, true);
-      assert.ok(Math.abs(state.sceneHeight - viewport.height * 1.8) <= 2, `Unexpected scene height: ${state.sceneHeight}`);
+      assert.ok(state.sceneHeight > viewport.height * 5, `Story is too short: ${state.sceneHeight}`);
       assert.ok(Math.abs(state.heroHeight - viewport.height) <= 2, `Unexpected hero height: ${state.heroHeight}`);
+      assert.ok(Math.abs(state.backdropHeight - viewport.height) <= 2, `Unexpected backdrop height: ${state.backdropHeight}`);
+      assert.equal(state.backdropPosition, "sticky");
+      assert.ok(Math.abs(state.photographyOffset - state.sceneHeight) <= 2, "Photography should begin where the timelapse story ends");
       assert.ok(state.source.includes(viewport.source), `Unexpected source: ${state.source}`);
       assert.match(state.cueText, /SCROLL TO MOVE THE TELESCOPE/i);
       assert.equal(state.cueVisible, true);
@@ -101,7 +109,7 @@ await runTest("responsive sources and first viewport", async () => {
   }
 });
 
-await runTest("scroll controls frames and releases the sticky scene", async () => {
+await runTest("scroll controls frames until Photography replaces the backdrop", async () => {
   const { context, page, consoleErrors } = await openHome({ viewport: { width: 360, height: 800 } });
 
   try {
@@ -112,8 +120,15 @@ await runTest("scroll controls frames and releases the sticky scene", async () =
 
     const metrics = await page.evaluate(() => ({
       distance: document.querySelector("[data-hero-timelapse]").offsetHeight - innerHeight,
-      duration: document.querySelector("[data-hero-video]").duration
+      duration: document.querySelector("[data-hero-video]").duration,
+      photographyTop: document.querySelector(".photography-teaser").offsetTop
     }));
+
+    await page.locator(".hero-scroll").focus();
+    assert.equal(await page.locator(".hero-scroll").isVisible(), true);
+    await page.locator(".hero-scroll").click();
+    await page.waitForFunction(() => window.location.hash === "#evidence" && document.querySelector("#evidence").getBoundingClientRect().top < innerHeight);
+    await page.evaluate(() => window.scrollTo(0, 0));
 
     for (const progress of [0, 0.25, 0.5, 0.75, 1]) {
       await page.evaluate((position) => window.scrollTo(0, position), metrics.distance * progress);
@@ -126,24 +141,26 @@ await runTest("scroll controls frames and releases the sticky scene", async () =
 
       const state = await page.evaluate(() => {
         const scene = document.querySelector("[data-hero-timelapse]");
-        const hero = document.querySelector(".home-hero");
+        const backdrop = document.querySelector(".home-story__backdrop");
         return {
-          progress: Number(getComputedStyle(scene).getPropertyValue("--hero-progress")),
-          heroTop: hero.getBoundingClientRect().top
+          progress: Number(getComputedStyle(scene).getPropertyValue("--story-progress")),
+          backdropTop: backdrop.getBoundingClientRect().top
         };
       });
 
       assert.ok(Math.abs(state.progress - progress) < 0.01, `Progress mismatch at ${progress}: ${state.progress}`);
-      assert.ok(Math.abs(state.heroTop) <= 1, `Hero is not sticky at ${progress}: ${state.heroTop}`);
+      assert.ok(Math.abs(state.backdropTop) <= 1, `Backdrop is not sticky at ${progress}: ${state.backdropTop}`);
     }
 
-    await page.locator(".hero-scroll").focus();
-    assert.equal(await page.locator(".hero-scroll").isVisible(), true);
-    await page.locator(".hero-scroll").click();
-    await page.waitForFunction(() => window.location.hash === "#evidence" && document.querySelector("#evidence").getBoundingClientRect().top < innerHeight);
+    await page.evaluate((position) => window.scrollTo(0, position), metrics.photographyTop);
+    await page.waitForFunction(() => Math.abs(document.querySelector(".photography-teaser").getBoundingClientRect().top) <= 1);
 
-    const released = await page.evaluate(() => document.querySelector("#evidence").getBoundingClientRect().top < innerHeight);
-    assert.equal(released, true);
+    const transition = await page.evaluate(() => ({
+      backdropBottom: document.querySelector(".home-story__backdrop").getBoundingClientRect().bottom,
+      photographyTop: document.querySelector(".photography-teaser").getBoundingClientRect().top
+    }));
+    assert.ok(transition.backdropBottom <= 1, `Timelapse did not stop at Photography: ${transition.backdropBottom}`);
+    assert.ok(Math.abs(transition.photographyTop) <= 1);
   } finally {
     await closeHome(context, consoleErrors);
   }
@@ -160,6 +177,7 @@ await runTest("reduced motion keeps the static poster", async () => {
         enabled: scene.classList.contains("is-timelapse-enabled"),
         height: scene.offsetHeight,
         viewportHeight: innerHeight,
+        backdropPosition: getComputedStyle(document.querySelector(".home-story__backdrop")).position,
         source: video.currentSrc,
         videoDisplay: getComputedStyle(video).display,
         label: document.querySelector(".hero-scroll").innerText.replace(/\s+/g, " ").trim()
@@ -167,7 +185,8 @@ await runTest("reduced motion keeps the static poster", async () => {
     });
 
     assert.equal(state.enabled, false);
-    assert.ok(Math.abs(state.height - state.viewportHeight) <= 2);
+    assert.ok(state.height > state.viewportHeight * 5);
+    assert.equal(state.backdropPosition, "sticky");
     assert.equal(state.source, "");
     assert.equal(state.videoDisplay, "none");
     assert.match(state.label, /CONTINUE TO SELECTED EVIDENCE/i);
@@ -187,13 +206,15 @@ await runTest("data saver keeps the static poster", async () => {
         enabled: scene.classList.contains("is-timelapse-enabled"),
         height: scene.offsetHeight,
         viewportHeight: innerHeight,
+        backdropPosition: getComputedStyle(document.querySelector(".home-story__backdrop")).position,
         source: video.currentSrc,
         label: document.querySelector(".hero-scroll").innerText.replace(/\s+/g, " ").trim()
       };
     });
 
     assert.equal(state.enabled, false);
-    assert.ok(Math.abs(state.height - state.viewportHeight) <= 2);
+    assert.ok(state.height > state.viewportHeight * 5);
+    assert.equal(state.backdropPosition, "sticky");
     assert.equal(state.source, "");
     assert.match(state.label, /CONTINUE TO SELECTED EVIDENCE/i);
   } finally {
@@ -221,7 +242,7 @@ await runTest("video failure falls back to the poster", async () => {
     });
 
     assert.equal(state.static, true);
-    assert.ok(Math.abs(state.height - state.viewportHeight) <= 2);
+    assert.ok(state.height > state.viewportHeight * 5);
   } finally {
     await context.close();
   }
@@ -237,4 +258,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log("\n[hero] OK: scroll-driven hero, responsive sources and static fallbacks verified");
+console.log("\n[hero] OK: scroll-driven home story, Photography handoff and static fallbacks verified");

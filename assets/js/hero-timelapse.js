@@ -13,6 +13,7 @@
   var framesPerSecond = 12;
   var sceneStart = 0;
   var scrollDistance = 1;
+  var heroExitDistance = 1;
   var duration = 0;
   var targetTime = 0;
   var loadStarted = false;
@@ -30,6 +31,7 @@
   function measureScene() {
     sceneStart = scene.getBoundingClientRect().top + window.pageYOffset;
     scrollDistance = Math.max(1, scene.offsetHeight - window.innerHeight);
+    heroExitDistance = Math.max(1, window.innerHeight * 0.85);
     requestUpdate();
   }
 
@@ -63,8 +65,11 @@
   function updateScene() {
     updateRequested = false;
 
-    var progress = clamp((window.pageYOffset - sceneStart) / scrollDistance, 0, 1);
-    scene.style.setProperty("--hero-progress", progress.toFixed(4));
+    var scrollPosition = window.pageYOffset - sceneStart;
+    var progress = clamp(scrollPosition / scrollDistance, 0, 1);
+    var heroExitProgress = clamp(scrollPosition / heroExitDistance, 0, 1);
+    scene.style.setProperty("--story-progress", progress.toFixed(4));
+    scene.style.setProperty("--hero-exit-progress", heroExitProgress.toFixed(4));
 
     if (progress > 0 && !loadStarted) loadVideo();
 
@@ -122,7 +127,8 @@
   function disableTimelapse() {
     scene.classList.remove("is-timelapse-enabled", "is-video-ready");
     scene.classList.add("is-timelapse-static");
-    scene.style.setProperty("--hero-progress", "0");
+    scene.style.setProperty("--story-progress", "0");
+    scene.style.setProperty("--hero-exit-progress", "0");
     duration = 0;
     targetTime = 0;
 
@@ -161,6 +167,7 @@
 
   window.addEventListener("scroll", requestUpdate, { passive: true });
   window.addEventListener("resize", measureScene, { passive: true });
+  window.addEventListener("load", measureScene, { once: true });
   window.addEventListener("pageshow", measureScene);
 
   ["wheel", "touchstart"].forEach(function (eventName) {
